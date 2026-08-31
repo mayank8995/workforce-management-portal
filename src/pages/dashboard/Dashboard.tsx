@@ -26,7 +26,10 @@ function Dashboard() {
     limit: 5,
   });
   const metricData = results[0]?.data?.data;
-  const cachedPerformanceCardData = results[1]?.data?.data;
+  const topPerformers = results[1]?.data?.data;
+  const meetingKPIs = results[2]?.data?.data;
+  const promotedThisYear = results[3]?.data?.data;
+  const requiringReview = results[4]?.data?.data;
   // const topProjects = results[2]?.data;
   const isLoading = results.some((query) => query.isLoading);
   const isError = results.some((query) => query.isError);
@@ -45,24 +48,18 @@ function Dashboard() {
               </KeyMetricCard>
               <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 p-2 xl:p-4">
                 <TopPerformersCard
-                  topPerformersList={
-                    cachedPerformanceCardData?.topPerformers as TopPerformersCardProps
-                  }
+                  topPerformersList={topPerformers as TopPerformersCardProps}
                 ></TopPerformersCard>
                 <PromotedCard
                   promotedThisYear={
-                    cachedPerformanceCardData?.promotedThisYear as PromotedThisYearCardProps
+                    promotedThisYear as PromotedThisYearCardProps
                   }
                 ></PromotedCard>
                 <RequiringReviewCard
-                  requiringReview={
-                    cachedPerformanceCardData?.requiringReview as RequiringReviewCardProps
-                  }
+                  requiringReview={requiringReview as RequiringReviewCardProps}
                 ></RequiringReviewCard>
                 <MeetingKPIsCard
-                  meetingKPIs={
-                    cachedPerformanceCardData?.meetingKPIs as MeetingKPIsCardProps
-                  }
+                  meetingKPIs={meetingKPIs as MeetingKPIsCardProps}
                 ></MeetingKPIsCard>
                 {/* <TopProjectsCard
                   topProjects={

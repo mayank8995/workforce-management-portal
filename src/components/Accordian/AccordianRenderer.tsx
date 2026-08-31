@@ -17,7 +17,6 @@ export const accordians: AccordionSection[] = [
     initialState: true,
     showColumns: true,
     fields: [
-      'id',
       'joiningDate',
       'manager',
       'location',

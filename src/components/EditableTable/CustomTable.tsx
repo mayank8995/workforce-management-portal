@@ -22,6 +22,7 @@ import useScreenType from '../../hooks/useScreenSize';
 import { useModal } from '../../context/ModalContext';
 import { sortModalContainerCss } from '../../utils/constants';
 import { useSearchParams } from 'react-router-dom';
+import EmployeeForm from '../Form/EmployeeForm/EmployeeForm';
 
 function CustomTable<T extends ListType>(
   props: CustomTableProps<T>
@@ -57,10 +58,10 @@ function CustomTable<T extends ListType>(
     updateModalProps({
       sortConfig: {
         key: tableQueryParams.sortBy as string,
-        direction: tableQueryParams.order as string,
+        direction: tableQueryParams.sortOrder as string,
       },
     });
-  }, [tableQueryParams.sortBy, tableQueryParams.order, screenType]);
+  }, [tableQueryParams.sortBy, tableQueryParams.sortOrder, screenType]);
 
   useEffect(() => {
     queryClient.removeQueries({ queryKey: ['filterKeyData'], exact: true });
@@ -109,11 +110,11 @@ function CustomTable<T extends ListType>(
   // Handler functions
   const handleSort = (key: string) => {
     setQuery((prev) => {
-      const direction = prev.order;
+      const direction = prev.sortOrder;
       return {
         ...prev,
         sortBy: key,
-        order: direction === 'asc' ? 'desc' : 'asc',
+        sortOrder: direction === 'asc' ? 'desc' : 'asc',
       };
     });
   };
@@ -135,7 +136,7 @@ function CustomTable<T extends ListType>(
         <ArrowUpDown className="w-4 h-4 text-slate-400 dark:text-slate-500 dark:hover:text-indigo-400" />
       );
     }
-    return tableQueryParams.order === 'asc' ? (
+    return tableQueryParams.sortOrder === 'asc' ? (
       <ArrowUp className="w-4 h-4 text-slate-400 dark:text-slate-500 dark:hover:text-indigo-400" />
     ) : (
       <ArrowDown className="w-4 h-4 text-slate-400 dark:text-slate-500 dark:hover:text-indigo-400" />
@@ -158,7 +159,7 @@ function CustomTable<T extends ListType>(
       onSort: (key: string) => handleSort(key),
       sortConfig: {
         key: tableQueryParams.sortBy as string,
-        direction: tableQueryParams.order as string,
+        direction: tableQueryParams.sortOrder as string,
       },
       containerCss: sortModalContainerCss,
     });
@@ -209,6 +210,10 @@ function CustomTable<T extends ListType>(
       setDownloading(false);
     }
   };
+
+  const openCreateEmployeeModal = () => {
+    openModal(EmployeeForm);
+  };
   return (
     <>
       {!isLoading ? (
@@ -227,7 +232,7 @@ function CustomTable<T extends ListType>(
                                text-[10px] xl:text-xs
                               font-semibold dark:bg-emerald-900/40 dark:text-emerald-400"
               >
-                Total: {tableQueryParams?.totalItems || 0}
+                Total: {tableQueryParams?.total || 0}
               </span>
             </div>
             <TableToolbar
@@ -245,6 +250,7 @@ function CustomTable<T extends ListType>(
               downloading={downloading}
               ref={ref}
               listSize={list.length}
+              openCreateEmployeeModal={openCreateEmployeeModal}
             />
             {!isError ? (
               <div className="flex flex-col justify-center">

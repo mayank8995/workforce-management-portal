@@ -95,10 +95,11 @@ function Login({
         await wakeUpServer();
         const res: {
           status?: number;
-          data?: { user?: LoginData; message?: ToastContent<unknown> };
+          data?: { data?: LoginData; message?: ToastContent<unknown> };
         } | null = await doLogin(form);
-        if (res.status === 200) {
-          login({ ...res?.data?.user } as LoginData);
+        if (res?.status === 200) {
+          const { _id, name } = res?.data?.data as LoginData;
+          login({ _id, name });
           toast.success(res?.data?.message, {});
           navigate(NAV_ITEMS.DASHBOARD);
         } else {

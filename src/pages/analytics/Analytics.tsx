@@ -1,20 +1,17 @@
-import { useQueryClient } from '@tanstack/react-query';
 import KeyMetricCard from '../../components/Card/KeyMetricCard';
 import KeyMetric from '../../components/Card/KeyMetric';
 import {
   ATTRITION_INSIGHTS,
   DEPARTMENT_WISE_HEADCOUNT,
-  REVENUE_TREND_IN_CR,
+  REVENUE_IN_THIS_MONTH,
   SKILLS_IN_DEMAND,
   TOP_CLIENTS,
   TOTAL_PROJECTS,
 } from '../../utils/constants';
 import React, { Suspense } from 'react';
-import type {
-  AnalyticsCard,
-  ProjectStatusDistribution,
-} from '../../types/types';
+import type { ProjectStatusDistribution } from '../../types/types';
 import DonutCharts from '../../components/Charts/DonutCharts';
+import { useAnalytics } from '../../services/utils.service';
 const PieChartComponent = React.lazy(
   () => import('../../components/Charts/PieChartComponent')
 );
@@ -30,10 +27,11 @@ const MultiCityBarChartComponent = React.lazy(
 );
 
 function Analytics() {
-  const queryClient = useQueryClient();
-  const { data: metricData }: AnalyticsCard =
-    queryClient.getQueryData(['analyticsData']) || {};
-
+  // const queryClient = useQueryClient();
+  // const { data: metricData }: AnalyticsCard =
+  //   queryClient.getQueryData(['analyticsData']) || {};
+  const data = useAnalytics();
+  const { data: metricData } = data?.data || {};
   return (
     <div className="flex flex-col flex-auto">
       <KeyMetricCard>
@@ -145,13 +143,14 @@ function Analytics() {
             name={'Revenue'}
             X={'month'}
             Y={'revenueCr'}
-            title={REVENUE_TREND_IN_CR}
+            title={REVENUE_IN_THIS_MONTH}
             data={metricData?.revenueTrend}
           />
           <DonutCharts
             title={TOTAL_PROJECTS}
             data={
-              metricData?.projectStatusDistribution as ProjectStatusDistribution
+              metricData
+                ?.projectStatusDistribution?.[0] as ProjectStatusDistribution
             }
           />
           <MultiCityBarChartComponent

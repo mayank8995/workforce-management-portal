@@ -32,7 +32,7 @@ const RequiringReviewCard = ({ requiringReview }: ReviewList) => {
         {Array.isArray(requiringReview?.employees) &&
           requiringReview?.employees?.map((value, index: number) => {
             return (
-              <React.Fragment key={value.id}>
+              <React.Fragment key={value._id + value.name + value.rating}>
                 {index < CARD_CONTENT_LIMIT_TO_SCROLL && (
                   <div className="flex flex-row justify-between max-xs:flex-col max-xs:gap-2 mb-2 min-w-0">
                     <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -58,7 +58,7 @@ const RequiringReviewCard = ({ requiringReview }: ReviewList) => {
                         className={`flex items-center text-[10px] xl:text-xs px-2 py-0.2 xl:py-0.5 rounded-full font-bold whitespace-nowrap
             ${value.reviewReason[0] === 'Low Rating' ? 'bg-orange-100 text-orange-600 dark:bg-emerald-900/40 dark:text-orange-400' : ''}
             ${value.reviewReason[0] === 'Low Attendance' ? 'bg-yellow-100 text-yellow-600 dark:bg-emerald-900/40 dark:text-yellow-400' : ''}
-            ${value.reviewReason[0] === 'On Notice Period' ? 'bg-red-100 text-red-600 dark:bg-emerald-900/40 dark:text-red-400' : ''}
+            ${value.reviewReason[0] === 'On Notice' ? 'bg-red-100 text-red-600 dark:bg-emerald-900/40 dark:text-red-400' : ''}
             ${value.reviewReason[0] === 'Low Satisfaction' ? 'bg-purple-100 text-purple-600 dark:bg-emerald-900/40 dark:text-purple-400' : ''}
           `}
                       >

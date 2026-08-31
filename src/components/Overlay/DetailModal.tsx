@@ -9,12 +9,12 @@ import ErrorPage from '../Error/ErrorPage';
 
 interface DetailModalProps {
   onClose: () => void;
-  id: number;
+  _id: number;
 }
 
-const DetailModal = ({ onClose, id }: DetailModalProps) => {
-  const { data: details, isError, isLoading } = useEmployeeDetail({ id });
-  const row = details?.['data'] ?? [];
+const DetailModal = ({ onClose, _id }: DetailModalProps) => {
+  const { data: details, isError, isLoading } = useEmployeeDetail({ _id });
+  const row = details?.['data']?.data?.result ?? [];
 
   return (
     <>

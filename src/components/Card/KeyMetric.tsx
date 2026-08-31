@@ -24,8 +24,8 @@ function KeyMetric({ metricData }: KeyMetricCardsProps): React.ReactElement {
       value: metricData?.summary?.attritionRate ?? 0,
       icon: KEY_TRACK_METRIC_ICON['USER_MINUS'],
     },
-    [KEY_TRACK_METRIC['REVENUE_IN_QR_CR']]: {
-      value: metricData?.summary?.revenueThisQuarterCr ?? 0,
+    [KEY_TRACK_METRIC['REVENUE_IN_THIS_MONTH']]: {
+      value: metricData?.summary?.totalRevenue ?? 0,
       icon: KEY_TRACK_METRIC_ICON['INDIAN_RUPEE'],
     },
     [KEY_TRACK_METRIC['PROFIT_MARGIN']]: {

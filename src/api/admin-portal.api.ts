@@ -2,6 +2,7 @@ import { toast } from 'react-toastify';
 import apiClient from '../services/http-common.service';
 import { getApiErrorDetails } from '../services/utils.service';
 import type {
+  EmployeeFormType,
   FilterList,
   LoginForm,
   LoginProfile,
@@ -30,7 +31,7 @@ export async function getTableEmployees(
 ) {
   try {
     setIsLoading?.(true);
-    const response = await apiClient.get('/paginatedEmployeeList', {
+    const response = await apiClient.get('/employees', {
       params,
       signal,
     });
@@ -43,9 +44,33 @@ export async function getTableEmployees(
     setIsLoading?.(false);
   }
 }
+
+export async function getAnalyticsEmployeesTable(
+  params: TableQueryParams,
+  setIsLoading?: (loading: boolean) => void,
+  signal?: AbortSignal
+) {
+  try {
+    setIsLoading?.(true);
+    const response = await apiClient.get(
+      `/analytics/${params?.tableType}/employees`,
+      {
+        params,
+        signal,
+      }
+    );
+    setIsLoading?.(false);
+    return response;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  } finally {
+    setIsLoading?.(false);
+  }
+}
 export async function getFilterList(params: FilterList) {
   try {
-    const response = await apiClient.get('/getFilterList', {
+    const response = await apiClient.get('/filterList', {
       params,
     });
     return response;
@@ -57,19 +82,53 @@ export async function getFilterList(params: FilterList) {
 
 export async function getAnalytics() {
   try {
-    const response = await apiClient.get('/analytics');
-    return response;
+    const response = await apiClient.get('/dashboard/analytics');
+    return response?.data;
   } catch (error) {
     console.error('Error fetching data:', error);
     throw error;
   }
 }
 
-export async function getPerformanceCards() {
+export async function getTopPerformers() {
   try {
-    const response = await apiClient.get('/performanceCards');
+    const response = await apiClient.get('/analytics/topPerformers/employees');
     // console.log("response>>>>",response)
-    return response;
+    return response?.data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+}
+export async function getMeetingKPIs() {
+  try {
+    const response = await apiClient.get('/analytics/meetingKPIs/employees');
+    // console.log("response>>>>",response)
+    return response?.data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+}
+export async function getPromotedThisYear() {
+  try {
+    const response = await apiClient.get(
+      '/analytics/promotedThisYear/employees'
+    );
+    // console.log("response>>>>",response)
+    return response?.data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+}
+export async function getRequiringReview() {
+  try {
+    const response = await apiClient.get(
+      '/analytics/requiringReview/employees'
+    );
+    // console.log("response>>>>",response)
+    return response?.data;
   } catch (error) {
     console.error('Error fetching data:', error);
     throw error;
@@ -93,7 +152,7 @@ export const postSubmitProfileSettings = async (form: ProfileForm | null) => {
 
 export const getProfileData = async (params: LoginProfile) => {
   try {
-    const res = await apiClient.get('/profile', { params });
+    const res = await apiClient.get('/employee/profile', { params });
     // console.log("got:", res.data);
     return res;
   } catch (err: unknown) {
@@ -107,7 +166,7 @@ export const getProfileData = async (params: LoginProfile) => {
 
 export const editProfileData = async (payload: ProfileForm | null) => {
   try {
-    const res = await apiClient.patch('/profile', payload);
+    const res = await apiClient.patch('/employee/edit/profile', payload);
     // console.log("Edited:", res.data);
     return res;
   } catch (err: unknown) {
@@ -182,10 +241,23 @@ export const doSignup = async (form: SignUpForm) => {
   }
 };
 
-export const fetchEmployeeDetails = async (params: { id: number }) => {
+export const fetchEmployeeDetails = async (params: { _id: number }) => {
   try {
-    const res = await apiClient.get('/getEmployeeDetails', { params });
+    const res = await apiClient.get('/employee/details', { params });
     // console.log("Created:", res);
+    return res;
+  } catch (err: unknown) {
+    const { message, status, url } = getApiErrorDetails(err);
+    console.error('API Error:', message);
+    console.error('Status:', status);
+    console.error('URL:', url);
+    throw err;
+  }
+};
+
+export const createEmployee = async (form: EmployeeFormType) => {
+  try {
+    const res = await apiClient.post('/employee/create', JSON.stringify(form));
     return res;
   } catch (err: unknown) {
     const { message, status, url } = getApiErrorDetails(err);

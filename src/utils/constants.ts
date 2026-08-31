@@ -22,6 +22,7 @@ export const KEY_TRACK_METRIC = {
   ATTRITION_RATE: 'Attrition Rate',
   PROFIT_MARGIN: 'Profit Margin',
   REVENUE_IN_QR_CR: 'Revenue in this quarter',
+  REVENUE_IN_THIS_MONTH: 'Revenue in this month',
   TOTAL_PROJECTS: 'Total Projects',
 } as const;
 export const KEY_TRACK_METRIC_ICON = {
@@ -61,6 +62,7 @@ export const PIE_COLORS = [
   '#8884d8',
 ];
 export const REVENUE_TREND_IN_CR = 'Revenue Trend (₹ Cr)';
+export const REVENUE_IN_THIS_MONTH = 'Revenue Trend (₹ Cr)';
 export const SKILLS_IN_DEMAND = 'Skils in Demand';
 export const TOP_CLIENTS = 'Top clients';
 export const TOP_PERFORMERS = 'Top performers';
@@ -161,6 +163,19 @@ focus:border-transparent
 focus:transition-all
 focus:duration-200`;
 
+export const selectDropDownClass = `cursor-pointer
+            px-2 py-1
+            border
+            border-slate-300 dark:border-slate-700
+            rounded-lg
+            bg-white dark:bg-slate-800
+            text-sm
+            shadow-sm
+            focus:ring-2
+            focus:ring-blue-500 dark:text-slate-300
+            dark:outline-none dark:focus:outline-none`;
+export const selectOptionsClass = `text-sm font-bold outline-none`;
+
 export const labelclassName = `block mb-1.5 mt-1.5 text-slate-600 dark:text-slate-400 text-xs font-medium tracking-wide uppercase`;
 
 export const loginLabelclassNAme = `block mb-1.5 mt-1.5 text-slate-600 dark:text-slate-400 text-xs font-medium tracking-wide uppercase`;
@@ -178,7 +193,7 @@ export const headers_top_projects: TableHeader<TopProject>[] = [
 ];
 
 export const headers_top_performers: TableHeader<TopPerformer>[] = [
-  { key: 'id', value: 'Id' },
+  { key: '_id', value: 'Id', metadata: { show: false } },
   { key: 'name', value: 'Name' },
   { key: 'designation', value: 'Designation' },
   { key: 'department', value: 'Department' },
@@ -186,7 +201,7 @@ export const headers_top_performers: TableHeader<TopPerformer>[] = [
 ];
 
 export const headers_promotedThisYear: TableHeader<PromotedEmployee>[] = [
-  { key: 'id', value: 'Id' },
+  { key: '_id', value: 'Id', metadata: { show: false } },
   { key: 'name', value: 'Name' },
   { key: 'currentDesignation', value: 'Current Designation' },
   { key: 'previousDesignation', value: 'Previous Designation' },
@@ -195,7 +210,7 @@ export const headers_promotedThisYear: TableHeader<PromotedEmployee>[] = [
 ];
 
 export const headers_requiringReview: TableHeader<EmployeeRequiringReview>[] = [
-  { key: 'id', value: 'Id' },
+  { key: '_id', value: 'Id', metadata: { show: false } },
   { key: 'name', value: 'Name' },
   { key: 'designation', value: 'Designation' },
   { key: 'department', value: 'Department' },
@@ -204,7 +219,7 @@ export const headers_requiringReview: TableHeader<EmployeeRequiringReview>[] = [
 ];
 
 export const headers_employees: TableHeader<Employee>[] = [
-  { key: 'id', value: 'Id' },
+  { key: '_id', value: 'Id', metadata: { show: false } },
   { key: 'name', value: 'Name' },
   { key: 'designation', value: 'Designation' },
   { key: 'department', value: 'Department' },
@@ -324,7 +339,7 @@ export const DEFAULT_TABLE_QUERY_PARAMS = {
   limit: 5,
   search: '',
   sortBy: '',
-  order: '',
+  sortOrder: '',
 };
 
 export const statusColors: Record<string, string> = {
@@ -370,33 +385,33 @@ export const textColorsDark: Record<string, string> = {
 export const reviewColors: Record<string, string> = {
   'low rating': 'bg-orange-100',
   'low attendance': 'bg-yellow-100',
-  'on notice period': 'bg-red-100',
+  'on notice': 'bg-red-100',
   'low satisfaction': 'bg-purple-100',
 };
 
 export const reviewtextColors: Record<string, string> = {
   'low rating': 'text-orange-600',
   'low attendance': 'text-yellow-600',
-  'on notice period': 'text-red-600',
+  'on notice': 'text-red-600',
   'low satisfaction': 'text-purple-600',
 };
 
 export const reviewColorsDark: Record<string, string> = {
   'low rating': 'bg-emerald-900/40',
   'low attendance': 'bg-[#534ab7]/20',
-  'on notice period': 'bg-orange-400',
+  'on notice': 'bg-orange-400',
   'low satisfaction': 'bg-green-100',
 };
 
 export const reviewtextColorsDark: Record<string, string> = {
   'low rating': 'text-orange-400',
   'low attendance': 'text-yellow-600',
-  'on notice period': 'text-red-400',
+  'on notice': 'text-red-400',
   'low satisfaction': 'text-purple-400',
 };
 
 export const FIELD_LABELS: Record<keyof Employee, string> = {
-  id: 'ID',
+  _id: 'ID',
   name: 'Name',
   email: 'Email',
   phone: 'Phone',
@@ -413,14 +428,14 @@ export const FIELD_LABELS: Record<keyof Employee, string> = {
   rating: 'Rating',
   attendancePercentage: 'Attendance Percentage',
   employeeSatisfaction: 'Employee Satisfaction',
-  onNoticePeriod: 'On Notice Period',
+  onNoticePeriod: 'On Notice',
   projectName: 'Project Name',
   riskStatus: 'Risk Status',
   status: 'Status',
 };
 
 export const TOP_PERFORMER_FIELD_LABELS: Record<keyof TopPerformer, string> = {
-  id: 'ID',
+  _id: 'ID',
   name: 'Name',
   designation: 'Designation',
   department: 'Department',
@@ -428,7 +443,7 @@ export const TOP_PERFORMER_FIELD_LABELS: Record<keyof TopPerformer, string> = {
 };
 
 export const TOP_PROJECT_FIELD_LABELS: Record<keyof TopProject, string> = {
-  id: 'ID',
+  _id: 'ID',
   name: 'Name',
   projectName: 'Project Name',
   riskStatus: 'Risk Status',
@@ -439,7 +454,7 @@ export const PROMOTED_EMPLOYEE_FIELD_LABELS: Record<
   keyof PromotedEmployee,
   string
 > = {
-  id: 'ID',
+  _id: 'ID',
   name: 'Name',
   currentDesignation: 'Current Designation',
   previousDesignation: 'Previous Designation',
@@ -451,7 +466,7 @@ export const EMPLOYEE_REVIEW_FIELD_LABELS: Record<
   keyof EmployeeRequiringReview,
   string
 > = {
-  id: 'ID',
+  _id: 'ID',
   name: 'Name',
   designation: 'Designation',
   department: 'Department',
@@ -483,6 +498,6 @@ export const employeeDetailModalContainerCss = `h-full max-h-full overflow-auto 
 export const REFETCH_TRY = 3;
 
 export const GUEST_LOGIN = {
-  email: 'test@ad.com',
-  password: '987654',
+  email: 'liam.anderson@ad.com',
+  password: 'liam.anderson.mayank@SpaceX123',
 };

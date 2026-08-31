@@ -34,10 +34,10 @@ apiClient.interceptors.request.use(
         config.url === '/logout'
       )
     ) {
-      let access_token: string | null = localStorage.getItem('access-token');
-      if (access_token) {
-        config.headers.set('Authorization', `Bearer ${access_token}`);
-      }
+      // let access_token: string | null = localStorage.getItem('access-token');
+      // if (access_token) {
+      //   config.headers.set('Authorization', `Bearer ${access_token}`);
+      // }
     }
     return config;
   },

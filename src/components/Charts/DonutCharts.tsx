@@ -7,10 +7,9 @@ const DonutCharts = ({ data: rawData, title }: DonutChartProps) => {
   const { theme: themeMode } = useTheme();
 
   const data = [
-    { name: 'On Track', value: rawData?.onTrack, color: '#4CAF50' },
-    { name: 'At Risk', value: rawData?.atRisk, color: '#F44336' },
-    { name: 'Delayed', value: rawData?.delayed, color: '#FF9800' },
-    { name: 'Completed', value: rawData?.completed, color: '#2196F3' },
+    { name: 'Active', value: rawData?.Active, color: '#4CAF50' },
+    { name: 'Support', value: rawData?.Support, color: '#FF9800' },
+    { name: 'Completed', value: rawData?.Completed, color: '#2196F3' },
   ];
 
   return (

@@ -45,7 +45,7 @@ const TopPerformersCard = ({ topPerformersList }: TopPerformersList) => {
         {Array.isArray(topPerformersList?.employees) &&
           topPerformersList?.employees?.map((value, index: number) => {
             return (
-              <React.Fragment key={value.id}>
+              <React.Fragment key={value._id + value.name + value.rating}>
                 {index < CARD_CONTENT_LIMIT_TO_SCROLL && (
                   <div className="min-w-0 flex items-center justify-between mb-2 xs:items-start">
                     <div className="flex items-center gap-6 text-sm flex-1 min-w-0">

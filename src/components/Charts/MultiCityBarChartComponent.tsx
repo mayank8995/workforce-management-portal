@@ -19,7 +19,7 @@ function MultiCityBarChartComponent({ title, X, Y, data }: any) {
         </h1>
 
         <div className="overflow-y-auto min-h-0 max-h-87.5 w-full overflow-hidden">
-          <ResponsiveContainer width="100%" height={350}>
+          <ResponsiveContainer width="100%" height={550}>
             {/* Crucial: layout="vertical" makes the chart horizontal */}
             <BarChart
               responsive
