@@ -32,7 +32,7 @@ const PromotedCard = ({ promotedThisYear }: PromotedList) => {
         {Array.isArray(promotedThisYear?.employees) &&
           promotedThisYear?.employees?.map((value, index: number) => {
             return (
-              <React.Fragment key={value.id}>
+              <React.Fragment key={value._id + value.name + value.promotedOn}>
                 {index < CARD_CONTENT_LIMIT_TO_SCROLL && (
                   <div className="flex flex-row justify-between max-xs:flex-col max-xs:gap-2 mb-2 min-w-0">
                     <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -56,7 +56,18 @@ const PromotedCard = ({ promotedThisYear }: PromotedList) => {
                     <div className="shrink-0 self-start max-xs:self-end min-w-0 ">
                       <h2 className="text-amber-500 dark:text-amber-100 flex items-center justify-center">
                         <ChevronsUp size={12} strokeWidth={2.5} />
-                        <span className=" text-xs">{value?.promotedOn}</span>
+                        <span className=" text-xs">
+                          <time dateTime={value?.promotedOn}>
+                            {new Date(value?.promotedOn).toLocaleDateString(
+                              'en-US',
+                              {
+                                day: '2-digit',
+                                month: 'short',
+                                year: 'numeric',
+                              }
+                            )}
+                          </time>
+                        </span>
                       </h2>
                     </div>
                   </div>

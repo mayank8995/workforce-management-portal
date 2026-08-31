@@ -46,8 +46,8 @@ function ProfileSettings() {
     department: '',
     designation: '',
     empId: '',
-    jdate: '',
-    wmode: '',
+    joiningDate: '',
+    workMode: '',
     location: '',
     image: null,
   });
@@ -59,9 +59,12 @@ function ProfileSettings() {
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
-    if (profileData?.data && Object.keys(profileData)?.length > 0) {
+    if (
+      profileData?.data?.data &&
+      Object.keys(profileData?.data?.data)?.length > 0
+    ) {
       setIsEditing(true);
-      setFormValues(profileData.data as ProfileForm);
+      setFormValues(profileData?.data?.data as ProfileForm);
     }
   }, [profileData]);
 
@@ -88,7 +91,7 @@ function ProfileSettings() {
         key === 'department' ||
         key === 'designation' ||
         key === 'empId' ||
-        key === 'jdate'
+        key === 'joiningDate'
       ) {
         // console.log("VZXVXZVXXZ",formValues[key])
         const msg = validateField(key, formValues[key]);
@@ -119,7 +122,7 @@ function ProfileSettings() {
         if (!isEditing) {
           res = await postSubmitProfileSettings({
             ...formValues,
-            id: user?.id,
+            _id: user?._id,
           } as ProfileForm);
           if (res.status === 201) {
             toast.success(res?.data?.message);
@@ -131,7 +134,7 @@ function ProfileSettings() {
         } else {
           res = await editProfileData({
             ...formValues,
-            id: user?.id,
+            id: user?._id,
           } as ProfileForm);
           if (res.status === 201) {
             toast.success(res?.data?.message);
@@ -172,8 +175,8 @@ function ProfileSettings() {
         department: '',
         designation: '',
         empId: '',
-        jdate: '',
-        wmode: '',
+        joiningDate: '',
+        workMode: '',
         location: '',
         image: undefined,
       }); // reset the initial data to clear form fields
@@ -324,7 +327,6 @@ function ProfileSettings() {
                         Phone Number
                       </label>
                       <FormField
-                        maxlength={10}
                         errors={errors}
                         value={formValues?.phone}
                         name={'phone'}
@@ -348,6 +350,7 @@ function ProfileSettings() {
                         onChange={onInputChange}
                         className={className}
                         id={'email'}
+                        disabled={true}
                       />
                     </div>
                     <div className="mb-4 flex flex-col">
@@ -363,6 +366,7 @@ function ProfileSettings() {
                         onChange={onInputChange}
                         className={className}
                         id={'department'}
+                        disabled={true}
                       />
                     </div>
                     <div className="mb-4 flex flex-col">
@@ -378,6 +382,7 @@ function ProfileSettings() {
                         onChange={onInputChange}
                         className={className}
                         id={'designation'}
+                        disabled={true}
                       />
                     </div>
                   </div>
@@ -403,36 +408,39 @@ function ProfileSettings() {
                       onChange={onInputChange}
                       className={className}
                       id={'empId'}
+                      disabled={true}
                     />
                   </div>
                   <div className="mb-4 flex flex-col">
-                    <label htmlFor="jdate" className={labelclassName}>
+                    <label htmlFor="joiningDate" className={labelclassName}>
                       Joining Date
                     </label>
                     <FormField
                       errors={errors}
-                      value={formValues?.jdate}
-                      name={'jdate'}
+                      value={formValues?.joiningDate}
+                      name={'joiningDate'}
                       type={'date'}
                       placeholder={'Enter your joining date'}
                       onChange={onInputChange}
                       className={className}
-                      id={'jdate'}
+                      id={'joiningDate'}
+                      disabled={true}
                     />
                   </div>
                   <div className="mb-4 flex flex-col">
-                    <label htmlFor="wmode" className={labelclassName}>
+                    <label htmlFor="workMode" className={labelclassName}>
                       Work Mode
                     </label>
                     <FormField
                       errors={errors}
-                      value={formValues?.wmode}
-                      name={'wmode'}
+                      value={formValues?.workMode}
+                      name={'workMode'}
                       type={'text'}
                       placeholder={'Hybrid/Remote/Onsite'}
                       onChange={onInputChange}
                       className={className}
-                      id={'wmode'}
+                      id={'workMode'}
+                      disabled={true}
                     />
                   </div>
                   <div className="mb-4 flex flex-col">
@@ -448,6 +456,7 @@ function ProfileSettings() {
                       onChange={onInputChange}
                       className={className}
                       id={'location'}
+                      disabled={true}
                     />
                   </div>
                 </div>

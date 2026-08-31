@@ -359,7 +359,7 @@ export function StepTwoForm({
           id={'designation'}
         />
       </div>
-      <div className="mb-2 flex flex-col">
+      {/* <div className="mb-2 flex flex-col">
         <label htmlFor="empId" className={loginLabelclassNAme}>
           Employee Id
         </label>
@@ -375,7 +375,7 @@ export function StepTwoForm({
           className={loginClassName}
           id={'empId'}
         />
-      </div>
+      </div> */}
       {/* <button  type="button" className=" w-full bg-gray-900   hover:bg-gray-700  mb-2  px-6 py-2.5
                         text-white font-semibold text-sm 
                         rounded-xl

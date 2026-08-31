@@ -12,7 +12,7 @@ interface AuthContextType {
   user: LoginData | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: ({ name, id }: LoginData) => void;
+  login: ({ name, _id }: LoginData) => void;
   logout: () => void;
   tableQueryParams: TableQueryParams;
   setQueryParamsData: (data: TableQueryParams) => void;
@@ -36,16 +36,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     limit: 5,
     search: '',
     sortBy: 'id',
-    order: 'asc',
+    sortOrder: 'asc',
   });
 
   useEffect(() => {
     setIsLoading(false);
   }, []);
 
-  const login = ({ id, name }: LoginData) => {
-    localStorage.setItem('user', JSON.stringify({ id, name }));
-    setUser({ id, name });
+  const login = ({ _id, name }: LoginData) => {
+    localStorage.setItem('user', JSON.stringify({ _id, name }));
+    setUser({ _id, name });
   };
 
   const logout = () => {

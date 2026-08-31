@@ -14,8 +14,11 @@ import StatusBadge from '../UtilComponents/StatusBadge';
 
 export const columns_employees: Column<Employee>[] = [
   {
-    key: 'id',
+    key: '_id',
     header: 'Id',
+    metadata: {
+      show: false,
+    },
   },
   {
     key: 'name',
@@ -52,8 +55,11 @@ export const columns_employees: Column<Employee>[] = [
 
 export const columns_top_performers: Column<TopPerformer>[] = [
   {
-    key: 'id',
+    key: '_id',
     header: 'Id',
+    metadata: {
+      show: false,
+    },
   },
   {
     key: 'name',
@@ -97,8 +103,11 @@ export const columns_top_projects: Column<TopProject>[] = [
 ];
 export const columns_promotedThisYear: Column<PromotedEmployee>[] = [
   {
-    key: 'id',
+    key: '_id',
     header: 'id',
+    metadata: {
+      show: false,
+    },
   },
   {
     key: 'name',
@@ -125,8 +134,11 @@ export const columns_promotedThisYear: Column<PromotedEmployee>[] = [
 
 export const columns_requiringReview: Column<EmployeeRequiringReview>[] = [
   {
-    key: 'id',
+    key: '_id',
     header: 'id',
+    metadata: {
+      show: false,
+    },
   },
   {
     key: 'name',

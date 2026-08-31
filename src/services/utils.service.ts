@@ -3,10 +3,14 @@ import { keepPreviousData, useQueries, useQuery } from '@tanstack/react-query';
 import {
   getAnalytics,
   getTableEmployees,
-  getPerformanceCards,
   getProfileData,
   getFilterList,
   fetchEmployeeDetails,
+  getTopPerformers,
+  getMeetingKPIs,
+  getPromotedThisYear,
+  getRequiringReview,
+  getAnalyticsEmployeesTable,
 } from '../api/admin-portal.api';
 import type {
   FilterList,
@@ -53,6 +57,33 @@ export function useTableData(
   });
 }
 
+export function useEmployreeAnalyticsTableData(
+  params: TableQueryParams,
+  setIsLoading: (loading: boolean) => void,
+  signal?: AbortSignal
+) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { totalPages, totalItems, ...updatedParams } = params;
+
+  // const reqParams = {};
+  const queryParams: TableQueryParams =
+    'tableType' in updatedParams
+      ? updatedParams
+      : { ...updatedParams, tableType: 'employees' };
+
+  return useQuery({
+    queryKey: [
+      'employees',
+      ...Object.values(queryParams).map((v) => String(v)),
+    ],
+    queryFn: () =>
+      getAnalyticsEmployeesTable(queryParams, setIsLoading, signal),
+    placeholderData: keepPreviousData, // Smooth transitions,
+    staleTime: Infinity,
+    retry: REFETCH_TRY,
+  });
+}
+
 export function usePerFormanceTableData(params: TableQueryParams) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { totalPages, totalItems, ...updatedParams } = params;
@@ -89,22 +120,50 @@ export function useAllData(params: TableQueryParams) {
         retry: REFETCH_TRY,
       },
       {
-        queryKey: ['performanceCardsData'],
-        queryFn: getPerformanceCards,
+        queryKey: ['topPerformers'],
+        queryFn: getTopPerformers,
         staleTime: Infinity,
         retry: REFETCH_TRY,
       },
       {
-        queryKey: [
-          'performance',
-          ...Object.values(queryParams).map((v) => String(v)),
-        ],
-        queryFn: () => getTableEmployees(queryParams),
-        placeholderData: keepPreviousData, // Smooth transitions,
+        queryKey: ['meetingKPIs'],
+        queryFn: getMeetingKPIs,
         staleTime: Infinity,
         retry: REFETCH_TRY,
       },
+      {
+        queryKey: ['promotedThisYear'],
+        queryFn: getPromotedThisYear,
+        staleTime: Infinity,
+        retry: REFETCH_TRY,
+      },
+      {
+        queryKey: ['requiringReview'],
+        queryFn: getRequiringReview,
+        staleTime: Infinity,
+        retry: REFETCH_TRY,
+      },
+
+      // {
+      //   queryKey: [
+      //     'performance',
+      //     ...Object.values(queryParams).map((v) => String(v)),
+      //   ],
+      //   queryFn: () => getTableEmployees(queryParams),
+      //   placeholderData: keepPreviousData, // Smooth transitions,
+      //   staleTime: Infinity,
+      //   retry: REFETCH_TRY,
+      // },
     ],
+  });
+}
+
+export function useAnalytics() {
+  return useQuery({
+    queryKey: ['analyticsView'],
+    queryFn: getAnalytics,
+    staleTime: Infinity,
+    retry: REFETCH_TRY,
   });
 }
 
@@ -117,10 +176,10 @@ export function useProfileData(user: LoginProfile) {
   });
 }
 
-export function useEmployeeDetail(id: { id: number }) {
+export function useEmployeeDetail(_id: { _id: number }) {
   return useQuery({
-    queryKey: ['employeeDetail', id],
-    queryFn: () => fetchEmployeeDetails(id),
+    queryKey: ['employeeDetail', _id],
+    queryFn: () => fetchEmployeeDetails(_id),
     staleTime: Infinity, // Keep the data "fresh" forever so it doesn't re-fetch
     retry: REFETCH_TRY,
   });
@@ -134,7 +193,7 @@ export function exportSelected<T extends ListType>(
 ) {
   try {
     const rows = data?.filter((item) => {
-      if (selectedRow.has(String(item.id))) {
+      if (selectedRow.has(String(item._id))) {
         return true;
       }
       return false;

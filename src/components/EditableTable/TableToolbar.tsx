@@ -8,9 +8,14 @@ import {
   FunnelX,
   SquareChevronLeft,
   SquareChevronRight,
+  UserPlus,
   X,
 } from 'lucide-react';
-import { className } from '../../utils/constants';
+import {
+  className,
+  selectDropDownClass,
+  selectOptionsClass,
+} from '../../utils/constants';
 import type { SelectedChip, TableToolbarProps } from '../../types/types';
 import { useQueryClient } from '@tanstack/react-query';
 import { TailSpin } from 'react-loader-spinner';
@@ -30,6 +35,7 @@ const TableToolbar = ({
   downloading,
   ref,
   listSize,
+  openCreateEmployeeModal,
 }: TableToolbarProps) => {
   const queryClient = useQueryClient();
   const isfilterAvailable: SelectedChip[] =
@@ -71,24 +77,12 @@ const TableToolbar = ({
                   name="limit"
                   value={tableQueryParams.limit}
                   onChange={handleRowsPerPageChange}
-                  className="
-            cursor-pointer
-            px-2 py-1
-            border
-            border-slate-300 dark:border-slate-700
-            rounded-lg
-            bg-white dark:bg-slate-800
-            text-sm
-            shadow-sm
-            focus:ring-2
-            focus:ring-blue-500 dark:text-slate-300
-            dark:outline-none dark:focus:outline-none
-            "
+                  className={selectDropDownClass}
                 >
                   {[2, 3, 5, 7, 10, 15].map((option, index) => (
                     <option
                       key={`option-${index}`}
-                      className="text-sm font-bold outline-none"
+                      className={selectOptionsClass}
                       value={option}
                     >
                       {option}
@@ -170,6 +164,19 @@ const TableToolbar = ({
                     className={`m-0 cursor-pointer`}
                   />
                 </div>
+                <button
+                  className="cursor-pointer"
+                  onClick={openCreateEmployeeModal}
+                >
+                  {
+                    <span title="Sort">
+                      <UserPlus
+                        size={20}
+                        className=" text-gray-600 dark:text-gray-100"
+                      />
+                    </span>
+                  }
+                </button>
               </div>
             }
           </div>

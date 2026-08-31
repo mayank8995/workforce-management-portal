@@ -61,13 +61,16 @@ const DesktopTable = <T extends ListType>(props: DesktopTableProps<T>) => {
               </th>
               {headersData?.map((header) => {
                 return (
-                  <th
-                    key={header.key}
-                    className="px-4 py-4 text-left text-xs font-semibold tracking-wider text-slate-600 dark:text-slate-400"
-                    onClick={() => handleSort(header?.key)}
-                  >
-                    {header?.value} {getSortIcon(header?.key)}
-                  </th>
+                  <React.Fragment key={header.key}>
+                    {!(header?.metadata?.show === false) && (
+                      <th
+                        className="px-4 py-4 text-left text-xs font-semibold tracking-wider text-slate-600 dark:text-slate-400"
+                        onClick={() => handleSort(header?.key)}
+                      >
+                        {header?.value} {getSortIcon(header?.key)}
+                      </th>
+                    )}
+                  </React.Fragment>
                 );
               })}
             </tr>
@@ -78,19 +81,19 @@ const DesktopTable = <T extends ListType>(props: DesktopTableProps<T>) => {
             {list?.length > 0 ? (
               list?.map((row, index: number) => (
                 <tr
-                  key={`${row.id}-${index * 2}`}
+                  key={`${row._id}-${index * 2}`}
                   className={` hover:bg-blue-50 hover:transition-colors hover:duration-200 dark:hover:bg-slate-400/50 odd:bg-white even:bg-slate-50 dark:odd:bg-slate-900 dark:even:bg-slate-800/40 dark:border-slate-800`}
                 >
                   {/* {Hooking checkboxlist into list as checkbox list is derived from list} */}
                   <td
-                    id={String(row?.id)}
+                    id={String(row?._id)}
                     className="px-4 py-4 font-medium text-slate-800 dark:text-slate-400"
                   >
                     <FormField
-                      name={String(row?.id)}
+                      name={String(row?._id)}
                       type={'checkbox'}
-                      id={String(row?.id)}
-                      checked={selectedRow.has(String(row?.id))}
+                      id={String(row?._id)}
+                      checked={selectedRow.has(String(row?._id))}
                       onChange={handleOnChange}
                       className={`${className} cursor-pointer`}
                     />
@@ -98,46 +101,53 @@ const DesktopTable = <T extends ListType>(props: DesktopTableProps<T>) => {
                   {columnsData?.map((column) => {
                     const value = row[column?.key];
                     return (
-                      <td
-                        key={column?.key}
-                        className={`px-4 py-4 font-medium text-slate-800 dark:text-slate-400`}
-                      >
-                        <button
-                          id={column?.key}
-                          className={
-                            column?.key === NAME
-                              ? 'cursor-pointer'
-                              : 'cursor-default'
-                          }
-                          type="button"
-                          onClick={(
-                            event: React.MouseEvent<HTMLButtonElement>
-                          ) => {
-                            if (!(event.currentTarget.id === NAME)) {
-                              event.preventDefault();
-                              return;
-                            }
-                            openModal(DetailModal, {
-                              id: row.id,
-                              tableQueryParams,
-                            });
-                          }}
-                        >
-                          {Array.isArray(value) && value?.length > 0 ? (
-                            <AndOthersComponent
-                              values={value}
+                      <React.Fragment key={column?.key}>
+                        {!(column?.metadata?.show === false) && (
+                          <td
+                            className={`px-4 py-4 font-medium text-slate-800 dark:text-slate-400`}
+                            id={String(row?._id)}
+                          >
+                            <button
                               id={column?.key}
-                              render={column?.render}
-                            />
-                          ) : (
-                            <>
-                              {!column?.render
-                                ? value
-                                : column?.render(String(value), column?.key)}
-                            </>
-                          )}
-                        </button>
-                      </td>
+                              className={
+                                column?.key === NAME
+                                  ? 'cursor-pointer'
+                                  : 'cursor-default'
+                              }
+                              type="button"
+                              onClick={(
+                                event: React.MouseEvent<HTMLButtonElement>
+                              ) => {
+                                if (!(event.currentTarget.id === NAME)) {
+                                  event.preventDefault();
+                                  return;
+                                }
+                                openModal(DetailModal, {
+                                  _id: row._id,
+                                  tableQueryParams,
+                                });
+                              }}
+                            >
+                              {Array.isArray(value) && value?.length > 0 ? (
+                                <AndOthersComponent
+                                  values={value}
+                                  id={column?.key}
+                                  render={column?.render}
+                                />
+                              ) : (
+                                <>
+                                  {!column?.render
+                                    ? value
+                                    : column?.render(
+                                        String(value),
+                                        column?.key
+                                      )}
+                                </>
+                              )}
+                            </button>
+                          </td>
+                        )}
+                      </React.Fragment>
                     );
                   })}
                 </tr>

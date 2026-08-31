@@ -3,7 +3,7 @@ import type { ChangeEvent, ComponentProps, ReactNode, RefObject } from 'react';
 
 export interface LoginData {
   readonly name: string;
-  readonly id: string;
+  readonly _id: string;
 }
 
 export interface ProfileForm {
@@ -14,8 +14,8 @@ export interface ProfileForm {
   department?: string;
   designation?: string;
   empId?: string;
-  jdate?: string;
-  wmode?: string;
+  joiningDate?: string;
+  workMode?: string;
   location?: string;
   image?: string | null;
 }
@@ -88,7 +88,7 @@ export type TableQueryParams = {
   totalItems?: number;
   totalPages?: number;
   sortBy?: string;
-  order?: 'asc' | 'desc';
+  sortOrder?: 'asc' | 'desc';
   tableType?: TableTypeProps;
   //eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
@@ -141,6 +141,7 @@ export type TableToolbarProps = {
   downloading: boolean;
   ref?: RefObject<HTMLInputElement | null>;
   listSize: number;
+  openCreateEmployeeModal: () => void;
 };
 export type TableTypeMap = {
   employees: Employee;
@@ -235,19 +236,24 @@ export type InputFieldType = ComponentProps<'input'> & {
 
 export type CheckBox = Record<string, boolean>;
 
-interface Project {
+export interface Project {
   projectName: string;
   status: ProjectStatus;
   riskStatus: RiskStatus;
   priorityRanking: number;
 }
-type WorkMode = 'Remote' | 'Hybrid' | 'On-site';
-type ProjectStatus = 'Active' | 'Support' | 'On Hold' | 'Completed';
-type RiskStatus = 'On Track' | 'At Risk' | 'Delayed';
+type WorkMode = 'Remote' | 'Hybrid' | 'Onsite';
+type ProjectStatus =
+  | 'Active'
+  | 'Completed'
+  | 'On Hold'
+  | 'Cancelled'
+  | 'Support';
+type RiskStatus = 'On Track' | 'At Risk' | 'Critical';
 type SatisfactionLevel = 'Low' | 'Medium' | 'High';
 
 export interface Employee {
-  id: number;
+  _id: number;
   name: string;
   email: string;
   phone: string;
@@ -268,6 +274,28 @@ export interface Employee {
   projectName?: string;
   riskStatus?: string;
   status?: string;
+  level?: string;
+}
+export interface EmployeeFormType {
+  name: string;
+  empId?: string;
+  email: string;
+  phone: string;
+  department: string;
+  designation: string;
+  manager: string;
+  joiningDate: string;
+  yearsOfExperience: number;
+  salary: number;
+  location: string;
+  workMode: string;
+  skills: string[];
+  rating: number;
+  attendancePercentage: number;
+  employeeSatisfaction: string;
+  onNoticePeriod: boolean;
+  projects: Project[];
+  level?: string;
 }
 
 export type EmployeeProps = {
@@ -279,6 +307,7 @@ export type Column<T> = {
     key: Extract<keyof T, string>;
     header: string;
     render?: (value: string, id: string) => ReactNode;
+    metadata?: any;
   };
 }[keyof T];
 
@@ -292,7 +321,7 @@ export type AccordionSection = {
   render?: (props?: Record<any, any>) => React.ReactNode;
 };
 export interface TopPerformer {
-  id: number;
+  _id: string;
   name: string;
   designation: string;
   department: string;
@@ -300,7 +329,7 @@ export interface TopPerformer {
 }
 
 export interface TopProject {
-  id: string;
+  _id: string;
   name: string;
   projectName: string;
   riskStatus: string;
@@ -308,7 +337,7 @@ export interface TopProject {
 }
 
 export interface PromotedEmployee {
-  id: number;
+  _id: string;
   name: string;
   currentDesignation: string;
   previousDesignation: string;
@@ -317,7 +346,7 @@ export interface PromotedEmployee {
 }
 
 export interface EmployeeRequiringReview {
-  id: number;
+  _id: string;
   name: string;
   designation: string;
   department: string;
@@ -328,6 +357,7 @@ export interface EmployeeRequiringReview {
 export type TableHeader<T> = {
   key: Extract<keyof T, string>;
   value: string;
+  metadata?: any;
 };
 export type ListType =
   | Employee
@@ -349,7 +379,7 @@ export type CustomTableProps<T extends ListType> = ErrorPageProps & {
 type Trend = 'up' | 'down';
 
 type EmployeeBase = {
-  id: number;
+  _id: number;
   name: string;
   department: string;
 };
@@ -403,7 +433,7 @@ type EmployeeSatisfaction = 'Low' | 'Medium' | 'High';
 type ReviewReason =
   | 'Low Rating'
   | 'Low Attendance'
-  | 'On Notice Period'
+  | 'On Notice'
   | 'Low Satisfaction';
 
 type ReviewEmployee = EmployeeBase & {
@@ -440,6 +470,7 @@ type AnalyticsSummary = {
   totalEmployees: number;
   activeProjects: number;
   revenueThisQuarterCr: number;
+  totalRevenue: number;
   profitMargin: number;
   attritionRate: number;
 };
@@ -456,10 +487,9 @@ type RevenueTrendItem = {
 
 export type ProjectStatusDistribution = {
   totalProjects: number;
-  onTrack: number;
-  atRisk: number;
-  delayed: number;
-  completed: number;
+  Active: number;
+  Support: number;
+  Completed: number;
 };
 
 type DepartmentHeadcount = {
@@ -545,7 +575,7 @@ export type NavItems = {
 };
 
 export type LoginProfile = {
-  id: string;
+  _id: string;
   name: string;
 };
 
