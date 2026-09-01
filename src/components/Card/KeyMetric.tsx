@@ -83,7 +83,9 @@ function KeyMetric({ metricData }: KeyMetricCardsProps): React.ReactElement {
                       {key}
                     </h1>
                     <h2 className="font-bold text-indigo-600 drop-shadow-sm text-sm truncate">
-                      {data[key]?.value}
+                      {data[key]?.icon === KEY_TRACK_METRIC_ICON['INDIAN_RUPEE']
+                        ? `${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(data[key]?.value)}`
+                        : data[key]?.value}
                     </h2>
                   </div>
                 </div>

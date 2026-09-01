@@ -1,10 +1,17 @@
 import React, { useEffect } from 'react';
 import type { ListType, MobileTableProps } from '../../types/types';
-import { bgColors, gradients, NAME } from '../../utils/constants';
+import {
+  bgColors,
+  EDIT_EMPLOYEE_SUBTITLE,
+  EDIT_EMPLOYEE_TITLE,
+  gradients,
+  NAME,
+} from '../../utils/constants';
 import FormField from '../Form/FormField';
 import { useModal } from '../../context/ModalContext';
-import DetailModal from '../Overlay/DetailModal';
+// import DetailModal from '../Overlay/DetailModal';
 import AndOthersComponent from '../AndOthers/AndOthersComponent';
+import EmployeeForm from '../Form/EmployeeForm/EmployeeForm';
 
 function MobileViewCardForTable<T extends ListType>({
   list,
@@ -65,9 +72,11 @@ function MobileViewCardForTable<T extends ListType>({
                         type="button"
                         className={` flex flex-col gap-1 min-w-0 cursor-pointer`}
                         onClick={() => {
-                          openModal(DetailModal, {
-                            id: row._id,
+                          openModal(EmployeeForm, {
+                            _id: row._id,
                             tableQueryParams,
+                            title: EDIT_EMPLOYEE_TITLE,
+                            subtitle: EDIT_EMPLOYEE_SUBTITLE,
                           });
                         }}
                       >

@@ -1,11 +1,18 @@
 import type { QueryClientConfig } from '@tanstack/react-query';
 import type { ChangeEvent, ComponentProps, ReactNode, RefObject } from 'react';
 
+interface Permission {
+  resource: string;
+  actions: string[];
+}
 export interface LoginData {
   readonly name: string;
   readonly _id: string;
+  readonly permissions: Permission[];
+  readonly role: string;
+  readonly department: string;
+  readonly designation: string;
 }
-
 export interface ProfileForm {
   readonly id?: string | undefined;
   name: string;
@@ -242,15 +249,15 @@ export interface Project {
   riskStatus: RiskStatus;
   priorityRanking: number;
 }
-type WorkMode = 'Remote' | 'Hybrid' | 'Onsite';
-type ProjectStatus =
+export type WorkMode = 'Remote' | 'Hybrid' | 'Onsite';
+export type ProjectStatus =
   | 'Active'
   | 'Completed'
   | 'On Hold'
   | 'Cancelled'
   | 'Support';
-type RiskStatus = 'On Track' | 'At Risk' | 'Critical';
-type SatisfactionLevel = 'Low' | 'Medium' | 'High';
+export type RiskStatus = 'On Track' | 'At Risk' | 'Critical';
+export type SatisfactionLevel = 'Low' | 'Medium' | 'High';
 
 export interface Employee {
   _id: number;
@@ -572,6 +579,7 @@ export type ExportHeader<T> = {
 export type NavItems = {
   name: string;
   path: string;
+  show: boolean;
 };
 
 export type LoginProfile = {

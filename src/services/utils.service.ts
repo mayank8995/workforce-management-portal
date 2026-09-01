@@ -176,12 +176,14 @@ export function useProfileData(user: LoginProfile) {
   });
 }
 
-export function useEmployeeDetail(_id: { _id: number }) {
+export function useEmployeeDetail(_id: { _id: string }) {
+  const { _id: userId } = _id;
   return useQuery({
     queryKey: ['employeeDetail', _id],
     queryFn: () => fetchEmployeeDetails(_id),
     staleTime: Infinity, // Keep the data "fresh" forever so it doesn't re-fetch
     retry: REFETCH_TRY,
+    enabled: !!userId, // Only run the query if _id is provided
   });
 }
 

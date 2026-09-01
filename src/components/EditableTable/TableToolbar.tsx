@@ -19,6 +19,7 @@ import {
 import type { SelectedChip, TableToolbarProps } from '../../types/types';
 import { useQueryClient } from '@tanstack/react-query';
 import { TailSpin } from 'react-loader-spinner';
+import { useAuth } from '../../context/AuthContext';
 
 const TableToolbar = ({
   txtToBeSearched,
@@ -40,6 +41,15 @@ const TableToolbar = ({
   const queryClient = useQueryClient();
   const isfilterAvailable: SelectedChip[] =
     queryClient.getQueryData(['filterKeyData']) || [];
+  const { can } = useAuth();
+  const isUpdateAllowed = can('employee', 'update');
+  const isCreateAllowed = can('employee', 'create');
+  console.log(
+    'isUpdateAllowed',
+    isUpdateAllowed,
+    'isCreateAllowed',
+    isCreateAllowed
+  );
   return (
     <React.Fragment>
       <div className="lg:hidden px-6 pt-4">
@@ -121,62 +131,68 @@ const TableToolbar = ({
                     </span>
                   }
                 </button>
-                <button
-                  disabled={selectedRow.size === 0}
-                  className={`${selectedRow.size === 0 ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-                  onClick={bulkAction}
-                >
-                  <span title="Download csv" className="flex gap-2">
-                    <Download
-                      size={20}
-                      color={selectedRow.size === 0 ? '#9ca3af' : '#2563eb'}
-                      className={`text-gray-600 dark:text-gray-100`}
-                    />
-                    {downloading && (
-                      <TailSpin
-                        visible={true}
-                        height={20}
-                        width={20}
-                        color={'#2563eb'}
-                        ariaLabel="tail-spin-loading"
-                        radius="1"
-                        strokeWidth="4"
-                        wrapperStyle={{}}
-                        wrapperClass="flex items-center justify-center"
-                      />
-                    )}
-                  </span>
-                </button>
-                <div
-                  title="Select All"
-                  className="flex lg:hidden items-center justify-center border-2 border-slate-950 border-dotted dark:border-slate-100 w-5 h-5"
-                >
-                  <FormField
-                    ref={ref}
-                    name={'selectAll'}
-                    type={'checkbox'}
-                    id={'selectAll'}
-                    checked={
-                      // selectedRow.has('selectAll') ||
-                      selectedRow.size === listSize
-                    }
-                    onChange={handleOnChange}
-                    className={`m-0 cursor-pointer`}
-                  />
-                </div>
-                <button
-                  className="cursor-pointer"
-                  onClick={openCreateEmployeeModal}
-                >
-                  {
-                    <span title="Sort">
-                      <UserPlus
+                {isUpdateAllowed ? (
+                  <button
+                    disabled={selectedRow.size === 0}
+                    className={`${selectedRow.size === 0 ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                    onClick={bulkAction}
+                  >
+                    <span title="Download csv" className="flex gap-2">
+                      <Download
                         size={20}
-                        className=" text-gray-600 dark:text-gray-100"
+                        color={selectedRow.size === 0 ? '#9ca3af' : '#2563eb'}
+                        className={`text-gray-600 dark:text-gray-100`}
                       />
+                      {downloading && (
+                        <TailSpin
+                          visible={true}
+                          height={20}
+                          width={20}
+                          color={'#2563eb'}
+                          ariaLabel="tail-spin-loading"
+                          radius="1"
+                          strokeWidth="4"
+                          wrapperStyle={{}}
+                          wrapperClass="flex items-center justify-center"
+                        />
+                      )}
                     </span>
-                  }
-                </button>
+                  </button>
+                ) : null}
+                {isUpdateAllowed ? (
+                  <div
+                    title="Select All"
+                    className="flex lg:hidden items-center justify-center border-2 border-slate-950 border-dotted dark:border-slate-100 w-5 h-5"
+                  >
+                    <FormField
+                      ref={ref}
+                      name={'selectAll'}
+                      type={'checkbox'}
+                      id={'selectAll'}
+                      checked={
+                        // selectedRow.has('selectAll') ||
+                        selectedRow.size === listSize
+                      }
+                      onChange={handleOnChange}
+                      className={`m-0 cursor-pointer`}
+                    />
+                  </div>
+                ) : null}
+                {isCreateAllowed ? (
+                  <button
+                    className="cursor-pointer"
+                    onClick={openCreateEmployeeModal}
+                  >
+                    {
+                      <span title="Sort">
+                        <UserPlus
+                          size={20}
+                          className=" text-gray-600 dark:text-gray-100"
+                        />
+                      </span>
+                    }
+                  </button>
+                ) : null}
               </div>
             }
           </div>

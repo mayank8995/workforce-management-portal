@@ -241,7 +241,7 @@ export const doSignup = async (form: SignUpForm) => {
   }
 };
 
-export const fetchEmployeeDetails = async (params: { _id: number }) => {
+export const fetchEmployeeDetails = async (params: { _id: string }) => {
   try {
     const res = await apiClient.get('/employee/details', { params });
     // console.log("Created:", res);
@@ -258,6 +258,23 @@ export const fetchEmployeeDetails = async (params: { _id: number }) => {
 export const createEmployee = async (form: EmployeeFormType) => {
   try {
     const res = await apiClient.post('/employee/create', JSON.stringify(form));
+    return res;
+  } catch (err: unknown) {
+    const { message, status, url } = getApiErrorDetails(err);
+    console.error('API Error:', message);
+    console.error('Status:', status);
+    console.error('URL:', url);
+    throw err;
+  }
+};
+export const editEmployee = async (
+  form: EmployeeFormType,
+  params: { _id: string }
+) => {
+  try {
+    const res = await apiClient.put('/employee/edit', JSON.stringify(form), {
+      params,
+    });
     return res;
   } catch (err: unknown) {
     const { message, status, url } = getApiErrorDetails(err);

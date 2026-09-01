@@ -35,7 +35,7 @@ export const router = createBrowserRouter([
         path: '/home',
         element: <Home />,
         errorElement: <ErrorBoundaryPage />,
-        handle: { breadcrumb: 'Home' },
+        handle: { breadcrumb: 'Home', resource: 'home' },
         children: [
           {
             index: true,
@@ -44,7 +44,7 @@ export const router = createBrowserRouter([
           {
             path: 'dashboard',
             element: <DashboardRoot />,
-            handle: { breadcrumb: 'Dashboard' },
+            handle: { breadcrumb: 'Dashboard', resource: 'dashboard' },
             children: [
               {
                 path: '',
@@ -53,26 +53,30 @@ export const router = createBrowserRouter([
               {
                 path: 'viewmore',
                 element: <ViewMore />,
-                handle: { breadcrumb: 'View More' },
+                handle: { breadcrumb: 'View More', resource: 'viewmore' },
               },
             ],
           },
           {
-            path: 'employees',
+            path: 'employee',
             element: <Employees />,
-            handle: { breadcrumb: 'Employees' },
+            handle: { breadcrumb: 'Employees', resource: 'employee' },
           },
           {
             path: 'analytics',
             element: <Analytics />,
-            handle: { breadcrumb: 'Analytics' },
+            handle: { breadcrumb: 'Analytics', resource: 'analytics' },
           },
           {
             path: 'settings',
             element: <ProfileSettings />,
-            handle: { breadcrumb: 'Settings' },
+            handle: { breadcrumb: 'Settings', resource: 'settings' },
           },
         ],
+      },
+      {
+        path: '/unauthorized',
+        element: <div>Unauthorized Access</div>,
       },
       {
         path: '*',

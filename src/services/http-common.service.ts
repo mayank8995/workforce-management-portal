@@ -61,7 +61,6 @@ apiClient.interceptors.response.use(
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     reportError(error);
     if (error.response?.status === 403) {
-      localStorage.removeItem('access-token');
       doLogout();
       return Promise.reject(new Error('Auth token expired'));
     }

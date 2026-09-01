@@ -7,6 +7,7 @@ import {
 } from 'react';
 import { type LoginData, type TableQueryParams } from '../types/types';
 import { useQueryClient } from '@tanstack/react-query';
+import { CHECK_FOR_ROUTES } from '../utils/constants';
 
 interface AuthContextType {
   user: LoginData | null;
@@ -16,6 +17,7 @@ interface AuthContextType {
   logout: () => void;
   tableQueryParams: TableQueryParams;
   setQueryParamsData: (data: TableQueryParams) => void;
+  can: (resource: string, action: string) => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -39,13 +41,37 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     sortOrder: 'asc',
   });
 
+  const permissionsMap = user?.permissions?.reduce(
+    (acc, permission) => {
+      acc[permission.resource] = new Set(permission.actions);
+      return acc;
+    },
+    {} as Record<string, Set<string>>
+  );
+
   useEffect(() => {
     setIsLoading(false);
   }, []);
 
-  const login = ({ _id, name }: LoginData) => {
-    localStorage.setItem('user', JSON.stringify({ _id, name }));
-    setUser({ _id, name });
+  const login = ({
+    name,
+    _id,
+    permissions,
+    role,
+    department,
+    designation,
+  }: LoginData) => {
+    localStorage.setItem(
+      'user',
+      JSON.stringify({ name, _id, permissions, role, department, designation })
+    );
+    setUser({ name, _id, permissions, role, department, designation });
+  };
+
+  const can = (resource: string, action: string) => {
+    return (
+      user?.role === 'admin' || permissionsMap?.[resource]?.has(action) || false
+    );
   };
 
   const logout = () => {
@@ -66,6 +92,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     logout,
     tableQueryParams,
     setQueryParamsData,
+    can,
   };
 
   return <AuthContext value={value}>{children}</AuthContext>;

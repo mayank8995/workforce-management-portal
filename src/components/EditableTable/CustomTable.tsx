@@ -20,7 +20,13 @@ import { exportSelected } from '../../services/utils.service';
 import { toast } from 'react-toastify';
 import useScreenType from '../../hooks/useScreenSize';
 import { useModal } from '../../context/ModalContext';
-import { sortModalContainerCss } from '../../utils/constants';
+import {
+  CREATE_EMPLOYEE_SUBTITLE,
+  CREATE_EMPLOYEE_TITLE,
+  EMPLOYEE_TABLE,
+  ERROR_OCCURRED_WHILE_DOWNLOADING_FILE,
+  sortModalContainerCss,
+} from '../../utils/constants';
 import { useSearchParams } from 'react-router-dom';
 import EmployeeForm from '../Form/EmployeeForm/EmployeeForm';
 
@@ -197,14 +203,14 @@ function CustomTable<T extends ListType>(
         selectedRow,
         list,
         headersData,
-        tableQueryParams?.tableType ?? 'employee'
+        tableQueryParams?.tableType ?? EMPLOYEE_TABLE
       );
       setDownloading(false);
     } catch (error) {
       const errorMessage =
         error instanceof Error
           ? error.message
-          : 'Error in downloading. Please try again.';
+          : ERROR_OCCURRED_WHILE_DOWNLOADING_FILE;
       toast.error(errorMessage);
     } finally {
       setDownloading(false);
@@ -212,7 +218,10 @@ function CustomTable<T extends ListType>(
   };
 
   const openCreateEmployeeModal = () => {
-    openModal(EmployeeForm);
+    openModal(EmployeeForm, {
+      title: CREATE_EMPLOYEE_TITLE,
+      subtitle: CREATE_EMPLOYEE_SUBTITLE,
+    });
   };
   return (
     <>

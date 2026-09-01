@@ -14,11 +14,27 @@ function Navigation() {
   const navigate = useNavigate();
   const context = useAuth();
   const navItems: NavItems[] = [
-    { name: SIDE_BAR_ITEMS.DASHBOARD, path: NAV_ITEMS.DASHBOARD },
-    { name: SIDE_BAR_ITEMS.EMPLOYEES, path: NAV_ITEMS.EMPLOYEES },
-    { name: SIDE_BAR_ITEMS.ANALYTICS, path: NAV_ITEMS.ANALYTICS },
-    { name: SIDE_BAR_ITEMS.SETTINGS, path: NAV_ITEMS.SETTINGS },
-    { name: SIDE_BAR_ITEMS.LOGOUT, path: NAV_ITEMS.LOGOUT },
+    {
+      name: SIDE_BAR_ITEMS.DASHBOARD,
+      path: NAV_ITEMS.DASHBOARD,
+      show: context?.can('dashboard', 'read'),
+    },
+    {
+      name: SIDE_BAR_ITEMS.EMPLOYEES,
+      path: NAV_ITEMS.EMPLOYEES,
+      show: context?.can('employee', 'read'),
+    },
+    {
+      name: SIDE_BAR_ITEMS.ANALYTICS,
+      path: NAV_ITEMS.ANALYTICS,
+      show: context?.can('analytics', 'read'),
+    },
+    {
+      name: SIDE_BAR_ITEMS.SETTINGS,
+      path: NAV_ITEMS.SETTINGS,
+      show: context?.can('settings', 'read'),
+    },
+    { name: SIDE_BAR_ITEMS.LOGOUT, path: NAV_ITEMS.LOGOUT, show: true },
   ];
 
   async function navigateToPage(
@@ -93,26 +109,25 @@ function Navigation() {
         {/* Nav Links */}
         <nav className="flex-1 p-4 space-y-2 h-full overflow-y-auto">
           {navItems?.map((item) => (
-            <button
-              key={item.name}
-              className={`w-full max-w-full text-xs md:text-sm`}
-            >
-              <NavLink
-                key={item.name}
-                to={item.path}
-                onClick={() => navigateToPage(false, item)}
-                onMouseEnter={() => {
-                  if (item.path === NAV_ITEMS.ANALYTICS) {
-                    loadAnalyticsPage();
-                  }
-                }}
-                onPointerDown={() => {
-                  if (item.path === NAV_ITEMS.ANALYTICS) {
-                    loadAnalyticsPage();
-                  }
-                }}
-                className={({ isActive }) =>
-                  `flex
+            <React.Fragment key={item.name}>
+              {item?.show ? (
+                <button className={`w-full max-w-full text-xs md:text-sm`}>
+                  <NavLink
+                    key={item.name}
+                    to={item.path}
+                    onClick={() => navigateToPage(false, item)}
+                    onMouseEnter={() => {
+                      if (item.path === NAV_ITEMS.ANALYTICS) {
+                        loadAnalyticsPage();
+                      }
+                    }}
+                    onPointerDown={() => {
+                      if (item.path === NAV_ITEMS.ANALYTICS) {
+                        loadAnalyticsPage();
+                      }
+                    }}
+                    className={({ isActive }) =>
+                      `flex
               items-center
               gap-3
               px-4
@@ -127,44 +142,46 @@ function Navigation() {
                   ? 'bg-linear-to-r from-indigo-600 to-violet-500 rounded-xl text-white shadow-lg shadow-indigo-500/300'
                   : 'text-slate-300 hover:bg-slate-800 hover:text-white'
               }`
-                }
-              >
-                {/* { `${item.name}` === SIDE_BAR_ITEMS.DASHBOARD && <Home className="h-5 w-5"/>}
+                    }
+                  >
+                    {/* { `${item.name}` === SIDE_BAR_ITEMS.DASHBOARD && <Home className="h-5 w-5"/>}
               { `${item.name}` === SIDE_BAR_ITEMS.EMPLOYEES && <Users className="h-5 w-5"/>}
               { `${item.name}` === SIDE_BAR_ITEMS.ANALYTICS && <BarChart3 className="h-5 w-5"/>}
               { `${item.name}` === SIDE_BAR_ITEMS.SETTINGS && <Settings className="h-5 w-5" />} */}
-                {item.name === SIDE_BAR_ITEMS.DASHBOARD && (
-                  <>
-                    <Home className="h-4 w-4 md:h-5 md:w-5" />
-                    {item.name}
-                  </>
-                )}
-                {item.name === SIDE_BAR_ITEMS.EMPLOYEES && (
-                  <>
-                    <Users className="h-4 w-4 md:h-5 md:w-5" />
-                    {item.name}
-                  </>
-                )}
-                {item.name === SIDE_BAR_ITEMS.ANALYTICS && (
-                  <>
-                    <BarChart3 className="h-4 w-4 md:h-5 md:w-5" />
-                    {item.name}
-                  </>
-                )}
-                {item.name === SIDE_BAR_ITEMS.SETTINGS && (
-                  <>
-                    <Settings className="h-4 w-4 md:h-5 md:w-5" />
-                    {item.name}
-                  </>
-                )}
-                {item.name === SIDE_BAR_ITEMS.LOGOUT && (
-                  <>
-                    <LogOut className="h-4 w-4 md:h-5 md:w-5" />
-                    {item.name}
-                  </>
-                )}
-              </NavLink>
-            </button>
+                    {item.name === SIDE_BAR_ITEMS.DASHBOARD && (
+                      <>
+                        <Home className="h-4 w-4 md:h-5 md:w-5" />
+                        {item.name}
+                      </>
+                    )}
+                    {item.name === SIDE_BAR_ITEMS.EMPLOYEES && (
+                      <>
+                        <Users className="h-4 w-4 md:h-5 md:w-5" />
+                        {item.name}
+                      </>
+                    )}
+                    {item.name === SIDE_BAR_ITEMS.ANALYTICS && (
+                      <>
+                        <BarChart3 className="h-4 w-4 md:h-5 md:w-5" />
+                        {item.name}
+                      </>
+                    )}
+                    {item.name === SIDE_BAR_ITEMS.SETTINGS && (
+                      <>
+                        <Settings className="h-4 w-4 md:h-5 md:w-5" />
+                        {item.name}
+                      </>
+                    )}
+                    {item.name === SIDE_BAR_ITEMS.LOGOUT && (
+                      <>
+                        <LogOut className="h-4 w-4 md:h-5 md:w-5" />
+                        {item.name}
+                      </>
+                    )}
+                  </NavLink>
+                </button>
+              ) : null}
+            </React.Fragment>
           ))}
         </nav>
 
