@@ -13,18 +13,13 @@ import type {
   PromotedThisYearCardProps,
   RequiringReviewCardProps,
   TopPerformersCardProps,
-  TableTypeMap,
 } from '../../types/types';
 import { useAllData } from '../../services/utils.service';
 import Skeleton from '../../components/Skeleton/Skeleton';
 import ErrorPage from '../../components/Error/ErrorPage';
 
 function Dashboard() {
-  const results = useAllData({
-    tableType: 'topProjects' as keyof TableTypeMap,
-    page: 1,
-    limit: 5,
-  });
+  const results = useAllData();
   const metricData = results[0]?.data?.data;
   const topPerformers = results[1]?.data?.data;
   const meetingKPIs = results[2]?.data?.data;

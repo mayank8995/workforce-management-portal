@@ -7,7 +7,6 @@ import {
 } from 'react';
 import { type LoginData, type TableQueryParams } from '../types/types';
 import { useQueryClient } from '@tanstack/react-query';
-import { CHECK_FOR_ROUTES } from '../utils/constants';
 
 interface AuthContextType {
   user: LoginData | null;

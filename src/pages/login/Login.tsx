@@ -240,7 +240,7 @@ function Login({
           {serverWakingUp?.message}
         </p>
       )}
-      {/* <p className="text-center text-slate-600 dark:text-slate-400 text-sm">
+      <p className="text-center text-slate-600 dark:text-slate-400 text-sm">
         Don't have an account?{' '}
         <button
           onClick={() => onCustomEvent(false)}
@@ -248,7 +248,7 @@ function Login({
         >
           Create one
         </button>
-      </p> */}
+      </p>
     </div>
   );
 }

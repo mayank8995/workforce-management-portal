@@ -70,7 +70,9 @@ function EmployeeForm({
     priorityRanking: '',
   });
 
-  const [projectErrors, setProjectErrors] = useState({});
+  const [projectErrors, setProjectErrors] = useState<Record<string, string>>(
+    {}
+  );
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formDisabled, setFormDisabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -141,7 +143,7 @@ function EmployeeForm({
     ];
 
     for (const key of requiredFields) {
-      const value = formValues?.[key];
+      const value = formValues?.[key as keyof EmployeeFormType];
 
       const msg = validateField(key, value);
 

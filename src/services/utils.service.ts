@@ -104,13 +104,7 @@ export function usePerFormanceTableData(params: TableQueryParams) {
   });
 }
 
-export function useAllData(params: TableQueryParams) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { totalPages, totalItems, ...updatedParams } = params;
-  const queryParams =
-    'tableType' in updatedParams
-      ? updatedParams
-      : ({ ...updatedParams, tableType: 'employees' } as TableQueryParams);
+export function useAllData() {
   return useQueries({
     queries: [
       {

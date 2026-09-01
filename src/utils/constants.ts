@@ -432,6 +432,7 @@ export const FIELD_LABELS: Record<keyof Employee, string> = {
   projectName: 'Project Name',
   riskStatus: 'Risk Status',
   status: 'Status',
+  level: 'Level',
 };
 
 export const TOP_PERFORMER_FIELD_LABELS: Record<keyof TopPerformer, string> = {
