@@ -44,12 +44,7 @@ const TableToolbar = ({
   const { can } = useAuth();
   const isUpdateAllowed = can('employee', 'update');
   const isCreateAllowed = can('employee', 'create');
-  console.log(
-    'isUpdateAllowed',
-    isUpdateAllowed,
-    'isCreateAllowed',
-    isCreateAllowed
-  );
+
   return (
     <React.Fragment>
       <div className="lg:hidden px-6 pt-4">

@@ -16,6 +16,7 @@ import type {
   Project,
   ProjectStatus,
   RiskStatus,
+  TableQueryParams,
 } from '../../../types/types';
 import { createEmployee, editEmployee } from '../../../api/admin-portal.api';
 import EmployeeFormSkeleton from './EmployeeFormSkeleton';
@@ -27,11 +28,13 @@ function EmployeeForm({
   _id,
   title,
   subtitle,
+  tableQueryParams,
 }: {
   onClose: () => void;
   _id: string;
   title: string;
   subtitle: string;
+  tableQueryParams: TableQueryParams;
 }) {
   const {
     data: details,
@@ -40,6 +43,7 @@ function EmployeeForm({
     refetch: refetchDetails,
   } = useEmployeeDetail({ _id });
   const row = details?.['data']?.data?.result ?? [];
+
   const { user } = useAuth();
   const [formValues, setFormValues] = useState<EmployeeFormType>({
     name: '',
@@ -196,7 +200,10 @@ function EmployeeForm({
             rating: Number(formValues?.rating),
             attendancePercentage: Number(formValues?.attendancePercentage),
           },
-          { _id: user?._id ?? '' }
+          {
+            _id: user?._id ?? '',
+            type: tableQueryParams?.tableType ?? 'employees',
+          }
         );
         if (res?.status === 200) {
           toast.success('Employee edited successfully');

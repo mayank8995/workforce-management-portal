@@ -269,7 +269,7 @@ export const createEmployee = async (form: EmployeeFormType) => {
 };
 export const editEmployee = async (
   form: EmployeeFormType,
-  params: { _id: string }
+  params: { _id: string; type: string }
 ) => {
   try {
     const res = await apiClient.put('/employee/edit', JSON.stringify(form), {
