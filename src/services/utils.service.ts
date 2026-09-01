@@ -104,13 +104,7 @@ export function usePerFormanceTableData(params: TableQueryParams) {
   });
 }
 
-export function useAllData(params: TableQueryParams) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { totalPages, totalItems, ...updatedParams } = params;
-  const queryParams =
-    'tableType' in updatedParams
-      ? updatedParams
-      : ({ ...updatedParams, tableType: 'employees' } as TableQueryParams);
+export function useAllData() {
   return useQueries({
     queries: [
       {
@@ -176,12 +170,14 @@ export function useProfileData(user: LoginProfile) {
   });
 }
 
-export function useEmployeeDetail(_id: { _id: number }) {
+export function useEmployeeDetail(_id: { _id: string }) {
+  const { _id: userId } = _id;
   return useQuery({
     queryKey: ['employeeDetail', _id],
     queryFn: () => fetchEmployeeDetails(_id),
     staleTime: Infinity, // Keep the data "fresh" forever so it doesn't re-fetch
     retry: REFETCH_TRY,
+    enabled: !!userId, // Only run the query if _id is provided
   });
 }
 

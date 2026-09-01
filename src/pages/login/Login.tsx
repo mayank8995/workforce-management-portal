@@ -98,8 +98,7 @@ function Login({
           data?: { data?: LoginData; message?: ToastContent<unknown> };
         } | null = await doLogin(form);
         if (res?.status === 200) {
-          const { _id, name } = res?.data?.data as LoginData;
-          login({ _id, name });
+          login(res?.data?.data as LoginData);
           toast.success(res?.data?.message, {});
           navigate(NAV_ITEMS.DASHBOARD);
         } else {

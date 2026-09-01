@@ -73,7 +73,7 @@ export const TOTAL_PROJECTS = 'Total Projects';
 export const NAV_ITEMS = {
   DASHBOARD: '/home/dashboard',
   ANALYTICS: '/home/analytics',
-  EMPLOYEES: '/home/employees',
+  EMPLOYEES: '/home/employee',
   SETTINGS: '/home/settings',
   LOGOUT: '/',
 };
@@ -432,6 +432,7 @@ export const FIELD_LABELS: Record<keyof Employee, string> = {
   projectName: 'Project Name',
   riskStatus: 'Risk Status',
   status: 'Status',
+  level: 'Level',
 };
 
 export const TOP_PERFORMER_FIELD_LABELS: Record<keyof TopPerformer, string> = {
@@ -501,3 +502,17 @@ export const GUEST_LOGIN = {
   email: 'liam.anderson@ad.com',
   password: 'liam.anderson.mayank@SpaceX123',
 };
+
+export const CHECK_FOR_ROUTES = ['dashboard', 'employee', 'analytics'];
+
+export const EDIT_EMPLOYEE_TITLE = 'Edit Employee';
+export const EDIT_EMPLOYEE_SUBTITLE = 'Edit employee details';
+
+export const CREATE_EMPLOYEE_TITLE = 'Create Employee';
+export const CREATE_EMPLOYEE_SUBTITLE =
+  'Add a new employee to the organization';
+
+export const EMPLOYEE_TABLE = 'employees';
+
+export const ERROR_OCCURRED_WHILE_DOWNLOADING_FILE =
+  'Error occurred while downloading the file. Please try again.';

@@ -39,6 +39,8 @@ function ProfileSettings() {
     isError,
     refetch,
   } = useProfileData(user as LoginProfile);
+  const { can } = useAuth();
+  const isUpdateAllowed = can('settings', 'update');
   const [formValues, setFormValues] = useState<ProfileForm | null>({
     name: '',
     phone: '',
@@ -461,7 +463,7 @@ function ProfileSettings() {
                   </div>
                 </div>
                 <hr className="border-t-2  border-gray-300 border-dotted dark:border-gray-600"></hr>
-                {!isEditing && (
+                {!isEditing && isUpdateAllowed && (
                   <div className="flex justify-between items-center p-4">
                     <button
                       type="submit"
@@ -512,7 +514,7 @@ function ProfileSettings() {
                     </button>
                   </div>
                 )}
-                {isEditing && (
+                {isEditing && isUpdateAllowed && (
                   <div className="flex justify-between items-center p-4">
                     <button
                       type="submit"

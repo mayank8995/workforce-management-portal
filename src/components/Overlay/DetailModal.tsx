@@ -9,7 +9,7 @@ import ErrorPage from '../Error/ErrorPage';
 
 interface DetailModalProps {
   onClose: () => void;
-  _id: number;
+  _id: string;
 }
 
 const DetailModal = ({ onClose, _id }: DetailModalProps) => {

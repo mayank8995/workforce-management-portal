@@ -129,6 +129,21 @@ export const columns_promotedThisYear: Column<PromotedEmployee>[] = [
   {
     key: 'promotedOn',
     header: 'Promoted On',
+    render: (value: string) => {
+      const date = new Date().toISOString()?.split('T')?.[0];
+      const formattedDate = new Date(value).toISOString()?.split('T')?.[0];
+      return (
+        <time dateTime={value}>
+          {formattedDate === date
+            ? 'Today'
+            : new Date(value).toLocaleDateString('en-US', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+              })}
+        </time>
+      );
+    },
   },
 ];
 
