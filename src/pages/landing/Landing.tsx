@@ -60,7 +60,7 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#eef0fc] via-[#e7e9fb] to-[#dee1f7] dark:from-[#0f172a] dark:via-[#161233] dark:to-[#2a1a52] text-slate-900 dark:text-white">
       <header className="sticky top-0 z-20 backdrop-blur-md bg-white/60 dark:bg-[#0f172a]/60 border-b border-black/5 dark:border-white/10">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 h-16 flex items-center justify-between">
+        <div className="mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <LayoutGrid className="h-6 w-6 text-[#534ab7]" />
             <span className="font-semibold">Admin Portal</span>
