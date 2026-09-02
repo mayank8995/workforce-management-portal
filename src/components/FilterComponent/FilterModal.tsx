@@ -8,10 +8,10 @@ import type {
   TableQueryParams,
   TableTypeMap,
 } from '../../types/types';
-import { useFilterList } from '../../services/utils.service';
 import FilterModalSkeleton from '../Skeleton/FilterModalSkeleton';
 import ErrorPage from '../Error/ErrorPage';
 import { useQueryClient } from '@tanstack/react-query';
+import { useFilterList } from '../../api/tanstack.query';
 
 type FilterListItem = [string, string[]];
 interface FilterListResponse {

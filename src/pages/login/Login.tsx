@@ -173,7 +173,7 @@ function Login({
         <div>
           <div className="mb-4 flex flex-col">
             <label htmlFor="email" className={loginLabelclassNAme}>
-              Username/Admin ID
+              Email Id
             </label>
             <FormField
               errors={errors}
@@ -249,6 +249,12 @@ function Login({
           Create one
         </button>
       </p>
+      <button
+        onClick={() => handleLogin(GUEST_LOGIN)}
+        className="w-full text-sm text-[#9d8df1] mt-2 hover:underline cursor-pointer"
+      >
+        Continue as guest
+      </button>
     </div>
   );
 }

@@ -2,13 +2,13 @@
 import { useState } from 'react';
 import CustomTable from '../EditableTable/CustomTable';
 import { useSearchParams } from 'react-router-dom';
-import { useEmployreeAnalyticsTableData } from '../../services/utils.service';
 import {
   DEFAULT_TABLE_QUERY_PARAMS,
   TABLE_CONFIG,
 } from '../../utils/constants';
 import type { TableQueryParams, TableTypeMap } from '../../types/types';
 import { useLoader } from '../../context/Loadercontext';
+import { useEmployeeAnalyticsTableData } from '../../api/tanstack.query';
 
 function ViewMore() {
   const { setIsLoading } = useLoader();
@@ -20,7 +20,7 @@ function ViewMore() {
   const [query, setQuery] = useState<TableQueryParams>(
     DEFAULT_TABLE_QUERY_PARAMS as TableQueryParams
   );
-  const tableQuery = useEmployreeAnalyticsTableData(
+  const tableQuery = useEmployeeAnalyticsTableData(
     { ...query, tableType: target as keyof TableTypeMap },
     setIsLoading,
     signal

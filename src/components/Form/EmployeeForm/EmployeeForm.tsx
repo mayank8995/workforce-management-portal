@@ -5,11 +5,13 @@ import React, { useEffect, useState, type SubmitEvent } from 'react';
 import { TailSpin } from 'react-loader-spinner';
 import { toast } from 'react-toastify';
 import { validateField } from '../../../services/form-validation.service';
+import { getApiErrorDetails } from '../../../services/utils.service';
 import {
-  getApiErrorDetails,
-  useEmployeeDetail,
-} from '../../../services/utils.service';
-import { className, labelclassName } from '../../../utils/constants';
+  className,
+  labelclassName,
+  VIEW_EMPLOYEE_SUB_TTILE,
+  VIEW_EMPLOYEE_TTILE,
+} from '../../../utils/constants';
 import FormField from '../FormField';
 import type {
   EmployeeFormType,
@@ -21,6 +23,8 @@ import type {
 import { createEmployee, editEmployee } from '../../../api/admin-portal.api';
 import EmployeeFormSkeleton from './EmployeeFormSkeleton';
 import ErrorPage from '../../Error/ErrorPage';
+import { useQueryClient } from '@tanstack/react-query';
+import { useEmployeeDetail } from '../../../api/tanstack.query';
 import { useAuth } from '../../../context/AuthContext';
 
 function EmployeeForm({
@@ -42,9 +46,12 @@ function EmployeeForm({
     isLoading: isDataLoading,
     refetch: refetchDetails,
   } = useEmployeeDetail({ _id });
+  const queryClient = useQueryClient();
   const row = details?.['data']?.data?.result ?? [];
 
-  const { user } = useAuth();
+  const { can } = useAuth();
+  const isUpdateAllowed = can('employee', 'update');
+
   const [formValues, setFormValues] = useState<EmployeeFormType>({
     name: '',
     empId: '',
@@ -201,11 +208,14 @@ function EmployeeForm({
             attendancePercentage: Number(formValues?.attendancePercentage),
           },
           {
-            _id: user?._id ?? '',
+            _id: _id ?? '',
             type: tableQueryParams?.tableType ?? 'employees',
           }
         );
         if (res?.status === 200) {
+          queryClient.invalidateQueries({
+            queryKey: ['employees'],
+          });
           toast.success('Employee edited successfully');
           // formReset();
           onClose?.();
@@ -372,11 +382,11 @@ function EmployeeForm({
             <div className="p-2 xl:p-4 dark:bg-gray-800">
               <div className="mb-6">
                 <h1 className="text-base xl:text-xl font-bold text-slate-800 dark:text-slate-100">
-                  {title}
+                  {!isUpdateAllowed ? VIEW_EMPLOYEE_TTILE : title}
                 </h1>
 
                 <h2 className="text-xs xl:text-sm text-slate-500 mt-1 dark:text-slate-300">
-                  {subtitle}
+                  {!isUpdateAllowed ? VIEW_EMPLOYEE_SUB_TTILE : subtitle}
                 </h2>
               </div>
 
@@ -386,366 +396,384 @@ function EmployeeForm({
                 className="bg-linear-to-br from-white to-indigo-50/40 rounded-2xl shadow-sm border border-slate-100 p-2 flex flex-col gap-3 hover:shadow-xl dark:bg-linear-to-br dark:from-slate-900 dark:to-purple-950/20 dark:border-none"
                 noValidate
               >
-                <div className="p-4">
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="w-1 h-5 bg-indigo-500 rounded-full" />
+                <fieldset disabled={!isUpdateAllowed}>
+                  <div className="p-4">
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="w-1 h-5 bg-indigo-500 rounded-full" />
 
-                    <h2 className="text-sm xl:text-base font-bold text-slate-800 dark:text-slate-100">
-                      Personal Information
-                    </h2>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="mb-4 flex flex-col">
-                      <label htmlFor="name" className={labelclassName}>
-                        Name
-                      </label>
-
-                      <FormField
-                        errors={errors}
-                        value={formValues?.name}
-                        name="name"
-                        type="text"
-                        placeholder="Enter employee name"
-                        onChange={onInputChange}
-                        className={className}
-                        id="name"
-                      />
-                    </div>
-                    <div className="mb-4 flex flex-col">
-                      <label htmlFor="email" className={labelclassName}>
-                        Email
-                      </label>
-
-                      <FormField
-                        errors={errors}
-                        value={formValues?.email}
-                        name="email"
-                        type="email"
-                        placeholder="Enter employee email"
-                        onChange={onInputChange}
-                        className={className}
-                        id="email"
-                        disabled={isEditing}
-                      />
+                      <h2 className="text-sm xl:text-base font-bold text-slate-800 dark:text-slate-100">
+                        Personal Information
+                      </h2>
                     </div>
 
-                    <div className="mb-4 flex flex-col">
-                      <label htmlFor="empId" className={labelclassName}>
-                        Employee ID
-                      </label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="mb-4 flex flex-col">
+                        <label htmlFor="name" className={labelclassName}>
+                          Name
+                        </label>
 
-                      <FormField
-                        errors={errors}
-                        value={formValues?.empId}
-                        name="empId"
-                        type="text"
-                        placeholder="Auto generated"
-                        onChange={onInputChange}
-                        className={className}
-                        id="empId"
-                        disabled={true}
-                      />
-                    </div>
+                        <FormField
+                          errors={errors}
+                          value={formValues?.name}
+                          name="name"
+                          type="text"
+                          placeholder="Enter employee name"
+                          onChange={onInputChange}
+                          className={className}
+                          id="name"
+                          disabled={!isUpdateAllowed}
+                        />
+                      </div>
+                      <div className="mb-4 flex flex-col">
+                        <label htmlFor="email" className={labelclassName}>
+                          Email
+                        </label>
 
-                    <div className="mb-4 flex flex-col">
-                      <label htmlFor="phone" className={labelclassName}>
-                        Phone Number
-                      </label>
+                        <FormField
+                          errors={errors}
+                          value={formValues?.email}
+                          name="email"
+                          type="email"
+                          placeholder="Enter employee email"
+                          onChange={onInputChange}
+                          className={className}
+                          id="email"
+                          disabled={isEditing || !isUpdateAllowed}
+                        />
+                      </div>
 
-                      <FormField
-                        errors={errors}
-                        value={formValues?.phone}
-                        name="phone"
-                        type="text"
-                        placeholder="Enter phone number"
-                        onChange={onInputChange}
-                        className={className}
-                        id="phone"
-                        maxlength={15}
-                      />
-                    </div>
-                  </div>
-                </div>
+                      <div className="mb-4 flex flex-col">
+                        <label htmlFor="empId" className={labelclassName}>
+                          Employee ID
+                        </label>
 
-                <hr className="border-t-2 border-gray-300 border-dotted dark:border-gray-600" />
+                        <FormField
+                          errors={errors}
+                          value={formValues?.empId}
+                          name="empId"
+                          type="text"
+                          placeholder="Auto generated"
+                          onChange={onInputChange}
+                          className={className}
+                          id="empId"
+                          disabled={true}
+                        />
+                      </div>
 
-                <div className="p-4">
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="w-1 h-5 bg-indigo-500 rounded-full" />
+                      <div className="mb-4 flex flex-col">
+                        <label htmlFor="phone" className={labelclassName}>
+                          Phone Number
+                        </label>
 
-                    <h2 className="text-sm xl:text-base font-bold text-slate-800 dark:text-slate-100">
-                      Employment Information
-                    </h2>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="mb-4 flex flex-col">
-                      <label htmlFor="department" className={labelclassName}>
-                        Department
-                      </label>
-
-                      <FormField
-                        errors={errors}
-                        value={formValues?.department}
-                        name="department"
-                        type="text"
-                        placeholder="Enter department"
-                        onChange={onInputChange}
-                        className={className}
-                        id="department"
-                      />
-                    </div>
-
-                    <div className="mb-4 flex flex-col">
-                      <label htmlFor="designation" className={labelclassName}>
-                        Designation
-                      </label>
-
-                      <FormField
-                        errors={errors}
-                        value={formValues?.designation}
-                        name="designation"
-                        type="text"
-                        placeholder="Enter designation"
-                        onChange={onInputChange}
-                        className={className}
-                        id="designation"
-                      />
-                    </div>
-
-                    <div className="mb-4 flex flex-col">
-                      <label htmlFor="manager" className={labelclassName}>
-                        Manager
-                      </label>
-
-                      <FormField
-                        errors={errors}
-                        value={formValues?.manager}
-                        name="manager"
-                        type="text"
-                        placeholder="Enter manager name"
-                        onChange={onInputChange}
-                        className={className}
-                        id="manager"
-                      />
-                    </div>
-
-                    <div className="mb-4 flex flex-col">
-                      <label htmlFor="joiningDate" className={labelclassName}>
-                        Joining Date
-                      </label>
-
-                      <FormField
-                        errors={errors}
-                        value={formValues?.joiningDate}
-                        name="joiningDate"
-                        type="date"
-                        placeholder="Select joining date"
-                        onChange={onInputChange}
-                        className={className}
-                        id="joiningDate"
-                        disabled={isEditing}
-                      />
-                    </div>
-
-                    <div className="mb-4 flex flex-col">
-                      <label
-                        htmlFor="yearsOfExperience"
-                        className={labelclassName}
-                      >
-                        Years of Experience
-                      </label>
-
-                      <FormField
-                        errors={errors}
-                        value={formValues?.yearsOfExperience}
-                        name="yearsOfExperience"
-                        type="number"
-                        placeholder="Enter years of experience"
-                        onChange={onInputChange}
-                        className={className}
-                        id="yearsOfExperience"
-                      />
-                    </div>
-
-                    <div className="mb-4 flex flex-col">
-                      <label htmlFor="location" className={labelclassName}>
-                        Location
-                      </label>
-
-                      <FormField
-                        errors={errors}
-                        value={formValues?.location}
-                        name="location"
-                        type="text"
-                        placeholder="Enter location"
-                        onChange={onInputChange}
-                        className={className}
-                        id="location"
-                      />
-                    </div>
-
-                    <div className="mb-4 flex flex-col">
-                      <label htmlFor="workMode" className={labelclassName}>
-                        Work Mode
-                      </label>
-
-                      <select
-                        id="workMode"
-                        name="workMode"
-                        value={formValues?.workMode}
-                        onChange={onSelectChange}
-                        className={className}
-                      >
-                        <option value="">Select work mode</option>
-                        <option value="Remote">Remote</option>
-                        <option value="Hybrid">Hybrid</option>
-                        <option value="Onsite">Onsite</option>
-                      </select>
-
-                      {errors?.workMode && (
-                        <p className="text-xs text-red-500 mt-1">
-                          {errors.workMode}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="mb-4 flex flex-col">
-                      <label htmlFor="level" className={labelclassName}>
-                        Level
-                      </label>
-
-                      <select
-                        id="level"
-                        name="level"
-                        value={formValues?.level}
-                        onChange={onSelectChange}
-                        className={className}
-                      >
-                        <option value="">Select level</option>
-                        <option value="junior">Junior</option>
-                        <option value="senior">Senior</option>
-                        <option value="lead">Lead</option>
-                        <option value="executive">Executive</option>
-                      </select>
-
-                      {errors?.level && (
-                        <p className="text-xs text-red-500 mt-1">
-                          {errors.level}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                <hr className="border-t-2 border-gray-300 border-dotted dark:border-gray-600" />
-
-                <div className="p-4">
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="w-1 h-5 bg-indigo-500 rounded-full" />
-
-                    <h2 className="text-sm xl:text-base font-bold text-slate-800 dark:text-slate-100">
-                      Projects
-                    </h2>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="mb-4 flex flex-col">
-                      <label htmlFor="projectName" className={labelclassName}>
-                        Project Name
-                      </label>
-
-                      <FormField
-                        errors={projectErrors}
-                        value={projectForm.projectName}
-                        name="projectName"
-                        type="text"
-                        placeholder="Enter project name"
-                        onChange={onProjectInputChange}
-                        className={className}
-                        id="projectName"
-                      />
-                    </div>
-
-                    <div className="mb-4 flex flex-col">
-                      <label htmlFor="status" className={labelclassName}>
-                        Status
-                      </label>
-
-                      <select
-                        id="status"
-                        name="status"
-                        value={projectForm.status}
-                        onChange={onProjectInputChange}
-                        className={className}
-                      >
-                        <option value="">Select status</option>
-                        <option value="Active">Active</option>
-                        <option value="Completed">Completed</option>
-                        <option value="On Hold">On Hold</option>
-                        <option value="Cancelled">Cancelled</option>
-                        <option value="Support">Support</option>
-                      </select>
-
-                      {projectErrors?.status && (
-                        <p className="text-xs text-red-500 mt-1">
-                          {projectErrors.status}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="mb-4 flex flex-col">
-                      <label htmlFor="riskStatus" className={labelclassName}>
-                        Risk Status
-                      </label>
-
-                      <select
-                        id="riskStatus"
-                        name="riskStatus"
-                        value={projectForm.riskStatus}
-                        onChange={onProjectInputChange}
-                        className={className}
-                      >
-                        <option value="">Select risk status</option>
-                        <option value="On Track">On Track</option>
-                        <option value="At Risk">At Risk</option>
-                        <option value="Critical">Critical</option>
-                      </select>
-
-                      {projectErrors?.riskStatus && (
-                        <p className="text-xs text-red-500 mt-1">
-                          {projectErrors.riskStatus}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="mb-4 flex flex-col">
-                      <label
-                        htmlFor="priorityRanking"
-                        className={labelclassName}
-                      >
-                        Priority Ranking
-                      </label>
-
-                      <FormField
-                        errors={projectErrors}
-                        value={projectForm.priorityRanking}
-                        name="priorityRanking"
-                        type="number"
-                        placeholder="Enter priority ranking"
-                        onChange={onProjectInputChange}
-                        className={className}
-                        id="priorityRanking"
-                      />
+                        <FormField
+                          errors={errors}
+                          value={formValues?.phone}
+                          name="phone"
+                          type="text"
+                          placeholder="Enter phone number"
+                          onChange={onInputChange}
+                          className={className}
+                          id="phone"
+                          maxlength={15}
+                          disabled={!isUpdateAllowed}
+                        />
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex justify-end mt-2">
-                    <button
-                      type="button"
-                      onClick={addProject}
-                      className="
+                  <hr className="border-t-2 border-gray-300 border-dotted dark:border-gray-600" />
+
+                  <div className="p-4">
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="w-1 h-5 bg-indigo-500 rounded-full" />
+
+                      <h2 className="text-sm xl:text-base font-bold text-slate-800 dark:text-slate-100">
+                        Employment Information
+                      </h2>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="mb-4 flex flex-col">
+                        <label htmlFor="department" className={labelclassName}>
+                          Department
+                        </label>
+
+                        <FormField
+                          errors={errors}
+                          value={formValues?.department}
+                          name="department"
+                          type="text"
+                          placeholder="Enter department"
+                          onChange={onInputChange}
+                          className={className}
+                          id="department"
+                          disabled={!isUpdateAllowed}
+                        />
+                      </div>
+
+                      <div className="mb-4 flex flex-col">
+                        <label htmlFor="designation" className={labelclassName}>
+                          Designation
+                        </label>
+
+                        <FormField
+                          errors={errors}
+                          value={formValues?.designation}
+                          name="designation"
+                          type="text"
+                          placeholder="Enter designation"
+                          onChange={onInputChange}
+                          className={className}
+                          id="designation"
+                          disabled={!isUpdateAllowed}
+                        />
+                      </div>
+
+                      <div className="mb-4 flex flex-col">
+                        <label htmlFor="manager" className={labelclassName}>
+                          Manager
+                        </label>
+
+                        <FormField
+                          errors={errors}
+                          value={formValues?.manager}
+                          name="manager"
+                          type="text"
+                          placeholder="Enter manager name"
+                          onChange={onInputChange}
+                          className={className}
+                          id="manager"
+                          disabled={!isUpdateAllowed}
+                        />
+                      </div>
+
+                      <div className="mb-4 flex flex-col">
+                        <label htmlFor="joiningDate" className={labelclassName}>
+                          Joining Date
+                        </label>
+
+                        <FormField
+                          errors={errors}
+                          value={formValues?.joiningDate}
+                          name="joiningDate"
+                          type="date"
+                          placeholder="Select joining date"
+                          onChange={onInputChange}
+                          className={className}
+                          id="joiningDate"
+                          disabled={isEditing || !isUpdateAllowed}
+                        />
+                      </div>
+
+                      <div className="mb-4 flex flex-col">
+                        <label
+                          htmlFor="yearsOfExperience"
+                          className={labelclassName}
+                        >
+                          Years of Experience
+                        </label>
+
+                        <FormField
+                          errors={errors}
+                          value={formValues?.yearsOfExperience}
+                          name="yearsOfExperience"
+                          type="number"
+                          placeholder="Enter years of experience"
+                          onChange={onInputChange}
+                          className={className}
+                          id="yearsOfExperience"
+                          disabled={!isUpdateAllowed}
+                        />
+                      </div>
+
+                      <div className="mb-4 flex flex-col">
+                        <label htmlFor="location" className={labelclassName}>
+                          Location
+                        </label>
+
+                        <FormField
+                          errors={errors}
+                          value={formValues?.location}
+                          name="location"
+                          type="text"
+                          placeholder="Enter location"
+                          onChange={onInputChange}
+                          className={className}
+                          id="location"
+                          disabled={!isUpdateAllowed}
+                        />
+                      </div>
+
+                      <div className="mb-4 flex flex-col">
+                        <label htmlFor="workMode" className={labelclassName}>
+                          Work Mode
+                        </label>
+
+                        <select
+                          id="workMode"
+                          name="workMode"
+                          value={formValues?.workMode}
+                          onChange={onSelectChange}
+                          className={className}
+                          disabled={!isUpdateAllowed}
+                        >
+                          <option value="">Select work mode</option>
+                          <option value="Remote">Remote</option>
+                          <option value="Hybrid">Hybrid</option>
+                          <option value="Onsite">Onsite</option>
+                        </select>
+
+                        {errors?.workMode && (
+                          <p className="text-xs text-red-500 mt-1">
+                            {errors.workMode}
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="mb-4 flex flex-col">
+                        <label htmlFor="level" className={labelclassName}>
+                          Level
+                        </label>
+
+                        <select
+                          id="level"
+                          name="level"
+                          value={formValues?.level}
+                          onChange={onSelectChange}
+                          className={className}
+                          disabled={!isUpdateAllowed}
+                        >
+                          <option value="">Select level</option>
+                          <option value="junior">Junior</option>
+                          <option value="senior">Senior</option>
+                          <option value="lead">Lead</option>
+                          <option value="executive">Executive</option>
+                        </select>
+
+                        {errors?.level && (
+                          <p className="text-xs text-red-500 mt-1">
+                            {errors.level}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr className="border-t-2 border-gray-300 border-dotted dark:border-gray-600" />
+
+                  <div className="p-4">
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="w-1 h-5 bg-indigo-500 rounded-full" />
+
+                      <h2 className="text-sm xl:text-base font-bold text-slate-800 dark:text-slate-100">
+                        Projects
+                      </h2>
+                    </div>
+
+                    {isUpdateAllowed && (
+                      <>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="mb-4 flex flex-col">
+                            <label
+                              htmlFor="projectName"
+                              className={labelclassName}
+                            >
+                              Project Name
+                            </label>
+
+                            <FormField
+                              errors={projectErrors}
+                              value={projectForm.projectName}
+                              name="projectName"
+                              type="text"
+                              placeholder="Enter project name"
+                              onChange={onProjectInputChange}
+                              className={className}
+                              id="projectName"
+                            />
+                          </div>
+
+                          <div className="mb-4 flex flex-col">
+                            <label htmlFor="status" className={labelclassName}>
+                              Status
+                            </label>
+
+                            <select
+                              id="status"
+                              name="status"
+                              value={projectForm.status}
+                              onChange={onProjectInputChange}
+                              className={className}
+                            >
+                              <option value="">Select status</option>
+                              <option value="Active">Active</option>
+                              <option value="Completed">Completed</option>
+                              <option value="On Hold">On Hold</option>
+                              <option value="Cancelled">Cancelled</option>
+                              <option value="Support">Support</option>
+                            </select>
+
+                            {projectErrors?.status && (
+                              <p className="text-xs text-red-500 mt-1">
+                                {projectErrors.status}
+                              </p>
+                            )}
+                          </div>
+
+                          <div className="mb-4 flex flex-col">
+                            <label
+                              htmlFor="riskStatus"
+                              className={labelclassName}
+                            >
+                              Risk Status
+                            </label>
+
+                            <select
+                              id="riskStatus"
+                              name="riskStatus"
+                              value={projectForm.riskStatus}
+                              onChange={onProjectInputChange}
+                              className={className}
+                            >
+                              <option value="">Select risk status</option>
+                              <option value="On Track">On Track</option>
+                              <option value="At Risk">At Risk</option>
+                              <option value="Critical">Critical</option>
+                            </select>
+
+                            {projectErrors?.riskStatus && (
+                              <p className="text-xs text-red-500 mt-1">
+                                {projectErrors.riskStatus}
+                              </p>
+                            )}
+                          </div>
+
+                          <div className="mb-4 flex flex-col">
+                            <label
+                              htmlFor="priorityRanking"
+                              className={labelclassName}
+                            >
+                              Priority Ranking
+                            </label>
+
+                            <FormField
+                              errors={projectErrors}
+                              value={projectForm.priorityRanking}
+                              name="priorityRanking"
+                              type="number"
+                              placeholder="Enter priority ranking"
+                              onChange={onProjectInputChange}
+                              className={className}
+                              id="priorityRanking"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flex justify-end mt-2">
+                          <button
+                            type="button"
+                            onClick={addProject}
+                            className="
         px-5 py-2.5
         bg-linear-to-r from-indigo-600 to-violet-600
         text-white
@@ -758,17 +786,19 @@ function EmployeeForm({
         transition-all duration-200
         cursor-pointer
       "
-                    >
-                      + Add Project
-                    </button>
-                  </div>
+                          >
+                            + Add Project
+                          </button>
+                        </div>
+                      </>
+                    )}
 
-                  {formValues?.projects?.length > 0 && (
-                    <div className="mt-6 flex flex-col gap-3">
-                      {formValues?.projects.map((project, index) => (
-                        <div
-                          key={`${project?.projectName}-${index}`}
-                          className="
+                    {formValues?.projects?.length > 0 && (
+                      <div className="mt-6 flex flex-col gap-3">
+                        {formValues?.projects.map((project, index) => (
+                          <div
+                            key={`${project?.projectName}-${index}`}
+                            className="
             rounded-xl
             border
             border-slate-200
@@ -777,23 +807,23 @@ function EmployeeForm({
             dark:bg-slate-900
             dark:border-slate-700
           "
-                        >
-                          <div className="flex justify-between items-start gap-4">
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-3">
-                                <span
-                                  className="
+                          >
+                            <div className="flex justify-between items-start gap-4">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2 mb-3">
+                                  <span
+                                    className="
                   text-sm
                   font-bold
                   text-slate-800
                   dark:text-slate-100
                 "
-                                >
-                                  {project.projectName}
-                                </span>
+                                  >
+                                    {project.projectName}
+                                  </span>
 
-                                <span
-                                  className="
+                                  <span
+                                    className="
                   px-2 py-1
                   text-xs
                   rounded-full
@@ -802,186 +832,194 @@ function EmployeeForm({
                   dark:bg-indigo-950
                   dark:text-indigo-300
                 "
-                                >
-                                  Priority #{project.priorityRanking}
-                                </span>
+                                  >
+                                    Priority #{project.priorityRanking}
+                                  </span>
+                                </div>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                  <div>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                                      Status
+                                    </p>
+
+                                    <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                                      {project.status}
+                                    </p>
+                                  </div>
+
+                                  <div>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                                      Risk Status
+                                    </p>
+
+                                    <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                                      {project.riskStatus}
+                                    </p>
+                                  </div>
+
+                                  <div>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                                      Priority
+                                    </p>
+
+                                    <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                                      {project.priorityRanking}
+                                    </p>
+                                  </div>
+                                </div>
                               </div>
 
-                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                <div>
-                                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                                    Status
-                                  </p>
-
-                                  <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
-                                    {project.status}
-                                  </p>
-                                </div>
-
-                                <div>
-                                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                                    Risk Status
-                                  </p>
-
-                                  <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
-                                    {project.riskStatus}
-                                  </p>
-                                </div>
-
-                                <div>
-                                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                                    Priority
-                                  </p>
-
-                                  <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
-                                    {project.priorityRanking}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-
-                            <button
-                              type="button"
-                              onClick={() => removeProject(index)}
-                              className="
+                              {isUpdateAllowed && (
+                                <button
+                                  type="button"
+                                  onClick={() => removeProject(index)}
+                                  className="
                 text-xs
                 font-semibold
                 text-red-500
                 hover:text-red-700
                 cursor-pointer
               "
-                            >
-                              Delete
-                            </button>
+                                >
+                                  Delete
+                                </button>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <hr className="border-t-2 border-gray-300 border-dotted dark:border-gray-600" />
+
+                  <div className="p-4">
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="w-1 h-5 bg-indigo-500 rounded-full" />
+
+                      <h2 className="text-sm xl:text-base font-bold text-slate-800 dark:text-slate-100">
+                        Compensation & Performance
+                      </h2>
                     </div>
-                  )}
-                </div>
-                <hr className="border-t-2 border-gray-300 border-dotted dark:border-gray-600" />
 
-                <div className="p-4">
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="w-1 h-5 bg-indigo-500 rounded-full" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="mb-4 flex flex-col">
+                        <label htmlFor="salary" className={labelclassName}>
+                          Salary
+                        </label>
 
-                    <h2 className="text-sm xl:text-base font-bold text-slate-800 dark:text-slate-100">
-                      Compensation & Performance
-                    </h2>
+                        <FormField
+                          errors={errors}
+                          value={formValues?.salary}
+                          name="salary"
+                          type="number"
+                          placeholder="Enter salary"
+                          onChange={onInputChange}
+                          className={className}
+                          id="salary"
+                          disabled={!isUpdateAllowed}
+                        />
+                      </div>
+
+                      <div className="mb-4 flex flex-col">
+                        <label htmlFor="rating" className={labelclassName}>
+                          Rating
+                        </label>
+
+                        <FormField
+                          errors={errors}
+                          value={formValues?.rating}
+                          name="rating"
+                          type="number"
+                          placeholder="0 - 5"
+                          onChange={onInputChange}
+                          className={className}
+                          id="rating"
+                          disabled={!isUpdateAllowed}
+                        />
+                      </div>
+
+                      <div className="mb-4 flex flex-col">
+                        <label
+                          htmlFor="attendancePercentage"
+                          className={labelclassName}
+                        >
+                          Attendance Percentage
+                        </label>
+
+                        <FormField
+                          errors={errors}
+                          value={formValues?.attendancePercentage}
+                          name="attendancePercentage"
+                          type="number"
+                          placeholder="0 - 100"
+                          onChange={onInputChange}
+                          className={className}
+                          id="attendancePercentage"
+                          disabled={!isUpdateAllowed}
+                        />
+                      </div>
+
+                      <div className="mb-4 flex flex-col">
+                        <label
+                          htmlFor="employeeSatisfaction"
+                          className={labelclassName}
+                        >
+                          Employee Satisfaction
+                        </label>
+
+                        <select
+                          id="employeeSatisfaction"
+                          name="employeeSatisfaction"
+                          value={formValues?.employeeSatisfaction}
+                          onChange={onSelectChange}
+                          className={className}
+                          disabled={!isUpdateAllowed}
+                        >
+                          <option value="">Select satisfaction</option>
+                          <option value="High">High</option>
+                          <option value="Medium">Medium</option>
+                          <option value="Low">Low</option>
+                        </select>
+
+                        {errors?.employeeSatisfaction && (
+                          <p className="text-xs text-red-500 mt-1">
+                            {errors?.employeeSatisfaction}
+                          </p>
+                        )}
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="mb-4 flex flex-col">
-                      <label htmlFor="salary" className={labelclassName}>
-                        Salary
-                      </label>
+                  <hr className="border-t-2 border-gray-300 border-dotted dark:border-gray-600" />
 
-                      <FormField
-                        errors={errors}
-                        value={formValues?.salary}
-                        name="salary"
-                        type="number"
-                        placeholder="Enter salary"
-                        onChange={onInputChange}
-                        className={className}
-                        id="salary"
-                      />
+                  <div className="p-4">
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="w-1 h-5 bg-indigo-500 rounded-full" />
+
+                      <h2 className="text-sm xl:text-base font-bold text-slate-800 dark:text-slate-100">
+                        Skills
+                      </h2>
                     </div>
 
-                    <div className="mb-4 flex flex-col">
-                      <label htmlFor="rating" className={labelclassName}>
-                        Rating
-                      </label>
+                    {isUpdateAllowed && (
+                      <div className="flex gap-3">
+                        <FormField
+                          errors={errors}
+                          value={skillInput}
+                          name="skillInput"
+                          type="text"
+                          placeholder="Enter a skill"
+                          onChange={(e) => setSkillInput(e?.target?.value)}
+                          className={className}
+                          id="skillInput"
+                          disabled={!isUpdateAllowed}
+                        />
 
-                      <FormField
-                        errors={errors}
-                        value={formValues?.rating}
-                        name="rating"
-                        type="number"
-                        placeholder="0 - 5"
-                        onChange={onInputChange}
-                        className={className}
-                        id="rating"
-                      />
-                    </div>
-
-                    <div className="mb-4 flex flex-col">
-                      <label
-                        htmlFor="attendancePercentage"
-                        className={labelclassName}
-                      >
-                        Attendance Percentage
-                      </label>
-
-                      <FormField
-                        errors={errors}
-                        value={formValues?.attendancePercentage}
-                        name="attendancePercentage"
-                        type="number"
-                        placeholder="0 - 100"
-                        onChange={onInputChange}
-                        className={className}
-                        id="attendancePercentage"
-                      />
-                    </div>
-
-                    <div className="mb-4 flex flex-col">
-                      <label
-                        htmlFor="employeeSatisfaction"
-                        className={labelclassName}
-                      >
-                        Employee Satisfaction
-                      </label>
-
-                      <select
-                        id="employeeSatisfaction"
-                        name="employeeSatisfaction"
-                        value={formValues?.employeeSatisfaction}
-                        onChange={onSelectChange}
-                        className={className}
-                      >
-                        <option value="">Select satisfaction</option>
-                        <option value="High">High</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Low">Low</option>
-                      </select>
-
-                      {errors?.employeeSatisfaction && (
-                        <p className="text-xs text-red-500 mt-1">
-                          {errors?.employeeSatisfaction}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                <hr className="border-t-2 border-gray-300 border-dotted dark:border-gray-600" />
-
-                <div className="p-4">
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="w-1 h-5 bg-indigo-500 rounded-full" />
-
-                    <h2 className="text-sm xl:text-base font-bold text-slate-800 dark:text-slate-100">
-                      Skills
-                    </h2>
-                  </div>
-
-                  <div className="flex gap-3">
-                    <FormField
-                      errors={errors}
-                      value={skillInput}
-                      name="skillInput"
-                      type="text"
-                      placeholder="Enter a skill"
-                      onChange={(e) => setSkillInput(e?.target?.value)}
-                      className={className}
-                      id="skillInput"
-                    />
-
-                    <button
-                      type="button"
-                      onClick={addSkill}
-                      className="
+                        <button
+                          type="button"
+                          onClick={addSkill}
+                          className="
                   px-5
                   py-2
                   rounded-xl
@@ -993,17 +1031,18 @@ function EmployeeForm({
                   transition
                   cursor-pointer
                 "
-                    >
-                      Add
-                    </button>
-                  </div>
+                        >
+                          Add
+                        </button>
+                      </div>
+                    )}
 
-                  {formValues?.skills?.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mt-4">
-                      {formValues?.skills?.map((skill) => (
-                        <div
-                          key={skill}
-                          className="
+                    {formValues?.skills?.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-4">
+                        {formValues?.skills?.map((skill) => (
+                          <div
+                            key={skill}
+                            className="
                       flex items-center gap-2
                       px-3 py-1.5
                       rounded-full
@@ -1014,60 +1053,63 @@ function EmployeeForm({
                       dark:bg-indigo-950
                       dark:text-indigo-300
                     "
-                        >
-                          <span>{skill}</span>
-
-                          <button
-                            type="button"
-                            onClick={() => removeSkill(skill)}
-                            className="cursor-pointer hover:text-red-500"
                           >
-                            ×
-                          </button>
-                        </div>
-                      ))}
+                            <span>{skill}</span>
+
+                            <button
+                              type="button"
+                              onClick={() => removeSkill(skill)}
+                              className="cursor-pointer hover:text-red-500"
+                              disabled={!isUpdateAllowed}
+                            >
+                              ×
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <hr className="border-t-2 border-gray-300 border-dotted dark:border-gray-600" />
+
+                  <div className="p-4">
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="w-1 h-5 bg-indigo-500 rounded-full" />
+
+                      <h2 className="text-sm xl:text-base font-bold text-slate-800 dark:text-slate-100">
+                        Employee Status
+                      </h2>
                     </div>
-                  )}
-                </div>
 
-                <hr className="border-t-2 border-gray-300 border-dotted dark:border-gray-600" />
+                    <div className="flex items-center gap-3">
+                      <input
+                        id="onNoticePeriod"
+                        name="onNoticePeriod"
+                        type="checkbox"
+                        checked={formValues?.onNoticePeriod}
+                        onChange={onInputChange}
+                        className="w-4 h-4 accent-indigo-600 cursor-pointer"
+                        disabled={!isUpdateAllowed}
+                      />
 
-                <div className="p-4">
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="w-1 h-5 bg-indigo-500 rounded-full" />
-
-                    <h2 className="text-sm xl:text-base font-bold text-slate-800 dark:text-slate-100">
-                      Employee Status
-                    </h2>
+                      <label
+                        htmlFor="onNoticePeriod"
+                        className="text-sm text-slate-700 dark:text-slate-200 cursor-pointer"
+                      >
+                        Employee is on notice period
+                      </label>
+                    </div>
                   </div>
 
-                  <div className="flex items-center gap-3">
-                    <input
-                      id="onNoticePeriod"
-                      name="onNoticePeriod"
-                      type="checkbox"
-                      checked={formValues?.onNoticePeriod}
-                      onChange={onInputChange}
-                      className="w-4 h-4 accent-indigo-600 cursor-pointer"
-                    />
-
-                    <label
-                      htmlFor="onNoticePeriod"
-                      className="text-sm text-slate-700 dark:text-slate-200 cursor-pointer"
-                    >
-                      Employee is on notice period
-                    </label>
-                  </div>
-                </div>
-
-                <hr className="border-t-2 border-gray-300 border-dotted dark:border-gray-600" />
-
-                {!isEditing ? (
-                  <div className="flex justify-between items-center p-4">
-                    <button
-                      type="submit"
-                      disabled={formDisabled}
-                      className="
+                  <hr className="border-t-2 border-gray-300 border-dotted dark:border-gray-600" />
+                  {isUpdateAllowed && (
+                    <>
+                      {!isEditing ? (
+                        <div className="flex justify-between items-center p-4">
+                          <button
+                            type="submit"
+                            disabled={formDisabled}
+                            className="
                 px-6 py-2.5
                 bg-linear-to-r from-indigo-600 to-violet-600
                 text-white font-semibold text-xs xl:text-base
@@ -1082,27 +1124,27 @@ function EmployeeForm({
                 disabled:text-gray-400
                 disabled:cursor-not-allowed
               "
-                    >
-                      {isLoading ? (
-                        <TailSpin
-                          visible={true}
-                          height={20}
-                          color="#fff"
-                          radius="4"
-                          ariaLabel="tail-spin-loading"
-                          wrapperStyle={{}}
-                          wrapperClass="flex items-center justify-center"
-                        />
-                      ) : (
-                        <>Create Employee</>
-                      )}
-                    </button>
+                          >
+                            {isLoading ? (
+                              <TailSpin
+                                visible={true}
+                                height={20}
+                                color="#fff"
+                                radius="4"
+                                ariaLabel="tail-spin-loading"
+                                wrapperStyle={{}}
+                                wrapperClass="flex items-center justify-center"
+                              />
+                            ) : (
+                              <>Create Employee</>
+                            )}
+                          </button>
 
-                    <button
-                      type="reset"
-                      id="reset"
-                      disabled={formDisabled}
-                      className="
+                          <button
+                            type="reset"
+                            id="reset"
+                            disabled={formDisabled}
+                            className="
                 px-6 py-2.5
                 bg-linear-to-r from-slate-600 to-violet-400
                 text-white font-semibold text-xs xl:text-base
@@ -1114,16 +1156,16 @@ function EmployeeForm({
                 cursor-pointer
                 disabled:cursor-not-allowed
               "
-                    >
-                      Reset
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex justify-between items-center p-4">
-                    <button
-                      type="submit"
-                      id="edit"
-                      className="
+                          >
+                            Reset
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="flex justify-between items-center p-4">
+                          <button
+                            type="submit"
+                            id="edit"
+                            className="
                           px-6 py-2.5
                 bg-linear-to-r from-indigo-600 to-violet-600
                 text-white font-semibold text-xs xl:text-base
@@ -1139,24 +1181,27 @@ function EmployeeForm({
                 disabled:cursor-not-allowed
                         
                     "
-                      disabled={formDisabled}
-                    >
-                      {isLoading ? (
-                        <TailSpin
-                          visible={true}
-                          height={20}
-                          color="#fff"
-                          radius="4"
-                          ariaLabel="tail-spin-loading"
-                          wrapperStyle={{}}
-                          wrapperClass="flex items-center justify-center"
-                        />
-                      ) : (
-                        <>Edit Employee</>
+                            disabled={formDisabled}
+                          >
+                            {isLoading ? (
+                              <TailSpin
+                                visible={true}
+                                height={20}
+                                color="#fff"
+                                radius="4"
+                                ariaLabel="tail-spin-loading"
+                                wrapperStyle={{}}
+                                wrapperClass="flex items-center justify-center"
+                              />
+                            ) : (
+                              <>Edit Employee</>
+                            )}
+                          </button>
+                        </div>
                       )}
-                    </button>
-                  </div>
-                )}
+                    </>
+                  )}
+                </fieldset>
               </form>
             </div>
           ) : (

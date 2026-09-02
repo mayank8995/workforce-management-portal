@@ -3,6 +3,7 @@ import App from '../App';
 import ErrorBoundaryPage from '../components/Error/ErrorBoundaryPage';
 import { ProtectedRoute } from '../pages/protected-routes/ProtectedRoutes';
 import React from 'react';
+import Landing from '../pages/landing/Landing.tsx';
 const Home = React.lazy(() => import('../components/Home/Home.tsx'));
 const Dashboard = React.lazy(() => import('../pages/dashboard/Dashboard.tsx'));
 const Employees = React.lazy(() => import('../pages/employee/Employees.tsx'));
@@ -21,6 +22,10 @@ export const loadDashboardPage = () =>
 const DashboardRoot = React.lazy(loadDashboardPage);
 
 export const router = createBrowserRouter([
+  {
+    path: '/portal',
+    element: <Landing />,
+  },
   {
     path: '/',
     element: <App />,

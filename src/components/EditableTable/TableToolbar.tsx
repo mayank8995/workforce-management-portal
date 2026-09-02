@@ -62,7 +62,8 @@ const TableToolbar = ({
             <button onClick={() => setTextToBeSearched('')}>
               <X
                 width={18}
-                className="cursor-pointer absolute bottom-0 right-1.5 top-2.5 dark:text-slate-300"
+                className="cursor-pointer absolute bottom-0 right-1.5 top-2.5 dark:text-slate-300 "
+                color="#2563eb"
               />
             </button>
           )}
@@ -104,11 +105,13 @@ const TableToolbar = ({
                       <Funnel
                         size={20}
                         className=" text-gray-600 dark:text-gray-100"
+                        color="#2563eb"
                       />
                     ) : (
                       <FunnelX
                         size={20}
                         className=" text-gray-600 dark:text-gray-100"
+                        color="#2563eb"
                       />
                     )}
                   </span>
@@ -122,72 +125,70 @@ const TableToolbar = ({
                       <ArrowUpDown
                         size={20}
                         className=" text-gray-600 dark:text-gray-100"
+                        color="#2563eb"
                       />
                     </span>
                   }
                 </button>
-                {isUpdateAllowed ? (
-                  <button
-                    disabled={selectedRow.size === 0}
-                    className={`${selectedRow.size === 0 ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-                    onClick={bulkAction}
-                  >
-                    <span title="Download csv" className="flex gap-2">
-                      <Download
-                        size={20}
-                        color={selectedRow.size === 0 ? '#9ca3af' : '#2563eb'}
-                        className={`text-gray-600 dark:text-gray-100`}
-                      />
-                      {downloading && (
-                        <TailSpin
-                          visible={true}
-                          height={20}
-                          width={20}
-                          color={'#2563eb'}
-                          ariaLabel="tail-spin-loading"
-                          radius="1"
-                          strokeWidth="4"
-                          wrapperStyle={{}}
-                          wrapperClass="flex items-center justify-center"
-                        />
-                      )}
-                    </span>
-                  </button>
-                ) : null}
-                {isUpdateAllowed ? (
-                  <div
-                    title="Select All"
-                    className="flex lg:hidden items-center justify-center border-2 border-slate-950 border-dotted dark:border-slate-100 w-5 h-5"
-                  >
-                    <FormField
-                      ref={ref}
-                      name={'selectAll'}
-                      type={'checkbox'}
-                      id={'selectAll'}
-                      checked={
-                        // selectedRow.has('selectAll') ||
-                        selectedRow.size === listSize
-                      }
-                      onChange={handleOnChange}
-                      className={`m-0 cursor-pointer`}
+                <button
+                  disabled={selectedRow.size === 0 || !isUpdateAllowed}
+                  className={`${selectedRow.size === 0 || !isUpdateAllowed ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                  onClick={bulkAction}
+                >
+                  <span title="Download csv" className="flex gap-2">
+                    <Download
+                      size={20}
+                      color={selectedRow.size === 0 ? '#9ca3af' : '#2563eb'}
+                      className={`text-gray-600 dark:text-gray-100`}
                     />
-                  </div>
-                ) : null}
-                {isCreateAllowed ? (
-                  <button
-                    className="cursor-pointer"
-                    onClick={openCreateEmployeeModal}
-                  >
-                    {
-                      <span title="Sort">
-                        <UserPlus
-                          size={20}
-                          className=" text-gray-600 dark:text-gray-100"
-                        />
-                      </span>
+                    {downloading && (
+                      <TailSpin
+                        visible={true}
+                        height={20}
+                        width={20}
+                        color={'#2563eb'}
+                        ariaLabel="tail-spin-loading"
+                        radius="1"
+                        strokeWidth="4"
+                        wrapperStyle={{}}
+                        wrapperClass="flex items-center justify-center"
+                      />
+                    )}
+                  </span>
+                </button>
+                <div
+                  title="Select All"
+                  className="flex lg:hidden items-center justify-center border-2 border-slate-950 border-dotted dark:border-slate-100 w-5 h-5"
+                >
+                  <FormField
+                    ref={ref}
+                    name={'selectAll'}
+                    type={'checkbox'}
+                    id={'selectAll'}
+                    checked={
+                      // selectedRow.has('selectAll') ||
+                      selectedRow.size === listSize
                     }
-                  </button>
-                ) : null}
+                    onChange={handleOnChange}
+                    className={`m-0 cursor-pointer`}
+                    disabled={!isUpdateAllowed}
+                  />
+                </div>
+                <button
+                  className={`${!isCreateAllowed ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                  onClick={openCreateEmployeeModal}
+                  disabled={!isCreateAllowed}
+                >
+                  {
+                    <span title="Sort">
+                      <UserPlus
+                        size={20}
+                        className=" text-gray-600 dark:text-gray-100"
+                        color={!isCreateAllowed ? '#9ca3af' : '#2563eb'}
+                      />
+                    </span>
+                  }
+                </button>
               </div>
             }
           </div>
@@ -238,6 +239,7 @@ const TableToolbar = ({
                 <X
                   width={18}
                   className="cursor-pointer absolute bottom-0 right-1.5 top-2.5 dark:text-slate-300"
+                  color="#2563eb"
                 />
               </button>
             )}
