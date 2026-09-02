@@ -6,13 +6,13 @@ import {
   EMPLOYEE_DIREC,
   headers_employees,
 } from '../../utils/constants';
-import { useTableData } from '../../services/utils.service';
 import type {
   EmployeeDirectoryResponse,
   TableQueryParams,
 } from '../../types/types';
 import { useLoader } from '../../context/Loadercontext';
 import { columns_employees } from '../../components/EditableTable/CustomCellRenderer';
+import { useTableData } from '../../api/tanstack.query';
 
 function Employees() {
   const { setIsLoading } = useLoader();

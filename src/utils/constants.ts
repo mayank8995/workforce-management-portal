@@ -1,3 +1,4 @@
+import { BarChart3, FolderKanban, ShieldCheck, Users } from 'lucide-react';
 import {
   columns_promotedThisYear,
   columns_requiringReview,
@@ -16,6 +17,7 @@ import type {
   TopPerformer,
   TopProject,
 } from '../types/types';
+import { getEnv } from '../config/env';
 
 export const KEY_TRACK_METRIC = {
   TOTAL_EMPLOYEES: 'Total Employees',
@@ -75,7 +77,8 @@ export const NAV_ITEMS = {
   ANALYTICS: '/home/analytics',
   EMPLOYEES: '/home/employee',
   SETTINGS: '/home/settings',
-  LOGOUT: '/',
+  LOGOUT: '/portal',
+  HOME_PAGE: '/portal',
 };
 
 export const SIDE_BAR_ITEMS = {
@@ -499,8 +502,8 @@ export const employeeDetailModalContainerCss = `h-full max-h-full overflow-auto 
 export const REFETCH_TRY = 3;
 
 export const GUEST_LOGIN = {
-  email: 'liam.anderson@ad.com',
-  password: 'liam.anderson.mayank@SpaceX123',
+  email: getEnv().email,
+  password: getEnv().password,
 };
 
 export const CHECK_FOR_ROUTES = ['dashboard', 'employee', 'analytics'];
@@ -516,3 +519,55 @@ export const EMPLOYEE_TABLE = 'employees';
 
 export const ERROR_OCCURRED_WHILE_DOWNLOADING_FILE =
   'Error occurred while downloading the file. Please try again.';
+export const VIEW_EMPLOYEE_TTILE = 'View Employee';
+export const VIEW_EMPLOYEE_SUB_TTILE = 'View Employee Details';
+
+export const FEATURES = [
+  {
+    icon: Users,
+    color: 'blue',
+    title: 'Employee Directory',
+    desc: 'Searchable, sortable, paginated directory across the whole org.',
+  },
+  {
+    icon: BarChart3,
+    color: 'purple',
+    title: 'Analytics & Insights',
+    desc: 'Attrition, revenue, and profit margin in one dashboard.',
+  },
+  {
+    icon: FolderKanban,
+    color: 'orange',
+    title: 'Project Tracking',
+    desc: 'Active projects and delivery status across every team.',
+  },
+  {
+    icon: ShieldCheck,
+    color: 'green',
+    title: 'Role-Based Access',
+    desc: 'Guest, employee, and admin views scoped to the right data.',
+  },
+] as const;
+
+export const FEATURE_STYLES: Record<string, { icon: string; border: string }> =
+  {
+    blue: {
+      icon: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
+      border: 'border-blue-500',
+    },
+    purple: {
+      icon: 'bg-[#534ab7]/10 text-[#534ab7] dark:text-[#a29bec]',
+      border: 'border-[#534ab7]',
+    },
+    orange: {
+      icon: 'bg-orange-500/10 text-orange-600 dark:text-orange-400',
+      border: 'border-orange-500',
+    },
+    green: {
+      icon: 'bg-green-500/10 text-green-600 dark:text-green-400',
+      border: 'border-green-500',
+    },
+  };
+
+export const ACCOUNT_CREATION_COMING_SOON = `Account creation is coming soon. Use Guest access to explore the
+            portal, or sign in if you already have access.`;

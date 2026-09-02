@@ -3,9 +3,9 @@ import React from 'react';
 import StatusBadge from '../UtilComponents/StatusBadge';
 import { accordians } from '../Accordian/AccordianRenderer';
 import Accordion from '../Accordian/Accordian';
-import { useEmployeeDetail } from '../../services/utils.service';
 import EmployeeDetailSkeleton from '../Skeleton/EmployeeDetailSkeleton';
 import ErrorPage from '../Error/ErrorPage';
+import { useEmployeeDetail } from '../../api/tanstack.query';
 
 interface DetailModalProps {
   onClose: () => void;

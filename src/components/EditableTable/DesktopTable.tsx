@@ -58,19 +58,20 @@ const DesktopTable = <T extends ListType>(props: DesktopTableProps<T>) => {
         <thead className="bg-slate-100">
           {headersData?.length > 0 && (
             <tr className="cursor-pointer dark:bg-slate-800 dark:border-slate-700">
-              {isUpdateAllowed ? (
-                <th className="px-4 py-4 text-left text-xs font-semibold tracking-wider text-slate-600 dark:text-slate-400">
-                  <FormField
-                    ref={ref}
-                    name={'selectAll'}
-                    type={'checkbox'}
-                    id={'selectAll'}
-                    checked={selectedRow.size === list.length}
-                    onChange={handleOnChange}
-                    className={`${className} cursor-pointer`}
-                  />
-                </th>
-              ) : null}
+              <th className="px-4 py-4 text-left text-xs font-semibold tracking-wider text-slate-600 dark:text-slate-400">
+                <FormField
+                  ref={ref}
+                  name={'selectAll'}
+                  type={'checkbox'}
+                  id={'selectAll'}
+                  checked={
+                    selectedRow.size === list.length && list.length !== 0
+                  }
+                  onChange={handleOnChange}
+                  className={`${className} ${!isUpdateAllowed ? 'cursor-pointer-none' : 'cursor-pointer'}`}
+                  disabled={!isUpdateAllowed}
+                />
+              </th>
               {headersData?.map((header) => {
                 return (
                   <React.Fragment key={header.key}>
@@ -97,21 +98,20 @@ const DesktopTable = <T extends ListType>(props: DesktopTableProps<T>) => {
                   className={` hover:bg-blue-50 hover:transition-colors hover:duration-200 dark:hover:bg-slate-400/50 odd:bg-white even:bg-slate-50 dark:odd:bg-slate-900 dark:even:bg-slate-800/40 dark:border-slate-800`}
                 >
                   {/* {Hooking checkboxlist into list as checkbox list is derived from list} */}
-                  {isUpdateAllowed ? (
-                    <td
+                  <td
+                    id={String(row?._id)}
+                    className="px-4 py-4 font-medium text-slate-800 dark:text-slate-400"
+                  >
+                    <FormField
+                      name={String(row?._id)}
+                      type={'checkbox'}
                       id={String(row?._id)}
-                      className="px-4 py-4 font-medium text-slate-800 dark:text-slate-400"
-                    >
-                      <FormField
-                        name={String(row?._id)}
-                        type={'checkbox'}
-                        id={String(row?._id)}
-                        checked={selectedRow.has(String(row?._id))}
-                        onChange={handleOnChange}
-                        className={`${className} cursor-pointer`}
-                      />
-                    </td>
-                  ) : null}
+                      checked={selectedRow.has(String(row?._id))}
+                      onChange={handleOnChange}
+                      className={`${className} ${!isUpdateAllowed ? 'cursor-pointer-none' : 'cursor-pointer'}`}
+                      disabled={!isUpdateAllowed}
+                    />
+                  </td>
                   {columnsData?.map((column) => {
                     const value = row[column?.key];
                     return (

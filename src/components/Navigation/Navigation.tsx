@@ -97,9 +97,7 @@ function Navigation() {
       >
         {/* Logo */}
         <div className="px-6 py-8 border-b border-slate-800">
-          <h1 className="font-bold text-white text-sm md:text-xl">
-            Admin Panel
-          </h1>
+          <h1 className="font-bold text-white text-sm md:text-xl">Workspace</h1>
 
           <p className="text-slate-400 text-xs md:text-sm mt-1">
             Workforce Management

@@ -199,10 +199,10 @@ export const doLogout = async () => {
     const response = await apiClient.post('/logout');
     const { success } = response?.data;
     if (success) {
-      router.navigate('/');
+      router.navigate('/portal');
     }
   } catch (err: unknown) {
-    router.navigate('/');
+    router.navigate('/portal');
     console.error('err>>>', err);
     const { message, status, url } = getApiErrorDetails(err);
     console.error('API Error:', message);
@@ -272,7 +272,7 @@ export const editEmployee = async (
   params: { _id: string; type: string }
 ) => {
   try {
-    const res = await apiClient.put('/employee/edit', JSON.stringify(form), {
+    const res = await apiClient.patch('/employee/edit', JSON.stringify(form), {
       params,
     });
     return res;
@@ -282,6 +282,18 @@ export const editEmployee = async (
     console.error('Status:', status);
     console.error('URL:', url);
     throw err;
+  }
+};
+
+export const guestLogin = async (form: LoginForm) => {
+  try {
+    const res = await doLogin(form);
+    return res;
+  } catch (err: unknown) {
+    const { message, status, url } = getApiErrorDetails(err);
+    console.error('API Error:', message);
+    console.error('Status:', status);
+    console.error('URL:', url);
   }
 };
 

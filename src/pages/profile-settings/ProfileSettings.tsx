@@ -22,25 +22,23 @@ import {
 import { validateField } from '../../services/form-validation.service';
 import { TailSpin } from 'react-loader-spinner';
 import { toast, type ToastContent } from 'react-toastify';
-import {
-  getApiErrorDetails,
-  useProfileData,
-} from '../../services/utils.service';
+import { getApiErrorDetails } from '../../services/utils.service';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../../context/AuthContext';
 import ProfileSettingSkeleton from '../../components/Skeleton/ProfileSettingSkeleton';
 import ErrorPage from '../../components/Error/ErrorPage';
+import { useProfileData } from '../../api/tanstack.query';
 
 function ProfileSettings() {
-  const { user } = useAuth();
+  const { user, can } = useAuth();
   const {
     data: profileData,
     isLoading: isFormDataLoading,
     isError,
     refetch,
   } = useProfileData(user as LoginProfile);
-  const { can } = useAuth();
   const isUpdateAllowed = can('settings', 'update');
+  const isCreateAllowed = can('settings', 'create');
   const [formValues, setFormValues] = useState<ProfileForm | null>({
     name: '',
     phone: '',
@@ -55,7 +53,6 @@ function ProfileSettings() {
   });
   const uploadRef = useRef<HTMLInputElement>(null); // separate ref for image upload
   const [errors, setErrors] = useState({});
-  const [formDisabled, setFormDisabled] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
   const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
@@ -116,7 +113,6 @@ function ProfileSettings() {
       if (checkFormValidity()) {
         setIsLoading(true);
         // console.log("inside herer")
-        setFormDisabled(false);
         let res: {
           status?: number;
           data?: { message?: ToastContent<unknown> };
@@ -255,219 +251,224 @@ function ProfileSettings() {
                 className="bg-linear-to-br from-white to-indigo-50/40 rounded-2xl  shadow-sm border border-slate-100 p-2 flex flex-col gap-3 hover:shadow-xl  dark:bg-linear-to-br dark:from-slate-900 dark:to-purple-950/20 dark:border-none"
                 noValidate
               >
-                <div className="grid grid-cols-1 sm:grid-cols-2 p-4 gap-4">
-                  <div className="bg-linear-to-br from-indigo-50 to-violet-50 rounded-2xl p-8 h-full dark:bg-linear-to-br dark:from-slate-900 dark:to-green-950/20">
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="w-1 h-5 bg-indigo-500 rounded-full" />
-                      <h2 className="text-sm xl:text-base font-bold text-slate-800 dark:text-slate-100">
-                        Avatar
-                      </h2>
-                    </div>
-
-                    <div className="flex flex-col items-center justify-center gap-4 ">
-                      <div className="relative">
-                        <div className="w-32 h-32 rounded-full ring-4 ring-white shadow-xl overflow-hidden">
-                          <img
-                            loading="eager"
-                            src={
-                              formValues?.image || '/assets/avatar_fallback.svg'
-                            }
-                            className="aspect-square w-full h-full object-cover"
-                            alt="User Profile"
-                          />
-                        </div>
-                        <input
-                          ref={uploadRef}
-                          onChange={handleFileChange}
-                          type="file"
-                          style={{ display: 'none' }}
-                        />
-                        <button
-                          onClick={handleUpload}
-                          type="button"
-                          className="cursor-pointer absolute bottom-1 right-1 w-9 h-9 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-lg hover:bg-indigo-700 transition"
-                        >
-                          ✎
-                        </button>
+                <fieldset disabled={!isUpdateAllowed}>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 p-4 gap-4">
+                    <div className="bg-linear-to-br from-indigo-50 to-violet-50 rounded-2xl p-8 h-full dark:bg-linear-to-br dark:from-slate-900 dark:to-green-950/20">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="w-1 h-5 bg-indigo-500 rounded-full" />
+                        <h2 className="text-sm xl:text-base font-bold text-slate-800 dark:text-slate-100">
+                          Avatar
+                        </h2>
                       </div>
-                      {formValues?.name && (
-                        <div className="text-center">
-                          <p className="font-bold text-slate-800 dark:text-slate-100 text-sm xl:text-base">
-                            {formValues?.name}
-                          </p>
-                          <p className="text-xs text-slate-500 dark:text-slate-300">
-                            {formValues?.designation}
-                          </p>
+
+                      <div className="flex flex-col items-center justify-center gap-4 ">
+                        <div className="relative">
+                          <div className="w-32 h-32 rounded-full ring-4 ring-white shadow-xl overflow-hidden">
+                            <img
+                              loading="eager"
+                              src={
+                                formValues?.image ||
+                                '/assets/avatar_fallback.svg'
+                              }
+                              className="aspect-square w-full h-full object-cover"
+                              alt="User Profile"
+                            />
+                          </div>
+                          <input
+                            ref={uploadRef}
+                            onChange={handleFileChange}
+                            type="file"
+                            style={{ display: 'none' }}
+                          />
+                          <button
+                            onClick={handleUpload}
+                            type="button"
+                            disabled={!isUpdateAllowed}
+                            className={`${!isUpdateAllowed ? 'disabled:text-gray-400 disabled: cursor-not-allowed' : 'cursor-pointer'} absolute bottom-1 right-1 w-9 h-9 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-lg hover:bg-indigo-700 transition`}
+                          >
+                            ✎
+                          </button>
                         </div>
-                      )}
+                        {formValues?.name && (
+                          <div className="text-center">
+                            <p className="font-bold text-slate-800 dark:text-slate-100 text-sm xl:text-base">
+                              {formValues?.name}
+                            </p>
+                            <p className="text-xs text-slate-500 dark:text-slate-300">
+                              {formValues?.designation}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="w-1 h-5 bg-indigo-500 rounded-full" />
+                        <h2 className="text-sm xl:text-base font-bold text-slate-800 dark:text-slate-100">
+                          Personal Information
+                        </h2>
+                      </div>
+                      <div className="mb-4 flex flex-col">
+                        <label htmlFor="name" className={labelclassName}>
+                          Name
+                        </label>
+                        <FormField
+                          errors={errors}
+                          value={formValues?.name}
+                          name={'name'}
+                          type={'text'}
+                          placeholder={'Enter your name'}
+                          onChange={onInputChange}
+                          className={className}
+                          id={'name'}
+                          disabled={!isUpdateAllowed}
+                        />
+                      </div>
+                      <div className="mb-4 flex flex-col">
+                        <label htmlFor="phone" className={labelclassName}>
+                          Phone Number
+                        </label>
+                        <FormField
+                          errors={errors}
+                          value={formValues?.phone}
+                          name={'phone'}
+                          type={'text'}
+                          placeholder={'Enter your phone number'}
+                          onChange={onInputChange}
+                          className={className}
+                          id={'phone'}
+                          disabled={!isUpdateAllowed}
+                        />
+                      </div>
+                      <div className="mb-4 flex flex-col">
+                        <label htmlFor="email" className={labelclassName}>
+                          Email
+                        </label>
+                        <FormField
+                          errors={errors}
+                          value={formValues?.email}
+                          name={'email'}
+                          type={'email'}
+                          placeholder={'Enter your email'}
+                          onChange={onInputChange}
+                          className={className}
+                          id={'email'}
+                          disabled={true}
+                        />
+                      </div>
+                      <div className="mb-4 flex flex-col">
+                        <label htmlFor="department" className={labelclassName}>
+                          Department
+                        </label>
+                        <FormField
+                          errors={errors}
+                          value={formValues?.department}
+                          name={'department'}
+                          type={'text'}
+                          placeholder={'Enter your department'}
+                          onChange={onInputChange}
+                          className={className}
+                          id={'department'}
+                          disabled={true}
+                        />
+                      </div>
+                      <div className="mb-4 flex flex-col">
+                        <label htmlFor="designation" className={labelclassName}>
+                          Designation
+                        </label>
+                        <FormField
+                          errors={errors}
+                          value={formValues?.designation}
+                          name={'designation'}
+                          type={'text'}
+                          placeholder={'Enter your designation'}
+                          onChange={onInputChange}
+                          className={className}
+                          id={'designation'}
+                          disabled={true}
+                        />
+                      </div>
                     </div>
                   </div>
-                  <div>
+                  <hr className="border-t-2  border-gray-300 border-dotted dark:border-gray-600"></hr>
+                  <div className="p-4">
                     <div className="flex items-center gap-2 mb-4">
                       <div className="w-1 h-5 bg-indigo-500 rounded-full" />
                       <h2 className="text-sm xl:text-base font-bold text-slate-800 dark:text-slate-100">
-                        Personal Information
+                        Account Information
                       </h2>
                     </div>
                     <div className="mb-4 flex flex-col">
-                      <label htmlFor="name" className={labelclassName}>
-                        Name
+                      <label htmlFor="empId" className={labelclassName}>
+                        Employee ID
                       </label>
                       <FormField
                         errors={errors}
-                        value={formValues?.name}
-                        name={'name'}
+                        value={formValues?.empId}
+                        name={'empId'}
                         type={'text'}
-                        placeholder={'Enter your name'}
+                        placeholder={'Enter your ID'}
                         onChange={onInputChange}
                         className={className}
-                        id={'name'}
-                      />
-                    </div>
-                    <div className="mb-4 flex flex-col">
-                      <label htmlFor="phone" className={labelclassName}>
-                        Phone Number
-                      </label>
-                      <FormField
-                        errors={errors}
-                        value={formValues?.phone}
-                        name={'phone'}
-                        type={'text'}
-                        placeholder={'Enter your phone number'}
-                        onChange={onInputChange}
-                        className={className}
-                        id={'phone'}
-                      />
-                    </div>
-                    <div className="mb-4 flex flex-col">
-                      <label htmlFor="email" className={labelclassName}>
-                        Email
-                      </label>
-                      <FormField
-                        errors={errors}
-                        value={formValues?.email}
-                        name={'email'}
-                        type={'email'}
-                        placeholder={'Enter your email'}
-                        onChange={onInputChange}
-                        className={className}
-                        id={'email'}
+                        id={'empId'}
                         disabled={true}
                       />
                     </div>
                     <div className="mb-4 flex flex-col">
-                      <label htmlFor="department" className={labelclassName}>
-                        Department
+                      <label htmlFor="joiningDate" className={labelclassName}>
+                        Joining Date
                       </label>
                       <FormField
                         errors={errors}
-                        value={formValues?.department}
-                        name={'department'}
-                        type={'text'}
-                        placeholder={'Enter your department'}
+                        value={formValues?.joiningDate}
+                        name={'joiningDate'}
+                        type={'date'}
+                        placeholder={'Enter your joining date'}
                         onChange={onInputChange}
                         className={className}
-                        id={'department'}
+                        id={'joiningDate'}
                         disabled={true}
                       />
                     </div>
                     <div className="mb-4 flex flex-col">
-                      <label htmlFor="designation" className={labelclassName}>
-                        Designation
+                      <label htmlFor="workMode" className={labelclassName}>
+                        Work Mode
                       </label>
                       <FormField
                         errors={errors}
-                        value={formValues?.designation}
-                        name={'designation'}
+                        value={formValues?.workMode}
+                        name={'workMode'}
                         type={'text'}
-                        placeholder={'Enter your designation'}
+                        placeholder={'Hybrid/Remote/Onsite'}
                         onChange={onInputChange}
                         className={className}
-                        id={'designation'}
+                        id={'workMode'}
+                        disabled={true}
+                      />
+                    </div>
+                    <div className="mb-4 flex flex-col">
+                      <label htmlFor="location" className={labelclassName}>
+                        Location
+                      </label>
+                      <FormField
+                        errors={errors}
+                        value={formValues?.location}
+                        name={'location'}
+                        type={'text'}
+                        placeholder={'Enter your location'}
+                        onChange={onInputChange}
+                        className={className}
+                        id={'location'}
                         disabled={true}
                       />
                     </div>
                   </div>
-                </div>
-                <hr className="border-t-2  border-gray-300 border-dotted dark:border-gray-600"></hr>
-                <div className="p-4">
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="w-1 h-5 bg-indigo-500 rounded-full" />
-                    <h2 className="text-sm xl:text-base font-bold text-slate-800 dark:text-slate-100">
-                      Account Information
-                    </h2>
-                  </div>
-                  <div className="mb-4 flex flex-col">
-                    <label htmlFor="empId" className={labelclassName}>
-                      Employee ID
-                    </label>
-                    <FormField
-                      errors={errors}
-                      value={formValues?.empId}
-                      name={'empId'}
-                      type={'text'}
-                      placeholder={'Enter your ID'}
-                      onChange={onInputChange}
-                      className={className}
-                      id={'empId'}
-                      disabled={true}
-                    />
-                  </div>
-                  <div className="mb-4 flex flex-col">
-                    <label htmlFor="joiningDate" className={labelclassName}>
-                      Joining Date
-                    </label>
-                    <FormField
-                      errors={errors}
-                      value={formValues?.joiningDate}
-                      name={'joiningDate'}
-                      type={'date'}
-                      placeholder={'Enter your joining date'}
-                      onChange={onInputChange}
-                      className={className}
-                      id={'joiningDate'}
-                      disabled={true}
-                    />
-                  </div>
-                  <div className="mb-4 flex flex-col">
-                    <label htmlFor="workMode" className={labelclassName}>
-                      Work Mode
-                    </label>
-                    <FormField
-                      errors={errors}
-                      value={formValues?.workMode}
-                      name={'workMode'}
-                      type={'text'}
-                      placeholder={'Hybrid/Remote/Onsite'}
-                      onChange={onInputChange}
-                      className={className}
-                      id={'workMode'}
-                      disabled={true}
-                    />
-                  </div>
-                  <div className="mb-4 flex flex-col">
-                    <label htmlFor="location" className={labelclassName}>
-                      Location
-                    </label>
-                    <FormField
-                      errors={errors}
-                      value={formValues?.location}
-                      name={'location'}
-                      type={'text'}
-                      placeholder={'Enter your location'}
-                      onChange={onInputChange}
-                      className={className}
-                      id={'location'}
-                      disabled={true}
-                    />
-                  </div>
-                </div>
-                <hr className="border-t-2  border-gray-300 border-dotted dark:border-gray-600"></hr>
-                {!isEditing && isUpdateAllowed && (
-                  <div className="flex justify-between items-center p-4">
-                    <button
-                      type="submit"
-                      className="
+                  <hr className="border-t-2  border-gray-300 border-dotted dark:border-gray-600"></hr>
+                  {!isEditing && (
+                    <div className="flex justify-between items-center p-4">
+                      <button
+                        type="submit"
+                        className="
                         px-6 py-2.5
                         bg-linear-to-r from-indigo-600 to-violet-600
                         text-white font-semibold text-xs xl:text-base
@@ -478,27 +479,27 @@ function ProfileSettings() {
                         transition-all duration-200
                         cursor-pointer disabled:text-gray-400 disabled:cursor-not-allowed
                     "
-                      disabled={formDisabled}
-                    >
-                      {isLoading ? (
-                        <TailSpin
-                          visible={true}
-                          height={20}
-                          color="#fff"
-                          radius="4"
-                          ariaLabel="tail-spin-loading"
-                          wrapperStyle={{}}
-                          wrapperClass="flex items-center justify-center"
-                        />
-                      ) : (
-                        <>Save Profile</>
-                      )}
-                    </button>
+                        disabled={!isCreateAllowed}
+                      >
+                        {isLoading ? (
+                          <TailSpin
+                            visible={true}
+                            height={20}
+                            color="#fff"
+                            radius="4"
+                            ariaLabel="tail-spin-loading"
+                            wrapperStyle={{}}
+                            wrapperClass="flex items-center justify-center"
+                          />
+                        ) : (
+                          <>Save Profile</>
+                        )}
+                      </button>
 
-                    <button
-                      type="reset"
-                      id="reset"
-                      className="
+                      <button
+                        type="reset"
+                        id="reset"
+                        className="
                     px-6 py-2.5
                 bg-linear-to-r from-slate-600 to-violet-200
                 text-white font-semibold text-xs xl:text-base
@@ -509,17 +510,18 @@ function ProfileSettings() {
                 transition-all duration-200
                 cursor-pointer
                 "
-                    >
-                      Reset
-                    </button>
-                  </div>
-                )}
-                {isEditing && isUpdateAllowed && (
-                  <div className="flex justify-between items-center p-4">
-                    <button
-                      type="submit"
-                      id="edit"
-                      className="
+                        disabled={!isCreateAllowed}
+                      >
+                        Reset
+                      </button>
+                    </div>
+                  )}
+                  {isEditing && (
+                    <div className="flex justify-between items-center p-4">
+                      <button
+                        type="submit"
+                        id="edit"
+                        className={`
                           px-6 py-2.5
                         bg-linear-to-r from-indigo-600 to-violet-600
                         text-white font-semibold text-xs xl:text-base
@@ -528,27 +530,28 @@ function ProfileSettings() {
                         hover:shadow-xl hover:shadow-indigo-500/40
                         hover:from-indigo-700 hover:to-violet-700
                         transition-all duration-200
-                        cursor-pointer
+                        ${!isUpdateAllowed ? 'disabled:text-gray-400 disabled:cursor-not-allowed' : 'cursor-pointer'}
                         
-                    "
-                      disabled={formDisabled}
-                    >
-                      {isLoading ? (
-                        <TailSpin
-                          visible={true}
-                          height={20}
-                          color="#fff"
-                          radius="4"
-                          ariaLabel="tail-spin-loading"
-                          wrapperStyle={{}}
-                          wrapperClass="flex items-center justify-center"
-                        />
-                      ) : (
-                        <>Edit Profile</>
-                      )}
-                    </button>
-                  </div>
-                )}
+                    `}
+                        disabled={!isUpdateAllowed}
+                      >
+                        {isLoading ? (
+                          <TailSpin
+                            visible={true}
+                            height={20}
+                            color="#fff"
+                            radius="4"
+                            ariaLabel="tail-spin-loading"
+                            wrapperStyle={{}}
+                            wrapperClass="flex items-center justify-center"
+                          />
+                        ) : (
+                          <>Edit Profile</>
+                        )}
+                      </button>
+                    </div>
+                  )}
+                </fieldset>
               </form>
             </div>
           ) : (

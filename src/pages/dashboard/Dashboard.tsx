@@ -14,9 +14,9 @@ import type {
   RequiringReviewCardProps,
   TopPerformersCardProps,
 } from '../../types/types';
-import { useAllData } from '../../services/utils.service';
 import Skeleton from '../../components/Skeleton/Skeleton';
 import ErrorPage from '../../components/Error/ErrorPage';
+import { useAllData } from '../../api/tanstack.query';
 
 function Dashboard() {
   const results = useAllData();
