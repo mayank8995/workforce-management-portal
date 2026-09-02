@@ -1,10 +1,14 @@
 import { Target, TrendingUp } from 'lucide-react';
 import type { MeetingKPIList } from '../../types/types';
 import React from 'react';
+import { CARD_BACKGROUND_COLOR } from '../../utils/constants';
 
 function MeetingKPIsCard({ meetingKPIs }: MeetingKPIList) {
   return (
-    <div className=" h-full  bg-linear-to-br from-white to-indigo-50/40 rounded-2xl shadow-sm border border-slate-100 p-5 flex flex-col gap-3 hover:shadow-xl hover:shadow-indigo-100/50 dark:hover:shadow-indigo-950/40  hover:-translate-y-0.5 transition-all duration-200 dark:bg-linear-to-br dark:from-slate-900 dark:to-indigo-950/20 dark:border-none">
+    // <div className=" h-full  bg-linear-to-br from-white to-indigo-50/40 rounded-2xl shadow-sm border border-slate-100 p-5 flex flex-col gap-3 hover:shadow-xl hover:shadow-indigo-100/50 dark:hover:shadow-indigo-950/40  hover:-translate-y-0.5 transition-all duration-200 dark:bg-linear-to-br dark:from-slate-900 dark:to-indigo-950/20 dark:border-none">
+    <div
+      className={`h-full  ${CARD_BACKGROUND_COLOR} rounded-2xl shadow-sm p-4 xl:p-5 flex flex-col gap-3 hover:shadow-xl  hover:-translate-y-0.5 transition-all duration-200`}
+    >
       <div className="mb-4 flex flex-row items-center justify-between">
         <div className="flex items-center justify-center">
           <div className="mr-2 h-5 w-5 xl:h-6 xl:w-6 rounded-lg  flex items-center justify-center">

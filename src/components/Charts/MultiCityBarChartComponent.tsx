@@ -8,12 +8,16 @@ import {
 } from 'recharts';
 import { useTheme } from '../../hooks/useTheme';
 import React from 'react';
+import { CARD_BACKGROUND_COLOR } from '../../utils/constants';
 
 function MultiCityBarChartComponent({ title, X, Y, data }: any) {
   const { theme: themeMode } = useTheme();
   return (
     <>
-      <div className="overflow-hidden bg-linear-to-br from-white to-indigo-50/40 rounded-2xl  shadow-sm border border-slate-100 p-5 flex flex-col gap-3 hover:shadow-xl hover:shadow-indigo-100/50 dark:hover:shadow-indigo-950/40 hover:-translate-y-0.5 transition-all duration-200  dark:bg-linear-to-br dark:from-slate-900 dark:to-purple-950/20 dark:border-none">
+      {/* <div className="overflow-hidden bg-linear-to-br from-white to-indigo-50/40 rounded-2xl  shadow-sm border border-slate-100 p-5 flex flex-col gap-3 hover:shadow-xl hover:shadow-indigo-100/50 dark:hover:shadow-indigo-950/40 hover:-translate-y-0.5 transition-all duration-200  dark:bg-linear-to-br dark:from-slate-900 dark:to-purple-950/20 dark:border-none"> */}
+      <div
+        className={`overflow-hidden ${CARD_BACKGROUND_COLOR} rounded-2xl shadow-sm p-5 flex flex-col gap-3 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200`}
+      >
         <h1 className="flex items-center justify-between text-sm xl:text-base font-bold dark:text-slate-100">
           {title}
         </h1>

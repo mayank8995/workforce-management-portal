@@ -9,6 +9,8 @@ import {
 } from 'react';
 import FormField from '../../components/Form/FormField';
 import {
+  BACKGROUND_COLOR,
+  CARD_BACKGROUND_COLOR,
   className,
   labelclassName,
   PROFILE_SUBHEAD,
@@ -234,9 +236,9 @@ function ProfileSettings() {
   return (
     <>
       {!isFormDataLoading ? (
-        <div className="w-full  dark:bg-gray-800">
+        <div className={`w-full  ${BACKGROUND_COLOR}`}>
           {!isError ? (
-            <div className="p-2 xl:p-4 dark:bg-gray-800">
+            <div className={`p-2 xl:p-4 ${BACKGROUND_COLOR}`}>
               <div className="mb-6">
                 <h1 className="text-base xl:text-2xl font-bold text-slate-800 dark:text-slate-100">
                   {SIDE_BAR_ITEMS.SETTINGS}
@@ -248,7 +250,8 @@ function ProfileSettings() {
               <form
                 onSubmit={handleSubmit}
                 onReset={formReset}
-                className="bg-linear-to-br from-white to-indigo-50/40 rounded-2xl  shadow-sm border border-slate-100 p-2 flex flex-col gap-3 hover:shadow-xl  dark:bg-linear-to-br dark:from-slate-900 dark:to-purple-950/20 dark:border-none"
+                // className="bg-linear-to-br from-white to-indigo-50/40 rounded-2xl  shadow-sm border border-slate-100 p-2 flex flex-col gap-3 hover:shadow-xl  dark:bg-linear-to-br dark:from-slate-900 dark:to-purple-950/20 dark:border-none"
+                className={`${CARD_BACKGROUND_COLOR} rounded-2xl  shadow-sm  p-2 flex flex-col gap-3 hover:shadow-xl`}
                 noValidate
               >
                 <fieldset disabled={!isUpdateAllowed}>
