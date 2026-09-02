@@ -77,8 +77,8 @@ export const NAV_ITEMS = {
   ANALYTICS: '/home/analytics',
   EMPLOYEES: '/home/employee',
   SETTINGS: '/home/settings',
-  LOGOUT: '/portal',
-  HOME_PAGE: '/portal',
+  LOGOUT: '/',
+  HOME_PAGE: '/',
 };
 
 export const SIDE_BAR_ITEMS = {
