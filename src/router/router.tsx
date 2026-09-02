@@ -23,11 +23,11 @@ const DashboardRoot = React.lazy(loadDashboardPage);
 
 export const router = createBrowserRouter([
   {
-    path: '/portal',
+    path: '/',
     element: <Landing />,
   },
   {
-    path: '/',
+    path: '/auth',
     element: <App />,
     errorElement: <ErrorBoundaryPage />,
   },

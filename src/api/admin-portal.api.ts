@@ -199,10 +199,10 @@ export const doLogout = async () => {
     const response = await apiClient.post('/logout');
     const { success } = response?.data;
     if (success) {
-      router.navigate('/portal');
+      router.navigate('/');
     }
   } catch (err: unknown) {
-    router.navigate('/portal');
+    router.navigate('/');
     console.error('err>>>', err);
     const { message, status, url } = getApiErrorDetails(err);
     console.error('API Error:', message);

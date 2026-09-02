@@ -77,13 +77,13 @@ export default function Landing() {
               {/* <GithubI className="h-5 w-5" /> */}
             </a>
             <button
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/auth')}
               className="cursor-pointer text-sm font-medium px-4 py-2 rounded-lg bg-[#534ab7] text-white hover:bg-[#463fa1] transition"
             >
               Sign In
             </button>
             <button
-              //   onClick={() => navigate('/')}
+              //   onClick={() => navigate('/auth')}
               className="border border-slate-300 flex justify-evenly items-center cursor-pointer text-sm font-medium px-4 py-2 rounded-lg transition hover:bg-black/5 dark:hover:bg-white/10"
             >
               <span>Sign Up</span>
@@ -109,13 +109,13 @@ export default function Landing() {
         {menuOpen && (
           <div className="md:hidden px-4 pb-4 flex flex-col gap-2">
             <button
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/auth')}
               className="cursor-pointer text-sm font-medium px-4 py-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 transition text-left"
             >
               Sign In
             </button>
             <button
-              //   onClick={() => navigate('/')}
+              //   onClick={() => navigate('/auth')}
               className="flex justify-evenly items-center  cursor-pointer text-sm font-medium px-4 py-2 rounded-lg bg-[#534ab7] text-white text-center"
             >
               <span>Sign Up</span>
@@ -182,7 +182,7 @@ export default function Landing() {
               )}
             </button>
             <button
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/auth')}
               className="cursor-pointer w-full sm:w-auto px-6 py-3 rounded-lg border border-slate-300 dark:border-white/20 font-medium hover:bg-black/5 dark:hover:bg-white/10 transition"
             >
               Sign In
@@ -191,7 +191,7 @@ export default function Landing() {
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-4">
             New here?{' '}
             <button
-              onClick={() => navigate('/')}
+              //   onClick={() => navigate('/auth')}
               className="cursor-pointer text-blue-600 dark:text-blue-400 font-medium hover:underline"
             >
               Create an account
