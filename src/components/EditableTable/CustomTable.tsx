@@ -21,6 +21,7 @@ import { toast } from 'react-toastify';
 import useScreenType from '../../hooks/useScreenSize';
 import { useModal } from '../../context/ModalContext';
 import {
+  BACKGROUND_COLOR,
   CREATE_EMPLOYEE_SUBTITLE,
   CREATE_EMPLOYEE_TITLE,
   EMPLOYEE_TABLE,
@@ -226,7 +227,9 @@ function CustomTable<T extends ListType>(
   return (
     <>
       {!isLoading ? (
-        <div className="min-h-screen bg-slate-50 p-2 xl:p-4 dark:bg-gray-800">
+        <div
+          className={`min-h-screen bg-slate-50 p-2 xl:p-4 ${BACKGROUND_COLOR}`}
+        >
           <div className="bg-white rounded-2xl shadow-md border border-slate-200 flex-1 overflow-x-auto dark:bg-slate-950 dark:border-none">
             <div className="flex items-center justify-between px-6 py-4 pb-0">
               <h2 className="flex flex-row text-slate-800 dark:text-slate-100 font-semibold text-sm xl:text-base  items-center gap-2">

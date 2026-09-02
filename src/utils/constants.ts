@@ -571,3 +571,8 @@ export const FEATURE_STYLES: Record<string, { icon: string; border: string }> =
 
 export const ACCOUNT_CREATION_COMING_SOON = `Account creation is coming soon. Use Guest access to explore the
             portal, or sign in if you already have access.`;
+
+export const CARD_BACKGROUND_COLOR = `bg-white border border-slate-200
+dark:bg-[#151B32] dark:border-[#27304D]`;
+
+export const BACKGROUND_COLOR = `dark:bg-gradient-to-br dark:from-[#0f172a] dark:via-[#161233] dark:to-[#2a1a52]`;

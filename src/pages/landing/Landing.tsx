@@ -78,16 +78,16 @@ export default function Landing() {
             </a>
             <button
               onClick={() => navigate('/')}
-              className="cursor-pointer text-sm font-medium px-4 py-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 transition"
+              className="cursor-pointer text-sm font-medium px-4 py-2 rounded-lg bg-[#534ab7] text-white hover:bg-[#463fa1] transition"
             >
               Sign In
             </button>
             <button
               //   onClick={() => navigate('/')}
-              className="flex justify-evenly items-center cursor-pointer text-sm font-medium px-4 py-2 rounded-lg bg-[#534ab7] text-white hover:bg-[#463fa1] transition"
+              className="border border-slate-300 flex justify-evenly items-center cursor-pointer text-sm font-medium px-4 py-2 rounded-lg transition hover:bg-black/5 dark:hover:bg-white/10"
             >
               <span>Sign Up</span>
-              <span className="ml-1 text-[10px] font-normal bg-white/20 px-1.5 py-0.5 rounded-full">
+              <span className="ml-1 text-[10px] font-normal bg-white/20 px-1.5 py-0.5 rounded-full border border-slate-300">
                 Soon
               </span>
             </button>
