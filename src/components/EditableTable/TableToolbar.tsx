@@ -180,7 +180,7 @@ const TableToolbar = ({
                   disabled={!isCreateAllowed}
                 >
                   {
-                    <span title="Sort">
+                    <span title="Add employee">
                       <UserPlus
                         size={20}
                         className=" text-gray-600 dark:text-gray-100"
