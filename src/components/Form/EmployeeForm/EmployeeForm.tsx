@@ -26,6 +26,7 @@ import ErrorPage from '../../Error/ErrorPage';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEmployeeDetail } from '../../../api/tanstack.query';
 import { useAuth } from '../../../context/AuthContext';
+import { X } from 'lucide-react';
 
 function EmployeeForm({
   onClose,
@@ -380,14 +381,38 @@ function EmployeeForm({
         >
           {!isError ? (
             <div className="p-2 xl:p-4 dark:bg-gray-800">
-              <div className="mb-6">
-                <h1 className="text-base xl:text-xl font-bold text-slate-800 dark:text-slate-100">
-                  {!isUpdateAllowed ? VIEW_EMPLOYEE_TTILE : title}
-                </h1>
-
-                <h2 className="text-xs xl:text-sm text-slate-500 mt-1 dark:text-slate-300">
-                  {!isUpdateAllowed ? VIEW_EMPLOYEE_SUB_TTILE : subtitle}
-                </h2>
+              <div className="mb-6 flex justify-between items-center">
+                <div>
+                  <h1 className="text-base xl:text-xl font-bold text-slate-800 dark:text-slate-100">
+                    {!isUpdateAllowed ? VIEW_EMPLOYEE_TTILE : title}
+                  </h1>
+                  <h2 className="text-xs xl:text-sm text-slate-500 mt-1 dark:text-slate-300">
+                    {!isUpdateAllowed ? VIEW_EMPLOYEE_SUB_TTILE : subtitle}
+                  </h2>
+                </div>
+                <button
+                  onClick={onClose}
+                  className="
+                    flex items-center justify-center
+                    w-8 h-8
+                    rounded-lg
+                    cursor-pointer
+                    transition-colors
+                    hover:bg-slate-100
+                    dark:hover:bg-slate-800
+                  "
+                >
+                  <X
+                    className="
+                      text-slate-400
+                      hover:text-slate-600
+                      dark:text-slate-500
+                      dark:hover:text-slate-300
+                    "
+                    width={18}
+                    height={18}
+                  />
+                </button>
               </div>
 
               <form
