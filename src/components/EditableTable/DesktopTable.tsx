@@ -195,7 +195,9 @@ const DesktopTable = <T extends ListType>(props: DesktopTableProps<T>) => {
                           className="px-4 py-4"
                         >
                           <div className="flex items-center gap-3">
-                            <div className="h-8 w-24 rounded bg-gray-200 dark:bg-gray-700"></div>
+                            <div
+                              className={`${i === 0 ? 'h-5 w-5' : 'h-8 w-24'} rounded bg-gray-200 dark:bg-gray-700`}
+                            ></div>
                           </div>
                         </td>
                       );

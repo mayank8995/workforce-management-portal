@@ -302,7 +302,7 @@ export const checkHealth = async () => {
   try {
     const { apiUrl } = getEnv();
     const response = await axios.get('/health', {
-      baseURL: apiUrl || 'http://localhost:3000/',
+      baseURL: apiUrl || 'http://localhost:3500/',
       timeout: 90000,
       withCredentials: true,
       headers: {

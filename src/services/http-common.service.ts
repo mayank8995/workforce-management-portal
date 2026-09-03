@@ -16,7 +16,7 @@ const RETRY_DELAY_MS = 500;
 const { apiUrl } = getEnv();
 const apiClient = axios.create({
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  baseURL: apiUrl || 'http://localhost:3000/',
+  baseURL: apiUrl || 'http://localhost:3500/',
   timeout: 5000,
   withCredentials: true,
   headers: {

@@ -6,7 +6,7 @@ global.TextDecoder = TextDecoder;
 
 jest.mock('./src/config/env', () => ({
   getEnv: () => ({
-    apiUrl: 'http://localhost:3000/',
+    apiUrl: 'http://localhost:3500/',
   }),
 }));
 

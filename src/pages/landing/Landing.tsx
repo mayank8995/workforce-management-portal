@@ -68,13 +68,34 @@ export default function Landing() {
 
           <div className="hidden md:flex items-center gap-3">
             <a
-              href="https://github.com/your-username/your-repo"
+              href="https://www.linkedin.com/in/mgupta8995/"
               target="_blank"
               rel="noreferrer"
-              className="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 transition"
+              className="w-8 h-8 p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 dark:bg-white transition"
+              aria-label="View source on LinkedIn"
+            >
+              {/* <GithubI className="h-5 w-5" /> */}
+              <img
+                loading="eager"
+                src={'/assets/linkedin.svg'}
+                className="aspect-circle object-cover w-full h-full"
+                alt="LinkedIn Link"
+              />
+            </a>
+            <a
+              href="https://github.com/mayank8995"
+              target="_blank"
+              rel="noreferrer"
+              className="w-8 h-8 p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 dark:bg-white transition"
               aria-label="View source on GitHub"
             >
               {/* <GithubI className="h-5 w-5" /> */}
+              <img
+                loading="eager"
+                src={'/assets/GitHub_Invertocat_Black.svg'}
+                className="aspect-circle object-cover w-full h-full"
+                alt="Github Link"
+              />
             </a>
             <button
               onClick={() => navigate('/auth')}
