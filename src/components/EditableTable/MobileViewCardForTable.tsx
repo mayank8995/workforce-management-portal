@@ -12,6 +12,7 @@ import { useModal } from '../../context/ModalContext';
 // import DetailModal from '../Overlay/DetailModal';
 import AndOthersComponent from '../AndOthers/AndOthersComponent';
 import EmployeeForm from '../Form/EmployeeForm/EmployeeForm';
+import { useAuth } from '../../context/AuthContext';
 
 function MobileViewCardForTable<T extends ListType>({
   list,
@@ -22,7 +23,8 @@ function MobileViewCardForTable<T extends ListType>({
   handleOnChange,
 }: MobileTableProps<T>) {
   const { openModal } = useModal();
-
+  const { can } = useAuth();
+  const isUpdateAllowed = can('employee', 'update');
   // const { selectedRow, setSelectedRow, handleOnChange } = useCheckBox(list);
 
   // to do - uses cases of when checkbox should be selected or not.
@@ -88,7 +90,8 @@ function MobileViewCardForTable<T extends ListType>({
                       </button>
                     </div>
                     <FormField
-                      className={`cursor-pointer w-auto`}
+                      className={`${!isUpdateAllowed ? 'cursor-pointer-none' : 'cursor-pointer'} w-auto`}
+                      disabled={!isUpdateAllowed}
                       name={String(row?._id)}
                       type={'checkbox'}
                       id={String(row?._id)}
