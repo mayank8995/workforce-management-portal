@@ -110,22 +110,13 @@ export default function Landing() {
           <div className="md:hidden px-4 pb-4 flex flex-col gap-2">
             <button
               onClick={() => navigate('/auth')}
-              className="cursor-pointer text-sm font-medium px-4 py-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 transition text-left"
+              className="cursor-pointer text-sm font-medium px-4 py-2 rounded-lg bg-[#534ab7] border border-[#534ab7] text-white dark:text-[#a29bec] dark:border-[#7f77dd] transition text-left"
             >
               Sign In
             </button>
             <button
-              //   onClick={() => navigate('/auth')}
-              className="flex justify-evenly items-center  cursor-pointer text-sm font-medium px-4 py-2 rounded-lg bg-[#534ab7] text-white text-center"
-            >
-              <span>Sign Up</span>
-              <span className="ml-1 text-[10px] font-normal bg-white/20 px-1.5 py-0.5 rounded-full">
-                Soon
-              </span>
-            </button>
-            <button
               onClick={(e) => handleSubmit(e, GUEST_LOGIN)}
-              className="flex justify-between cursor-pointer text-sm font-medium px-4 py-2 rounded-lg border border-[#534ab7] text-[#534ab7] dark:text-[#a29bec] dark:border-[#7f77dd] text-center"
+              className="flex justify-between cursor-pointer text-sm font-medium px-4 py-2 bg-[#534ab7] rounded-lg border border-[#534ab7] text-white dark:text-[#a29bec] dark:border-[#7f77dd] text-center"
             >
               <>Continue as Guest</>{' '}
               {isLoading ? (
@@ -142,6 +133,15 @@ export default function Landing() {
               ) : (
                 <ArrowRight className="h-4 w-4" />
               )}
+            </button>
+            <button
+              //   onClick={() => navigate('/auth')}
+              className="flex justify-start items-center  cursor-pointer text-sm font-medium px-4 py-2 rounded-lg  border border-[#534ab7] text-[#534ab7] dark:text-[#a29bec] dark:border-[#7f77dd] hover:bg-black/5 dark:hover:bg-white/10 text-center"
+            >
+              <span>Sign Up</span>
+              <span className="ml-1 text-[10px] font-normal bg-white/20 px-1.5 py-0.5 rounded-full">
+                Soon
+              </span>
             </button>
           </div>
         )}
