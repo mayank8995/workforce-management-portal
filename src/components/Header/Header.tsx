@@ -3,14 +3,14 @@ import { ADMIN_PORTAL } from '../../utils/constants';
 
 function Header() {
   return (
-    <>
-      <header className="h-14 min-h-14 bg-white border-b border-slate-200 flex items-center sm:justify-start md:justify-between px-5 gap-3 z-0 dark:dark:bg-slate-950 dark:border-b-0">
-        <h1 className="font-bold text-slate-800 dark:text-slate-100 text-lg md:text-2xl">
-          {ADMIN_PORTAL}
-        </h1>
-        <Toggle />
-      </header>
-    </>
+    <header className="h-14 min-h-14 flex items-center sm:justify-start md:justify-between gap-3 pl-4 pr-14 md:px-5 bg-white border-b border-slate-200 dark:bg-slate-950 dark:border-slate-800">
+      <h1 className="font-semibold tracking-tight text-slate-800 dark:text-slate-100 text-base md:text-xl truncate">
+        {ADMIN_PORTAL}
+      </h1>
+      {/* <div className="shrink-0"> */}
+      <Toggle />
+      {/* </div> */}
+    </header>
   );
 }
 

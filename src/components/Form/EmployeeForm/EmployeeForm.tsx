@@ -370,73 +370,54 @@ function EmployeeForm({
     <>
       {!isDataLoading ? (
         <div
-          className="p-3 sm:p-4
+          className="p-4 sm:p-5
             w-full sm:w-115 md:w-125 lg:w-135
             h-full
             overflow-y-auto
             bg-white dark:bg-slate-900
             text-slate-900 dark:text-slate-100
-            shadow-2xl
-            fixed z-300 right-0 top-0"
+            shadow-2xl border-l border-slate-200 dark:border-slate-800
+            fixed z-[300] right-0 top-0"
         >
           {!isError ? (
-            <div className="p-2 xl:p-4 dark:bg-gray-800">
-              <div className="mb-6 flex justify-between items-center">
-                <div>
-                  <h1 className="text-base xl:text-xl font-bold text-slate-800 dark:text-slate-100">
+            <div>
+              <div className="mb-5 flex justify-between items-start gap-3">
+                <div className="min-w-0">
+                  <h1 className="text-base xl:text-xl font-semibold text-slate-800 dark:text-slate-100 truncate">
                     {!isUpdateAllowed ? VIEW_EMPLOYEE_TTILE : title}
                   </h1>
-                  <h2 className="text-xs xl:text-sm text-slate-500 mt-1 dark:text-slate-300">
+                  <h2 className="text-xs xl:text-sm text-slate-500 mt-0.5 dark:text-slate-400">
                     {!isUpdateAllowed ? VIEW_EMPLOYEE_SUB_TTILE : subtitle}
                   </h2>
                 </div>
                 <button
                   onClick={onClose}
-                  className="
-                    flex items-center justify-center
-                    w-8 h-8
-                    rounded-lg
-                    cursor-pointer
-                    transition-colors
-                    hover:bg-slate-100
-                    dark:hover:bg-slate-800
-                  "
+                  className="shrink-0 flex items-center justify-center w-8 h-8 rounded-lg cursor-pointer transition-colors text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-300"
                 >
-                  <X
-                    className="
-                      text-slate-400
-                      hover:text-slate-600
-                      dark:text-slate-500
-                      dark:hover:text-slate-300
-                    "
-                    width={18}
-                    height={18}
-                  />
+                  <X width={18} height={18} />
                 </button>
               </div>
 
               <form
                 onSubmit={handleSubmit}
                 onReset={formReset}
-                className="bg-linear-to-br from-white to-indigo-50/40 rounded-2xl shadow-sm border border-slate-100 p-2 flex flex-col gap-3 hover:shadow-xl dark:bg-linear-to-br dark:from-slate-900 dark:to-purple-950/20 dark:border-none"
+                className="rounded-2xl border border-slate-200 bg-white flex flex-col dark:border-slate-800 dark:bg-slate-900/60"
                 noValidate
               >
                 <fieldset disabled={!isUpdateAllowed}>
                   <div className="p-4">
                     <div className="flex items-center gap-2 mb-4">
-                      <div className="w-1 h-5 bg-indigo-500 rounded-full" />
-
-                      <h2 className="text-sm xl:text-base font-bold text-slate-800 dark:text-slate-100">
+                      <div className="w-1 h-4 bg-indigo-500 rounded-full shrink-0" />
+                      <h2 className="text-sm xl:text-base font-semibold text-slate-800 dark:text-slate-100">
                         Personal Information
                       </h2>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="mb-4 flex flex-col">
+                      <div className="flex flex-col">
                         <label htmlFor="name" className={labelclassName}>
                           Name
                         </label>
-
                         <FormField
                           errors={errors}
                           value={formValues?.name}
@@ -449,11 +430,10 @@ function EmployeeForm({
                           disabled={!isUpdateAllowed}
                         />
                       </div>
-                      <div className="mb-4 flex flex-col">
+                      <div className="flex flex-col">
                         <label htmlFor="email" className={labelclassName}>
                           Email
                         </label>
-
                         <FormField
                           errors={errors}
                           value={formValues?.email}
@@ -466,12 +446,10 @@ function EmployeeForm({
                           disabled={isEditing || !isUpdateAllowed}
                         />
                       </div>
-
-                      <div className="mb-4 flex flex-col">
+                      <div className="flex flex-col">
                         <label htmlFor="empId" className={labelclassName}>
                           Employee ID
                         </label>
-
                         <FormField
                           errors={errors}
                           value={formValues?.empId}
@@ -484,12 +462,10 @@ function EmployeeForm({
                           disabled={true}
                         />
                       </div>
-
-                      <div className="mb-4 flex flex-col">
+                      <div className="flex flex-col">
                         <label htmlFor="phone" className={labelclassName}>
                           Phone Number
                         </label>
-
                         <FormField
                           errors={errors}
                           value={formValues?.phone}
@@ -506,23 +482,21 @@ function EmployeeForm({
                     </div>
                   </div>
 
-                  <hr className="border-t-2 border-gray-300 border-dotted dark:border-gray-600" />
+                  <hr className="border-t border-slate-200 dark:border-slate-800" />
 
                   <div className="p-4">
                     <div className="flex items-center gap-2 mb-4">
-                      <div className="w-1 h-5 bg-indigo-500 rounded-full" />
-
-                      <h2 className="text-sm xl:text-base font-bold text-slate-800 dark:text-slate-100">
+                      <div className="w-1 h-4 bg-indigo-500 rounded-full shrink-0" />
+                      <h2 className="text-sm xl:text-base font-semibold text-slate-800 dark:text-slate-100">
                         Employment Information
                       </h2>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="mb-4 flex flex-col">
+                      <div className="flex flex-col">
                         <label htmlFor="department" className={labelclassName}>
                           Department
                         </label>
-
                         <FormField
                           errors={errors}
                           value={formValues?.department}
@@ -535,12 +509,10 @@ function EmployeeForm({
                           disabled={!isUpdateAllowed}
                         />
                       </div>
-
-                      <div className="mb-4 flex flex-col">
+                      <div className="flex flex-col">
                         <label htmlFor="designation" className={labelclassName}>
                           Designation
                         </label>
-
                         <FormField
                           errors={errors}
                           value={formValues?.designation}
@@ -553,12 +525,10 @@ function EmployeeForm({
                           disabled={!isUpdateAllowed}
                         />
                       </div>
-
-                      <div className="mb-4 flex flex-col">
+                      <div className="flex flex-col">
                         <label htmlFor="manager" className={labelclassName}>
                           Manager
                         </label>
-
                         <FormField
                           errors={errors}
                           value={formValues?.manager}
@@ -571,12 +541,10 @@ function EmployeeForm({
                           disabled={!isUpdateAllowed}
                         />
                       </div>
-
-                      <div className="mb-4 flex flex-col">
+                      <div className="flex flex-col">
                         <label htmlFor="joiningDate" className={labelclassName}>
                           Joining Date
                         </label>
-
                         <FormField
                           errors={errors}
                           value={formValues?.joiningDate}
@@ -589,15 +557,13 @@ function EmployeeForm({
                           disabled={isEditing || !isUpdateAllowed}
                         />
                       </div>
-
-                      <div className="mb-4 flex flex-col">
+                      <div className="flex flex-col">
                         <label
                           htmlFor="yearsOfExperience"
                           className={labelclassName}
                         >
                           Years of Experience
                         </label>
-
                         <FormField
                           errors={errors}
                           value={formValues?.yearsOfExperience}
@@ -610,12 +576,10 @@ function EmployeeForm({
                           disabled={!isUpdateAllowed}
                         />
                       </div>
-
-                      <div className="mb-4 flex flex-col">
+                      <div className="flex flex-col">
                         <label htmlFor="location" className={labelclassName}>
                           Location
                         </label>
-
                         <FormField
                           errors={errors}
                           value={formValues?.location}
@@ -628,12 +592,10 @@ function EmployeeForm({
                           disabled={!isUpdateAllowed}
                         />
                       </div>
-
-                      <div className="mb-4 flex flex-col">
+                      <div className="flex flex-col">
                         <label htmlFor="workMode" className={labelclassName}>
                           Work Mode
                         </label>
-
                         <select
                           id="workMode"
                           name="workMode"
@@ -647,19 +609,16 @@ function EmployeeForm({
                           <option value="Hybrid">Hybrid</option>
                           <option value="Onsite">Onsite</option>
                         </select>
-
                         {errors?.workMode && (
-                          <p className="text-xs text-red-500 mt-1">
+                          <p className="text-xs text-red-600 mt-1 dark:text-red-400">
                             {errors.workMode}
                           </p>
                         )}
                       </div>
-
-                      <div className="mb-4 flex flex-col">
+                      <div className="flex flex-col">
                         <label htmlFor="level" className={labelclassName}>
                           Level
                         </label>
-
                         <select
                           id="level"
                           name="level"
@@ -674,9 +633,8 @@ function EmployeeForm({
                           <option value="lead">Lead</option>
                           <option value="executive">Executive</option>
                         </select>
-
                         {errors?.level && (
-                          <p className="text-xs text-red-500 mt-1">
+                          <p className="text-xs text-red-600 mt-1 dark:text-red-400">
                             {errors.level}
                           </p>
                         )}
@@ -684,13 +642,12 @@ function EmployeeForm({
                     </div>
                   </div>
 
-                  <hr className="border-t-2 border-gray-300 border-dotted dark:border-gray-600" />
+                  <hr className="border-t border-slate-200 dark:border-slate-800" />
 
                   <div className="p-4">
                     <div className="flex items-center gap-2 mb-4">
-                      <div className="w-1 h-5 bg-indigo-500 rounded-full" />
-
-                      <h2 className="text-sm xl:text-base font-bold text-slate-800 dark:text-slate-100">
+                      <div className="w-1 h-4 bg-indigo-500 rounded-full shrink-0" />
+                      <h2 className="text-sm xl:text-base font-semibold text-slate-800 dark:text-slate-100">
                         Projects
                       </h2>
                     </div>
@@ -698,14 +655,13 @@ function EmployeeForm({
                     {isUpdateAllowed && (
                       <>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                          <div className="mb-4 flex flex-col">
+                          <div className="flex flex-col">
                             <label
                               htmlFor="projectName"
                               className={labelclassName}
                             >
                               Project Name
                             </label>
-
                             <FormField
                               errors={projectErrors}
                               value={projectForm.projectName}
@@ -717,12 +673,10 @@ function EmployeeForm({
                               id="projectName"
                             />
                           </div>
-
-                          <div className="mb-4 flex flex-col">
+                          <div className="flex flex-col">
                             <label htmlFor="status" className={labelclassName}>
                               Status
                             </label>
-
                             <select
                               id="status"
                               name="status"
@@ -737,22 +691,19 @@ function EmployeeForm({
                               <option value="Cancelled">Cancelled</option>
                               <option value="Support">Support</option>
                             </select>
-
                             {projectErrors?.status && (
-                              <p className="text-xs text-red-500 mt-1">
+                              <p className="text-xs text-red-600 mt-1 dark:text-red-400">
                                 {projectErrors.status}
                               </p>
                             )}
                           </div>
-
-                          <div className="mb-4 flex flex-col">
+                          <div className="flex flex-col">
                             <label
                               htmlFor="riskStatus"
                               className={labelclassName}
                             >
                               Risk Status
                             </label>
-
                             <select
                               id="riskStatus"
                               name="riskStatus"
@@ -765,22 +716,19 @@ function EmployeeForm({
                               <option value="At Risk">At Risk</option>
                               <option value="Critical">Critical</option>
                             </select>
-
                             {projectErrors?.riskStatus && (
-                              <p className="text-xs text-red-500 mt-1">
+                              <p className="text-xs text-red-600 mt-1 dark:text-red-400">
                                 {projectErrors.riskStatus}
                               </p>
                             )}
                           </div>
-
-                          <div className="mb-4 flex flex-col">
+                          <div className="flex flex-col">
                             <label
                               htmlFor="priorityRanking"
                               className={labelclassName}
                             >
                               Priority Ranking
                             </label>
-
                             <FormField
                               errors={projectErrors}
                               value={projectForm.priorityRanking}
@@ -794,23 +742,11 @@ function EmployeeForm({
                           </div>
                         </div>
 
-                        <div className="flex justify-end mt-2">
+                        <div className="flex justify-end mt-4">
                           <button
                             type="button"
                             onClick={addProject}
-                            className="
-        px-5 py-2.5
-        bg-linear-to-r from-indigo-600 to-violet-600
-        text-white
-        font-semibold
-        text-xs xl:text-sm
-        rounded-xl
-        shadow-lg shadow-indigo-500/30
-        hover:from-indigo-700
-        hover:to-violet-700
-        transition-all duration-200
-        cursor-pointer
-      "
+                            className="px-4 py-2 bg-indigo-600 text-white font-medium text-xs xl:text-sm rounded-lg transition-colors duration-150 cursor-pointer hover:bg-indigo-700"
                           >
                             + Add Project
                           </button>
@@ -819,45 +755,19 @@ function EmployeeForm({
                     )}
 
                     {formValues?.projects?.length > 0 && (
-                      <div className="mt-6 flex flex-col gap-3">
+                      <div className="mt-4 flex flex-col gap-3">
                         {formValues?.projects.map((project, index) => (
                           <div
                             key={`${project?.projectName}-${index}`}
-                            className="
-            rounded-xl
-            border
-            border-slate-200
-            bg-white
-            p-4
-            dark:bg-slate-900
-            dark:border-slate-700
-          "
+                            className="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:bg-slate-800/40 dark:border-slate-800"
                           >
                             <div className="flex justify-between items-start gap-4">
-                              <div className="flex-1">
-                                <div className="flex items-center gap-2 mb-3">
-                                  <span
-                                    className="
-                  text-sm
-                  font-bold
-                  text-slate-800
-                  dark:text-slate-100
-                "
-                                  >
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2 mb-3 flex-wrap">
+                                  <span className="text-sm font-medium text-slate-800 dark:text-slate-100">
                                     {project.projectName}
                                   </span>
-
-                                  <span
-                                    className="
-                  px-2 py-1
-                  text-xs
-                  rounded-full
-                  bg-indigo-100
-                  text-indigo-700
-                  dark:bg-indigo-950
-                  dark:text-indigo-300
-                "
-                                  >
+                                  <span className="px-2 py-0.5 text-xs rounded-full bg-indigo-50 text-indigo-700 ring-1 ring-indigo-200 dark:bg-indigo-500/10 dark:text-indigo-300 dark:ring-indigo-900">
                                     Priority #{project.priorityRanking}
                                   </span>
                                 </div>
@@ -867,27 +777,22 @@ function EmployeeForm({
                                     <p className="text-xs text-slate-500 dark:text-slate-400">
                                       Status
                                     </p>
-
                                     <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
                                       {project.status}
                                     </p>
                                   </div>
-
                                   <div>
                                     <p className="text-xs text-slate-500 dark:text-slate-400">
                                       Risk Status
                                     </p>
-
                                     <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
                                       {project.riskStatus}
                                     </p>
                                   </div>
-
                                   <div>
                                     <p className="text-xs text-slate-500 dark:text-slate-400">
                                       Priority
                                     </p>
-
                                     <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
                                       {project.priorityRanking}
                                     </p>
@@ -899,13 +804,7 @@ function EmployeeForm({
                                 <button
                                   type="button"
                                   onClick={() => removeProject(index)}
-                                  className="
-                text-xs
-                font-semibold
-                text-red-500
-                hover:text-red-700
-                cursor-pointer
-              "
+                                  className="shrink-0 text-xs font-medium text-red-600 transition-colors hover:text-red-700 cursor-pointer dark:text-red-400 dark:hover:text-red-300"
                                 >
                                   Delete
                                 </button>
@@ -916,23 +815,22 @@ function EmployeeForm({
                       </div>
                     )}
                   </div>
-                  <hr className="border-t-2 border-gray-300 border-dotted dark:border-gray-600" />
+
+                  <hr className="border-t border-slate-200 dark:border-slate-800" />
 
                   <div className="p-4">
                     <div className="flex items-center gap-2 mb-4">
-                      <div className="w-1 h-5 bg-indigo-500 rounded-full" />
-
-                      <h2 className="text-sm xl:text-base font-bold text-slate-800 dark:text-slate-100">
+                      <div className="w-1 h-4 bg-indigo-500 rounded-full shrink-0" />
+                      <h2 className="text-sm xl:text-base font-semibold text-slate-800 dark:text-slate-100">
                         Compensation & Performance
                       </h2>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="mb-4 flex flex-col">
+                      <div className="flex flex-col">
                         <label htmlFor="salary" className={labelclassName}>
                           Salary
                         </label>
-
                         <FormField
                           errors={errors}
                           value={formValues?.salary}
@@ -945,12 +843,10 @@ function EmployeeForm({
                           disabled={!isUpdateAllowed}
                         />
                       </div>
-
-                      <div className="mb-4 flex flex-col">
+                      <div className="flex flex-col">
                         <label htmlFor="rating" className={labelclassName}>
                           Rating
                         </label>
-
                         <FormField
                           errors={errors}
                           value={formValues?.rating}
@@ -963,15 +859,13 @@ function EmployeeForm({
                           disabled={!isUpdateAllowed}
                         />
                       </div>
-
-                      <div className="mb-4 flex flex-col">
+                      <div className="flex flex-col">
                         <label
                           htmlFor="attendancePercentage"
                           className={labelclassName}
                         >
                           Attendance Percentage
                         </label>
-
                         <FormField
                           errors={errors}
                           value={formValues?.attendancePercentage}
@@ -984,15 +878,13 @@ function EmployeeForm({
                           disabled={!isUpdateAllowed}
                         />
                       </div>
-
-                      <div className="mb-4 flex flex-col">
+                      <div className="flex flex-col">
                         <label
                           htmlFor="employeeSatisfaction"
                           className={labelclassName}
                         >
                           Employee Satisfaction
                         </label>
-
                         <select
                           id="employeeSatisfaction"
                           name="employeeSatisfaction"
@@ -1006,9 +898,8 @@ function EmployeeForm({
                           <option value="Medium">Medium</option>
                           <option value="Low">Low</option>
                         </select>
-
                         {errors?.employeeSatisfaction && (
-                          <p className="text-xs text-red-500 mt-1">
+                          <p className="text-xs text-red-600 mt-1 dark:text-red-400">
                             {errors?.employeeSatisfaction}
                           </p>
                         )}
@@ -1016,13 +907,12 @@ function EmployeeForm({
                     </div>
                   </div>
 
-                  <hr className="border-t-2 border-gray-300 border-dotted dark:border-gray-600" />
+                  <hr className="border-t border-slate-200 dark:border-slate-800" />
 
                   <div className="p-4">
                     <div className="flex items-center gap-2 mb-4">
-                      <div className="w-1 h-5 bg-indigo-500 rounded-full" />
-
-                      <h2 className="text-sm xl:text-base font-bold text-slate-800 dark:text-slate-100">
+                      <div className="w-1 h-4 bg-indigo-500 rounded-full shrink-0" />
+                      <h2 className="text-sm xl:text-base font-semibold text-slate-800 dark:text-slate-100">
                         Skills
                       </h2>
                     </div>
@@ -1040,22 +930,10 @@ function EmployeeForm({
                           id="skillInput"
                           disabled={!isUpdateAllowed}
                         />
-
                         <button
                           type="button"
                           onClick={addSkill}
-                          className="
-                  px-5
-                  py-2
-                  rounded-xl
-                  bg-indigo-600
-                  text-white
-                  font-semibold
-                  text-sm
-                  hover:bg-indigo-700
-                  transition
-                  cursor-pointer
-                "
+                          className="shrink-0 px-4 py-2 bg-indigo-600 text-white font-medium text-xs xl:text-sm rounded-lg transition-colors duration-150 cursor-pointer hover:bg-indigo-700"
                         >
                           Add
                         </button>
@@ -1067,27 +945,16 @@ function EmployeeForm({
                         {formValues?.skills?.map((skill) => (
                           <div
                             key={skill}
-                            className="
-                      flex items-center gap-2
-                      px-3 py-1.5
-                      rounded-full
-                      bg-indigo-100
-                      text-indigo-700
-                      text-xs
-                      font-medium
-                      dark:bg-indigo-950
-                      dark:text-indigo-300
-                    "
+                            className="flex items-center gap-1.5 pl-3 pr-2 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-medium ring-1 ring-indigo-200 dark:bg-indigo-500/10 dark:text-indigo-300 dark:ring-indigo-900"
                           >
                             <span>{skill}</span>
-
                             <button
                               type="button"
                               onClick={() => removeSkill(skill)}
-                              className="cursor-pointer hover:text-red-500"
+                              className="cursor-pointer text-indigo-400 transition-colors hover:text-red-500 disabled:cursor-not-allowed"
                               disabled={!isUpdateAllowed}
                             >
-                              ×
+                              <X size={12} />
                             </button>
                           </div>
                         ))}
@@ -1095,13 +962,12 @@ function EmployeeForm({
                     )}
                   </div>
 
-                  <hr className="border-t-2 border-gray-300 border-dotted dark:border-gray-600" />
+                  <hr className="border-t border-slate-200 dark:border-slate-800" />
 
                   <div className="p-4">
                     <div className="flex items-center gap-2 mb-4">
-                      <div className="w-1 h-5 bg-indigo-500 rounded-full" />
-
-                      <h2 className="text-sm xl:text-base font-bold text-slate-800 dark:text-slate-100">
+                      <div className="w-1 h-4 bg-indigo-500 rounded-full shrink-0" />
+                      <h2 className="text-sm xl:text-base font-semibold text-slate-800 dark:text-slate-100">
                         Employee Status
                       </h2>
                     </div>
@@ -1116,39 +982,25 @@ function EmployeeForm({
                         className="w-4 h-4 accent-indigo-600 cursor-pointer"
                         disabled={!isUpdateAllowed}
                       />
-
                       <label
                         htmlFor="onNoticePeriod"
-                        className="text-sm text-slate-700 dark:text-slate-200 cursor-pointer"
+                        className="text-sm text-slate-700 dark:text-slate-300 cursor-pointer"
                       >
                         Employee is on notice period
                       </label>
                     </div>
                   </div>
 
-                  <hr className="border-t-2 border-gray-300 border-dotted dark:border-gray-600" />
+                  <hr className="border-t border-slate-200 dark:border-slate-800" />
+
                   {isUpdateAllowed && (
                     <>
                       {!isEditing ? (
-                        <div className="flex justify-between items-center p-4">
+                        <div className="flex justify-between items-center gap-3 p-4">
                           <button
                             type="submit"
                             disabled={formDisabled}
-                            className="
-                px-6 py-2.5
-                bg-linear-to-r from-indigo-600 to-violet-600
-                text-white font-semibold text-xs xl:text-base
-                rounded-xl
-                shadow-lg shadow-indigo-500/30
-                hover:enabled:shadow-xl
-                hover:enabled:shadow-indigo-500/40
-                hover:enabled:from-indigo-700
-                hover:enabled:to-violet-700
-                transition-all duration-200
-                cursor-pointer
-                disabled:text-gray-400
-                disabled:cursor-not-allowed
-              "
+                            className="px-5 py-2.5 bg-indigo-600 text-white font-medium text-xs xl:text-sm rounded-lg transition-colors duration-150 cursor-pointer hover:enabled:bg-indigo-700 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed dark:disabled:bg-slate-800 dark:disabled:text-slate-600"
                           >
                             {isLoading ? (
                               <TailSpin
@@ -1169,18 +1021,7 @@ function EmployeeForm({
                             type="reset"
                             id="reset"
                             disabled={formDisabled}
-                            className="
-                px-6 py-2.5
-                bg-linear-to-r from-slate-600 to-violet-400
-                text-white font-semibold text-xs xl:text-base
-                rounded-xl
-                shadow-lg shadow-indigo-500/30
-                hover:shadow-xl hover:shadow-indigo-500/40
-                hover:from-slate-300 hover:to-violet-400
-                transition-all duration-200
-                cursor-pointer
-                disabled:cursor-not-allowed
-              "
+                            className="px-5 py-2.5 border border-slate-300 text-slate-700 font-medium text-xs xl:text-sm rounded-lg transition-colors duration-150 cursor-pointer hover:enabled:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed dark:border-slate-700 dark:text-slate-300 dark:hover:enabled:bg-slate-800"
                           >
                             Reset
                           </button>
@@ -1190,22 +1031,7 @@ function EmployeeForm({
                           <button
                             type="submit"
                             id="edit"
-                            className="
-                          px-6 py-2.5
-                bg-linear-to-r from-indigo-600 to-violet-600
-                text-white font-semibold text-xs xl:text-base
-                rounded-xl
-                shadow-lg shadow-indigo-500/30
-                hover:enabled:shadow-xl
-                hover:enabled:shadow-indigo-500/40
-                hover:enabled:from-indigo-700
-                hover:enabled:to-violet-700
-                transition-all duration-200
-                cursor-pointer
-                disabled:text-gray-400
-                disabled:cursor-not-allowed
-                        
-                    "
+                            className="px-5 py-2.5 bg-indigo-600 text-white font-medium text-xs xl:text-sm rounded-lg transition-colors duration-150 cursor-pointer hover:enabled:bg-indigo-700 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed dark:disabled:bg-slate-800 dark:disabled:text-slate-600"
                             disabled={formDisabled}
                           >
                             {isLoading ? (

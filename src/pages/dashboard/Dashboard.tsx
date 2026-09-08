@@ -41,7 +41,7 @@ function Dashboard() {
               <KeyMetricCard>
                 <KeyMetric metricData={metricData}></KeyMetric>
               </KeyMetricCard>
-              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 p-2 xl:p-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-2 xl:px-4 pb-2 xl:pb-4">
                 <TopPerformersCard
                   topPerformersList={topPerformers as TopPerformersCardProps}
                 ></TopPerformersCard>

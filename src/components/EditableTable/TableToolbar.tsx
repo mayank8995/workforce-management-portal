@@ -45,9 +45,15 @@ const TableToolbar = ({
   const isUpdateAllowed = can('employee', 'update');
   const isCreateAllowed = can('employee', 'create');
 
+  const iconBtn =
+    'p-1.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 disabled:hover:bg-transparent';
+  const iconActive = 'text-blue-600 dark:text-blue-400';
+  const iconMuted = 'text-slate-400 dark:text-slate-600';
+
   return (
     <React.Fragment>
-      <div className="lg:hidden px-6 pt-4">
+      {/* MOBILE search */}
+      <div className="lg:hidden px-4 pt-4">
         <div className="relative">
           <FormField
             style={{ width: '100%' }}
@@ -59,23 +65,24 @@ const TableToolbar = ({
             onChange={(e) => setTextToBeSearched(e?.target?.value || '')}
           />
           {txtToBeSearched && (
-            <button onClick={() => setTextToBeSearched('')}>
-              <X
-                width={18}
-                className="cursor-pointer absolute bottom-0 right-1.5 top-2.5 dark:text-slate-300 "
-                color="#2563eb"
-              />
+            <button
+              onClick={() => setTextToBeSearched('')}
+              className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+            >
+              <X width={18} className={iconActive} />
             </button>
           )}
         </div>
       </div>
+
       <div className="mt-4 flex flex-row items-center justify-between">
-        <div className="flex-1 justify-between  flex items-center px-6 pb-4">
-          <div className="gap-2 flex flex-row items-center">
+        <div className="flex-1 min-w-0 flex flex-wrap items-center justify-between gap-y-2 px-4 lg:px-6 pb-4">
+          <div className="gap-2 flex flex-row items-center shrink-0">
+            {/* DESKTOP rows per page */}
             <div className="flex justify-center items-center">
               <label
                 htmlFor="limit"
-                className=" hidden lg:flex gap-2 text-sm items-center font-bold dark:text-slate-100 pr-2"
+                className="hidden lg:flex gap-2 text-sm items-center font-bold dark:text-slate-100 pr-2"
               >
                 Rows / page{' '}
                 <select
@@ -97,114 +104,105 @@ const TableToolbar = ({
                 </select>
               </label>
             </div>
-            {
-              <div className="gap-2 flex items-center">
-                <button className="cursor-pointer" onClick={openFilterModal}>
-                  <span title="Filter">
-                    {isfilterAvailable?.length === 0 ? (
-                      <Funnel
-                        size={20}
-                        className=" text-gray-600 dark:text-gray-100"
-                        color="#2563eb"
-                      />
-                    ) : (
-                      <FunnelX
-                        size={20}
-                        className=" text-gray-600 dark:text-gray-100"
-                        color="#2563eb"
-                      />
-                    )}
-                  </span>
-                </button>
-                <button
-                  className="cursor-pointer flex lg:hidden"
-                  onClick={openSortModal}
-                >
-                  {
-                    <span title="Sort">
-                      <ArrowUpDown
-                        size={20}
-                        className=" text-gray-600 dark:text-gray-100"
-                        color="#2563eb"
-                      />
-                    </span>
-                  }
-                </button>
-                <button
-                  disabled={selectedRow.size === 0 || !isUpdateAllowed}
-                  className={`${selectedRow.size === 0 || !isUpdateAllowed ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-                  onClick={bulkAction}
-                >
-                  <span title="Download csv" className="flex gap-2">
-                    <Download
-                      size={20}
-                      color={selectedRow.size === 0 ? '#9ca3af' : '#2563eb'}
-                      className={`text-gray-600 dark:text-gray-100`}
-                    />
-                    {downloading && (
-                      <TailSpin
-                        visible={true}
-                        height={20}
-                        width={20}
-                        color={'#2563eb'}
-                        ariaLabel="tail-spin-loading"
-                        radius="1"
-                        strokeWidth="4"
-                        wrapperStyle={{}}
-                        wrapperClass="flex items-center justify-center"
-                      />
-                    )}
-                  </span>
-                </button>
-                <div
-                  title="Select All"
-                  className="flex lg:hidden items-center justify-center border-2 border-slate-950 border-dotted dark:border-slate-100 w-5 h-5"
-                >
-                  <FormField
-                    ref={ref}
-                    name={'selectAll'}
-                    type={'checkbox'}
-                    id={'selectAll'}
-                    checked={
-                      // selectedRow.has('selectAll') ||
-                      selectedRow.size === listSize
-                    }
-                    onChange={handleOnChange}
-                    className={`m-0 cursor-pointer`}
-                    disabled={!isUpdateAllowed}
+
+            <div className="hidden lg:block h-5 w-px bg-slate-200 dark:bg-slate-700" />
+
+            <div className="gap-0.5 lg:gap-1 flex items-center shrink-0">
+              <button
+                className={`${iconBtn} cursor-pointer`}
+                onClick={openFilterModal}
+              >
+                <span title="Filter">
+                  {isfilterAvailable?.length === 0 ? (
+                    <Funnel size={20} className={iconActive} />
+                  ) : (
+                    <FunnelX size={20} className={iconActive} />
+                  )}
+                </span>
+              </button>
+
+              {/* MOBILE sort */}
+              <button
+                className={`${iconBtn} cursor-pointer flex lg:hidden`}
+                onClick={openSortModal}
+              >
+                <span title="Sort">
+                  <ArrowUpDown size={20} className={iconActive} />
+                </span>
+              </button>
+
+              <button
+                disabled={selectedRow.size === 0 || !isUpdateAllowed}
+                className={`${iconBtn} ${selectedRow.size === 0 || !isUpdateAllowed ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                onClick={bulkAction}
+              >
+                <span title="Download csv" className="flex gap-2">
+                  <Download
+                    size={20}
+                    className={selectedRow.size === 0 ? iconMuted : iconActive}
                   />
-                </div>
-                <button
-                  className={`${!isCreateAllowed ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-                  onClick={openCreateEmployeeModal}
-                  disabled={!isCreateAllowed}
-                >
-                  {
-                    <span title="Add employee">
-                      <UserPlus
-                        size={20}
-                        className=" text-gray-600 dark:text-gray-100"
-                        color={!isCreateAllowed ? '#9ca3af' : '#2563eb'}
-                      />
-                    </span>
-                  }
-                </button>
+                  {downloading && (
+                    <TailSpin
+                      visible={true}
+                      height={20}
+                      width={20}
+                      color={'#2563eb'}
+                      ariaLabel="tail-spin-loading"
+                      radius="1"
+                      strokeWidth="4"
+                      wrapperStyle={{}}
+                      wrapperClass="flex items-center justify-center"
+                    />
+                  )}
+                </span>
+              </button>
+
+              {/* MOBILE select all */}
+              <div
+                title="Select All"
+                className="flex lg:hidden items-center justify-center w-6 h-6 mx-1 shrink-0 rounded-md border border-dashed border-slate-300 dark:border-slate-600"
+              >
+                <FormField
+                  ref={ref}
+                  name={'selectAll'}
+                  type={'checkbox'}
+                  id={'selectAll'}
+                  checked={selectedRow.size === listSize}
+                  onChange={handleOnChange}
+                  className={`m-0 cursor-pointer`}
+                  disabled={!isUpdateAllowed}
+                />
               </div>
-            }
+
+              <button
+                className={`${iconBtn} ${!isCreateAllowed ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                onClick={openCreateEmployeeModal}
+                disabled={!isCreateAllowed}
+              >
+                <span title="Add employee">
+                  <UserPlus
+                    size={20}
+                    className={!isCreateAllowed ? iconMuted : iconActive}
+                  />
+                </span>
+              </button>
+            </div>
           </div>
-          <div className="flex justify-center items-center">
+
+          {/* pagination */}
+          <div className="flex justify-center items-center shrink-0">
             <button
               disabled={tableQueryParams.page === 1}
               onClick={handlePrevious}
-              className={`p-2 transition-colors ${
+              className={`${iconBtn} ${
                 tableQueryParams.page === 1
-                  ? 'opacity-40 cursor-not-allowed pointer-events-none  disabled:text-gray-400 dark:disabled:text-gray-100'
-                  : 'cursor-pointer text-gray-600 dark:text-gray-100'
+                  ? 'opacity-40 cursor-not-allowed pointer-events-none text-slate-400 dark:text-slate-600'
+                  : 'cursor-pointer text-slate-600 dark:text-slate-300'
               }`}
             >
-              <SquareChevronLeft />
+              <SquareChevronLeft size={20} />
             </button>
-            <span className="text-xs md:text-sm font-bold  dark:text-slate-100">
+            <span className="px-1.5 lg:px-2 text-xs md:text-sm font-bold tabular-nums whitespace-nowrap text-slate-700 dark:text-slate-100">
               {tableQueryParams.page} / {tableQueryParams.totalPages || 1}
             </span>
             <button
@@ -213,17 +211,19 @@ const TableToolbar = ({
                 tableQueryParams.totalPages === 0
               }
               onClick={handleNext}
-              className={`p-2 transition-colors ${
+              className={`${iconBtn} ${
                 tableQueryParams.page === tableQueryParams.totalPages ||
                 tableQueryParams.totalPages === 0
-                  ? 'opacity-40 cursor-not-allowed pointer-events-none  disabled:text-gray-400 dark:disabled:text-gray-100'
-                  : 'cursor-pointer text-gray-600 dark:text-gray-100'
+                  ? 'opacity-40 cursor-not-allowed pointer-events-none text-slate-400 dark:text-slate-600'
+                  : 'cursor-pointer text-slate-600 dark:text-slate-300'
               }`}
             >
-              <SquareChevronRight />
+              <SquareChevronRight size={20} />
             </button>
           </div>
         </div>
+
+        {/* DESKTOP search */}
         <div className="hidden lg:flex px-6 pb-4">
           <div className="relative">
             <FormField
@@ -235,12 +235,11 @@ const TableToolbar = ({
               onChange={(e) => setTextToBeSearched(e?.target?.value || '')}
             />
             {txtToBeSearched && (
-              <button onClick={() => setTextToBeSearched('')}>
-                <X
-                  width={18}
-                  className="cursor-pointer absolute bottom-0 right-1.5 top-2.5 dark:text-slate-300"
-                  color="#2563eb"
-                />
+              <button
+                onClick={() => setTextToBeSearched('')}
+                className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+              >
+                <X width={18} className={iconActive} />
               </button>
             )}
           </div>

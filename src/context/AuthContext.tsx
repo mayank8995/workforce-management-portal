@@ -2,6 +2,7 @@ import {
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useState,
   type ReactNode,
 } from 'react';
@@ -83,16 +84,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setTableQueryParams(data);
   };
 
-  const value = {
-    user,
-    isAuthenticated: !!user,
-    isLoading,
-    login,
-    logout,
-    tableQueryParams,
-    setQueryParamsData,
-    can,
-  };
+  // const value = {
+  //   user,
+  //   isAuthenticated: !!user,
+  //   isLoading,
+  //   login,
+  //   logout,
+  //   tableQueryParams,
+  //   setQueryParamsData,
+  //   can,
+  // };
+  const value = useMemo(
+    () => ({
+      user,
+      isAuthenticated: !!user,
+      isLoading,
+      login,
+      logout,
+      tableQueryParams,
+      setQueryParamsData,
+      can,
+    }),
+    [user, isLoading, tableQueryParams]
+  );
 
   return <AuthContext value={value}>{children}</AuthContext>;
 };

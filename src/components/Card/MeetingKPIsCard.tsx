@@ -4,105 +4,80 @@ import React from 'react';
 import { CARD_BACKGROUND_COLOR } from '../../utils/constants';
 
 function MeetingKPIsCard({ meetingKPIs }: MeetingKPIList) {
+  const rows = [
+    {
+      label: 'Exceeding',
+      range: meetingKPIs?.breakdown?.exceeding?.ratingRange,
+      percentage: meetingKPIs?.breakdown?.exceeding?.percentage,
+      bar: 'bg-emerald-500 dark:bg-emerald-400',
+    },
+    {
+      label: 'Meeting',
+      range: meetingKPIs?.breakdown?.meeting?.ratingRange,
+      percentage: meetingKPIs?.breakdown?.meeting?.percentage,
+      bar: 'bg-violet-500 dark:bg-violet-400',
+    },
+    {
+      label: 'Not Meeting',
+      range: meetingKPIs?.breakdown?.notMeeting?.ratingRange,
+      percentage: meetingKPIs?.breakdown?.notMeeting?.percentage,
+      bar: 'bg-red-500 dark:bg-red-400',
+    },
+  ];
+
   return (
-    // <div className=" h-full  bg-linear-to-br from-white to-indigo-50/40 rounded-2xl shadow-sm border border-slate-100 p-5 flex flex-col gap-3 hover:shadow-xl hover:shadow-indigo-100/50 dark:hover:shadow-indigo-950/40  hover:-translate-y-0.5 transition-all duration-200 dark:bg-linear-to-br dark:from-slate-900 dark:to-indigo-950/20 dark:border-none">
     <div
-      className={`h-full  ${CARD_BACKGROUND_COLOR} rounded-2xl shadow-sm p-4 xl:p-5 flex flex-col gap-3 hover:shadow-xl  hover:-translate-y-0.5 transition-all duration-200`}
+      className={`h-full ${CARD_BACKGROUND_COLOR} rounded-2xl shadow-sm flex flex-col overflow-hidden transition-all duration-200 hover:shadow-xl`}
     >
-      <div className="mb-4 flex flex-row items-center justify-between">
-        <div className="flex items-center justify-center">
-          <div className="mr-2 h-5 w-5 xl:h-6 xl:w-6 rounded-lg  flex items-center justify-center">
-            <Target className="text-amber-500 dark:text-amber-100" />
-          </div>
-          <h1 className=" flex items-center text-sm xl:text-base font-bold dark:text-slate-100">
+      <div className="flex flex-row items-center justify-between gap-3 px-4 xl:px-5 py-3.5 border-b border-slate-100 dark:border-slate-800">
+        <div className="flex items-center gap-2 min-w-0">
+          <Target
+            size={18}
+            className="shrink-0 text-amber-500 dark:text-amber-400"
+          />
+          <h1 className="text-sm xl:text-base font-semibold text-slate-800 dark:text-slate-100 truncate">
             {meetingKPIs?.title}
           </h1>
         </div>
-        <h2 className="gap-1 whitespace-nowrap bg-green-400 text-white text-[10px] xl:text-xs font-bold px-2 py-0.5 rounded-full shadow-sm flex items-center dark:bg-emerald-900/40 dark:text-emerald-400">
+        <h2 className="shrink-0 gap-1 whitespace-nowrap bg-green-50 text-green-700 ring-1 ring-green-200 text-[10px] xl:text-xs font-semibold px-2 py-0.5 rounded-full flex items-center tabular-nums dark:bg-emerald-500/10 dark:text-emerald-400 dark:ring-emerald-800">
           <TrendingUp size={12} strokeWidth={2.5} />
           <span>{meetingKPIs?.trendValue}%</span>
         </h2>
       </div>
-      <div className="flex-1 flex flex-col justify-evenly">
-        <div className="mb-2">
-          <h1 className="flex items-center text-sm font-bold dark:text-slate-100">
-            {meetingKPIs?.percentage} / 100 employees
-          </h1>
+
+      <div className="flex-1 flex flex-col px-4 xl:px-5 py-4">
+        <div className="flex items-baseline gap-1.5 mb-5">
+          <span className="text-xl xl:text-2xl font-semibold tabular-nums text-slate-900 dark:text-slate-100">
+            {meetingKPIs?.percentage}
+          </span>
+          <span className="text-xs text-slate-500 dark:text-slate-400">
+            / 100 employees
+          </span>
         </div>
-        <div className="grid grid-cols-3 gap-6 mb-6">
-          <div className="col-span-2">
-            <div className="inline-flex items-center gap-3 mb-2">
-              {/* <div
-                className={`col-span-0 w-6 h-6 rounded-full bg-green-500 flex items-center justify-center`}
-              ></div> */}
-              <h1 className="flex items-center text-xs font-bold dark:text-slate-100">
-                Exceeding ({meetingKPIs?.breakdown?.exceeding?.ratingRange})
-              </h1>
+
+        <div className="flex-1 flex flex-col justify-evenly gap-4">
+          {rows.map((row) => (
+            <div key={row.label}>
+              <div className="flex items-baseline justify-between gap-2 mb-1.5">
+                <span className="text-xs font-medium text-slate-700 dark:text-slate-300 truncate">
+                  {row.label}
+                  <span className="text-slate-400 dark:text-slate-500">
+                    {' '}
+                    ({row.range})
+                  </span>
+                </span>
+                <span className="shrink-0 text-xs font-semibold tabular-nums text-slate-800 dark:text-slate-100">
+                  {row.percentage}%
+                </span>
+              </div>
+              <div className="h-1.5 w-full rounded-full bg-slate-200 overflow-hidden dark:bg-slate-800">
+                <div
+                  className={`h-full rounded-full transition-all duration-500 ${row.bar}`}
+                  style={{ width: `${row.percentage}%` }}
+                />
+              </div>
             </div>
-            <div className="h-2 w-full rounded-full bg-gray-200 overflow-hidden">
-              <div
-                className="h-full bg-linear-to-r from-emerald-400 to-green-600 dark:bg-linear-to-r  transition-all"
-                style={{
-                  width: `${meetingKPIs?.breakdown?.exceeding?.percentage}%`,
-                }}
-              ></div>
-            </div>
-          </div>
-          <div className="flex items-end">
-            <h1 className="flex items-center text-xs font-bold dark:text-slate-100">
-              {meetingKPIs?.breakdown?.exceeding?.percentage}%
-            </h1>
-          </div>
-        </div>
-        <div className="grid grid-cols-3 gap-6 mb-6">
-          <div className="col-span-2">
-            <div className="inline-flex items-center gap-3 mb-2">
-              {/* <div
-                className={`col-span-0 w-6 h-6 rounded-full bg-violet-500 text-white text-xs font-bold flex items-center justify-center`}
-              ></div> */}
-              <h1 className="flex items-center text-xs font-bold dark:text-slate-100">
-                Meeting ({meetingKPIs?.breakdown?.meeting?.ratingRange})
-              </h1>
-            </div>
-            <div className="h-2 w-full rounded-full bg-gray-200 overflow-hidden">
-              <div
-                className="h-full bg-linear-to-r  dark:bg-linear-to-r from-violet-600 to-indigo-700  transition-all"
-                style={{
-                  width: `${meetingKPIs?.breakdown?.meeting?.percentage}%`,
-                }}
-              ></div>
-            </div>
-          </div>
-          <div className="flex items-end">
-            <h1 className="flex items-center text-xs font-bold dark:text-slate-100">
-              {meetingKPIs?.breakdown?.meeting?.percentage}%
-            </h1>
-          </div>
-        </div>
-        <div className="grid grid-cols-3 gap-6 mb-6">
-          <div className="col-span-2">
-            <div className="inline-flex items-center gap-3 mb-2">
-              {/* <div
-                className={`col-span-0 w-6 h-6 rounded-full bg-red-500 text-white text-xs font-bold flex items-center justify-center`}
-              ></div> */}
-              <h1 className="flex items-center text-xs font-bold dark:text-slate-100">
-                Not Meeting ({meetingKPIs?.breakdown?.notMeeting?.ratingRange})
-              </h1>
-            </div>
-            <div className="h-2 w-full rounded-full bg-gray-200 overflow-hidden">
-              <div
-                className="h-full bg-linear-to-r  dark:bg-linear-to-r from-red-500 to-orange-500  transition-all"
-                style={{
-                  width: `${meetingKPIs?.breakdown?.notMeeting?.percentage}%`,
-                }}
-              ></div>
-            </div>
-          </div>
-          <div className="flex items-end">
-            <h1 className="flex items-center text-xs font-bold dark:text-slate-100">
-              {meetingKPIs?.breakdown?.notMeeting?.percentage}%
-            </h1>
-          </div>
+          ))}
         </div>
       </div>
     </div>
