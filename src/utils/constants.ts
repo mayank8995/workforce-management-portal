@@ -179,7 +179,7 @@ export const selectDropDownClass = `cursor-pointer
             dark:outline-none dark:focus:outline-none`;
 export const selectOptionsClass = `text-sm font-bold outline-none`;
 
-export const labelclassName = `block mb-1.5 mt-1.5 text-slate-600 dark:text-slate-400 text-xs font-medium tracking-wide uppercase`;
+export const labelclassName = `block mb-1.5 text-slate-500 dark:text-slate-400 text-xs font-medium`;
 
 export const loginLabelclassNAme = `block mb-1.5 mt-1.5 text-slate-600 dark:text-slate-400 text-xs font-medium tracking-wide uppercase`;
 

@@ -48,17 +48,12 @@ const DesktopTable = <T extends ListType>(props: DesktopTableProps<T>) => {
   }, [tableQueryParams]);
 
   return (
-    <React.Fragment>
-      <table
-        className="hidden lg:table rounded-2xl
-  shadow-lg
-  border
-  border-slate-200 m-2.5 dark:bg-slate-900 dark:border-slate-700  dark:shadow-slate-900/50 "
-      >
-        <thead className="bg-slate-100">
+    <div className="hidden lg:block m-2.5 rounded-2xl border border-slate-200 shadow-lg overflow-hidden dark:border-slate-700 dark:bg-slate-900 dark:shadow-slate-900/50">
+      <table className="w-full">
+        <thead className="bg-slate-100 dark:bg-slate-800">
           {headersData?.length > 0 && (
-            <tr className="cursor-pointer dark:bg-slate-800 dark:border-slate-700">
-              <th className="px-4 py-4 text-left text-xs font-semibold tracking-wider text-slate-600 dark:text-slate-400">
+            <tr className="cursor-pointer dark:border-slate-700">
+              <th className="px-4 py-4 text-left text-xs font-semibold uppercase tracking-wider whitespace-nowrap select-none text-slate-600 dark:text-slate-400">
                 <FormField
                   ref={ref}
                   name={'selectAll'}
@@ -77,7 +72,7 @@ const DesktopTable = <T extends ListType>(props: DesktopTableProps<T>) => {
                   <React.Fragment key={header.key}>
                     {!(header?.metadata?.show === false) && (
                       <th
-                        className="px-4 py-4 text-left text-xs font-semibold tracking-wider text-slate-600 dark:text-slate-400"
+                        className="px-4 py-4 text-left text-xs font-semibold uppercase tracking-wider whitespace-nowrap select-none text-slate-600 dark:text-slate-400"
                         onClick={() => handleSort(header?.key)}
                       >
                         {header?.value} {getSortIcon(header?.key)}
@@ -90,17 +85,17 @@ const DesktopTable = <T extends ListType>(props: DesktopTableProps<T>) => {
           )}
         </thead>
         {!isLoading ? (
-          <tbody className="divide-y divide-slate-200">
+          <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
             {list?.length > 0 ? (
               list?.map((row, index: number) => (
                 <tr
                   key={`${row._id}-${index * 2}`}
-                  className={` hover:bg-blue-50 hover:transition-colors hover:duration-200 dark:hover:bg-slate-400/50 odd:bg-white even:bg-slate-50 dark:odd:bg-slate-900 dark:even:bg-slate-800/40 dark:border-slate-800`}
+                  className="transition-colors duration-150 odd:bg-white even:bg-slate-50 hover:bg-blue-50 dark:odd:bg-slate-900 dark:even:bg-slate-800/40 dark:hover:bg-slate-700/60 dark:border-slate-800"
                 >
                   {/* {Hooking checkboxlist into list as checkbox list is derived from list} */}
                   <td
                     id={String(row?._id)}
-                    className="px-4 py-4 font-medium text-slate-800 dark:text-slate-400"
+                    className="px-4 py-3.5 text-sm font-medium whitespace-nowrap text-slate-800 dark:text-slate-300"
                   >
                     <FormField
                       name={String(row?._id)}
@@ -118,7 +113,7 @@ const DesktopTable = <T extends ListType>(props: DesktopTableProps<T>) => {
                       <React.Fragment key={column?.key}>
                         {!(column?.metadata?.show === false) && (
                           <td
-                            className={`px-4 py-4 font-medium text-slate-800 dark:text-slate-400`}
+                            className="px-4 py-3.5 text-sm font-medium whitespace-nowrap text-slate-800 dark:text-slate-300"
                             id={String(row?._id)}
                           >
                             <button
@@ -170,7 +165,10 @@ const DesktopTable = <T extends ListType>(props: DesktopTableProps<T>) => {
               ))
             ) : (
               <tr>
-                <td colSpan={8} className="col-span-8  text-center py-8">
+                <td
+                  colSpan={headersData?.length + 1}
+                  className="text-center py-8"
+                >
                   <h1 className="dark:text-slate-100 text-slate-800 flex flex-row justify-center items-center">
                     <TextSearch className="pr-1" />
                     <span>{NO_RESULT_FOUND}</span>
@@ -180,11 +178,11 @@ const DesktopTable = <T extends ListType>(props: DesktopTableProps<T>) => {
             )}
           </tbody>
         ) : (
-          <tbody className="divide-y divide-gray-100 border-t border-gray-100 animate-pulse">
+          <tbody className="divide-y divide-slate-200 border-t border-slate-200 animate-pulse dark:divide-slate-800 dark:border-slate-800">
             {Array.from({ length: rowsPerPage }, (_, index) => index + 1)?.map(
               (_, id) => {
                 return (
-                  <tr key={`${id + rowsPerPage}`} className="hover:bg-gray-50">
+                  <tr key={`${id + rowsPerPage}`}>
                     {Array.from(
                       { length: headersData?.length },
                       (_, index) => index + 1
@@ -196,7 +194,7 @@ const DesktopTable = <T extends ListType>(props: DesktopTableProps<T>) => {
                         >
                           <div className="flex items-center gap-3">
                             <div
-                              className={`${i === 0 ? 'h-5 w-5' : 'h-8 w-24'} rounded bg-gray-200 dark:bg-gray-700`}
+                              className={`${i === 0 ? 'h-5 w-5' : 'h-8 w-24'} rounded bg-slate-200 dark:bg-slate-700`}
                             ></div>
                           </div>
                         </td>
@@ -209,7 +207,7 @@ const DesktopTable = <T extends ListType>(props: DesktopTableProps<T>) => {
           </tbody>
         )}
       </table>
-    </React.Fragment>
+    </div>
   );
 };
 

@@ -23,7 +23,10 @@ export default function Landing() {
 
   useLayoutEffect(() => {
     const root = document.documentElement;
-    if (localStorage.getItem('theme') === 'dark') {
+    if (
+      !localStorage.getItem('theme') ||
+      localStorage.getItem('theme') === 'dark'
+    ) {
       root.setAttribute('data-theme', 'dark');
     }
   }, []);

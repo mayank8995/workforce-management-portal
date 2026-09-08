@@ -30,6 +30,7 @@ import { useAuth } from '../../context/AuthContext';
 import ProfileSettingSkeleton from '../../components/Skeleton/ProfileSettingSkeleton';
 import ErrorPage from '../../components/Error/ErrorPage';
 import { useProfileData } from '../../api/tanstack.query';
+import { Pencil } from 'lucide-react';
 
 function ProfileSettings() {
   const { user, can } = useAuth();
@@ -236,37 +237,36 @@ function ProfileSettings() {
   return (
     <>
       {!isFormDataLoading ? (
-        <div className={`w-full  ${BACKGROUND_COLOR}`}>
+        <div className={`w-full ${BACKGROUND_COLOR}`}>
           {!isError ? (
-            <div className={`p-2 xl:p-4 ${BACKGROUND_COLOR}`}>
-              <div className="mb-6">
-                <h1 className="text-base xl:text-2xl font-bold text-slate-800 dark:text-slate-100">
+            <div className={`p-3 xl:p-4 ${BACKGROUND_COLOR}`}>
+              <div className="mb-5">
+                <h1 className="text-base xl:text-xl font-semibold text-slate-800 dark:text-slate-100">
                   {SIDE_BAR_ITEMS.SETTINGS}
                 </h1>
-                <h2 className="text-xs xl:text-sm text-slate-500 mt-1 dark:text-slate-300">
+                <h2 className="text-xs xl:text-sm text-slate-500 mt-0.5 dark:text-slate-400">
                   {PROFILE_SUBHEAD}
                 </h2>
               </div>
               <form
                 onSubmit={handleSubmit}
                 onReset={formReset}
-                // className="bg-linear-to-br from-white to-indigo-50/40 rounded-2xl  shadow-sm border border-slate-100 p-2 flex flex-col gap-3 hover:shadow-xl  dark:bg-linear-to-br dark:from-slate-900 dark:to-purple-950/20 dark:border-none"
-                className={`${CARD_BACKGROUND_COLOR} rounded-2xl  shadow-sm  p-2 flex flex-col gap-3 hover:shadow-xl`}
+                className={`${CARD_BACKGROUND_COLOR} rounded-2xl border border-slate-200 flex flex-col dark:border-slate-800`}
                 noValidate
               >
                 <fieldset disabled={!isUpdateAllowed}>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 p-4 gap-4">
-                    <div className="bg-linear-to-br from-indigo-50 to-violet-50 rounded-2xl p-8 h-full dark:bg-linear-to-br dark:from-slate-900 dark:to-green-950/20">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 p-4 gap-4 xl:gap-6">
+                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-6 h-full dark:border-slate-800 dark:bg-slate-800/40">
                       <div className="flex items-center gap-2 mb-4">
-                        <div className="w-1 h-5 bg-indigo-500 rounded-full" />
-                        <h2 className="text-sm xl:text-base font-bold text-slate-800 dark:text-slate-100">
+                        <div className="w-1 h-4 bg-indigo-500 rounded-full shrink-0" />
+                        <h2 className="text-sm xl:text-base font-semibold text-slate-800 dark:text-slate-100">
                           Avatar
                         </h2>
                       </div>
 
-                      <div className="flex flex-col items-center justify-center gap-4 ">
+                      <div className="flex flex-col items-center justify-center gap-4">
                         <div className="relative">
-                          <div className="w-32 h-32 rounded-full ring-4 ring-white shadow-xl overflow-hidden">
+                          <div className="w-28 h-28 xl:w-32 xl:h-32 rounded-full ring-4 ring-white overflow-hidden dark:ring-slate-800">
                             <img
                               loading="eager"
                               src={
@@ -287,201 +287,206 @@ function ProfileSettings() {
                             onClick={handleUpload}
                             type="button"
                             disabled={!isUpdateAllowed}
-                            className={`${!isUpdateAllowed ? 'disabled:text-gray-400 disabled: cursor-not-allowed' : 'cursor-pointer'} absolute bottom-1 right-1 w-9 h-9 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-lg hover:bg-indigo-700 transition`}
+                            className={`${!isUpdateAllowed ? 'disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed dark:disabled:bg-slate-700' : 'cursor-pointer hover:bg-indigo-700'} absolute bottom-0 right-0 w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center ring-2 ring-white transition-colors duration-150 dark:ring-slate-800`}
                           >
-                            ✎
+                            <Pencil size={14} />
                           </button>
                         </div>
                         {formValues?.name && (
-                          <div className="text-center">
-                            <p className="font-bold text-slate-800 dark:text-slate-100 text-sm xl:text-base">
+                          <div className="text-center min-w-0 max-w-full">
+                            <p className="font-medium text-slate-800 dark:text-slate-100 text-sm xl:text-base truncate">
                               {formValues?.name}
                             </p>
-                            <p className="text-xs text-slate-500 dark:text-slate-300">
+                            <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
                               {formValues?.designation}
                             </p>
                           </div>
                         )}
                       </div>
                     </div>
+
                     <div>
                       <div className="flex items-center gap-2 mb-4">
-                        <div className="w-1 h-5 bg-indigo-500 rounded-full" />
-                        <h2 className="text-sm xl:text-base font-bold text-slate-800 dark:text-slate-100">
+                        <div className="w-1 h-4 bg-indigo-500 rounded-full shrink-0" />
+                        <h2 className="text-sm xl:text-base font-semibold text-slate-800 dark:text-slate-100">
                           Personal Information
                         </h2>
                       </div>
-                      <div className="mb-4 flex flex-col">
-                        <label htmlFor="name" className={labelclassName}>
-                          Name
-                        </label>
-                        <FormField
-                          errors={errors}
-                          value={formValues?.name}
-                          name={'name'}
-                          type={'text'}
-                          placeholder={'Enter your name'}
-                          onChange={onInputChange}
-                          className={className}
-                          id={'name'}
-                          disabled={!isUpdateAllowed}
-                        />
-                      </div>
-                      <div className="mb-4 flex flex-col">
-                        <label htmlFor="phone" className={labelclassName}>
-                          Phone Number
-                        </label>
-                        <FormField
-                          errors={errors}
-                          value={formValues?.phone}
-                          name={'phone'}
-                          type={'text'}
-                          placeholder={'Enter your phone number'}
-                          onChange={onInputChange}
-                          className={className}
-                          id={'phone'}
-                          disabled={!isUpdateAllowed}
-                        />
-                      </div>
-                      <div className="mb-4 flex flex-col">
-                        <label htmlFor="email" className={labelclassName}>
-                          Email
-                        </label>
-                        <FormField
-                          errors={errors}
-                          value={formValues?.email}
-                          name={'email'}
-                          type={'email'}
-                          placeholder={'Enter your email'}
-                          onChange={onInputChange}
-                          className={className}
-                          id={'email'}
-                          disabled={true}
-                        />
-                      </div>
-                      <div className="mb-4 flex flex-col">
-                        <label htmlFor="department" className={labelclassName}>
-                          Department
-                        </label>
-                        <FormField
-                          errors={errors}
-                          value={formValues?.department}
-                          name={'department'}
-                          type={'text'}
-                          placeholder={'Enter your department'}
-                          onChange={onInputChange}
-                          className={className}
-                          id={'department'}
-                          disabled={true}
-                        />
-                      </div>
-                      <div className="mb-4 flex flex-col">
-                        <label htmlFor="designation" className={labelclassName}>
-                          Designation
-                        </label>
-                        <FormField
-                          errors={errors}
-                          value={formValues?.designation}
-                          name={'designation'}
-                          type={'text'}
-                          placeholder={'Enter your designation'}
-                          onChange={onInputChange}
-                          className={className}
-                          id={'designation'}
-                          disabled={true}
-                        />
+                      <div className="flex flex-col gap-4">
+                        <div className="flex flex-col">
+                          <label htmlFor="name" className={labelclassName}>
+                            Name
+                          </label>
+                          <FormField
+                            errors={errors}
+                            value={formValues?.name}
+                            name={'name'}
+                            type={'text'}
+                            placeholder={'Enter your name'}
+                            onChange={onInputChange}
+                            className={className}
+                            id={'name'}
+                            disabled={!isUpdateAllowed}
+                          />
+                        </div>
+                        <div className="flex flex-col">
+                          <label htmlFor="phone" className={labelclassName}>
+                            Phone Number
+                          </label>
+                          <FormField
+                            errors={errors}
+                            value={formValues?.phone}
+                            name={'phone'}
+                            type={'text'}
+                            placeholder={'Enter your phone number'}
+                            onChange={onInputChange}
+                            className={className}
+                            id={'phone'}
+                            disabled={!isUpdateAllowed}
+                          />
+                        </div>
+                        <div className="flex flex-col">
+                          <label htmlFor="email" className={labelclassName}>
+                            Email
+                          </label>
+                          <FormField
+                            errors={errors}
+                            value={formValues?.email}
+                            name={'email'}
+                            type={'email'}
+                            placeholder={'Enter your email'}
+                            onChange={onInputChange}
+                            className={className}
+                            id={'email'}
+                            disabled={true}
+                          />
+                        </div>
+                        <div className="flex flex-col">
+                          <label
+                            htmlFor="department"
+                            className={labelclassName}
+                          >
+                            Department
+                          </label>
+                          <FormField
+                            errors={errors}
+                            value={formValues?.department}
+                            name={'department'}
+                            type={'text'}
+                            placeholder={'Enter your department'}
+                            onChange={onInputChange}
+                            className={className}
+                            id={'department'}
+                            disabled={true}
+                          />
+                        </div>
+                        <div className="flex flex-col">
+                          <label
+                            htmlFor="designation"
+                            className={labelclassName}
+                          >
+                            Designation
+                          </label>
+                          <FormField
+                            errors={errors}
+                            value={formValues?.designation}
+                            name={'designation'}
+                            type={'text'}
+                            placeholder={'Enter your designation'}
+                            onChange={onInputChange}
+                            className={className}
+                            id={'designation'}
+                            disabled={true}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <hr className="border-t-2  border-gray-300 border-dotted dark:border-gray-600"></hr>
+
+                  <hr className="border-t border-slate-200 dark:border-slate-800" />
+
                   <div className="p-4">
                     <div className="flex items-center gap-2 mb-4">
-                      <div className="w-1 h-5 bg-indigo-500 rounded-full" />
-                      <h2 className="text-sm xl:text-base font-bold text-slate-800 dark:text-slate-100">
+                      <div className="w-1 h-4 bg-indigo-500 rounded-full shrink-0" />
+                      <h2 className="text-sm xl:text-base font-semibold text-slate-800 dark:text-slate-100">
                         Account Information
                       </h2>
                     </div>
-                    <div className="mb-4 flex flex-col">
-                      <label htmlFor="empId" className={labelclassName}>
-                        Employee ID
-                      </label>
-                      <FormField
-                        errors={errors}
-                        value={formValues?.empId}
-                        name={'empId'}
-                        type={'text'}
-                        placeholder={'Enter your ID'}
-                        onChange={onInputChange}
-                        className={className}
-                        id={'empId'}
-                        disabled={true}
-                      />
-                    </div>
-                    <div className="mb-4 flex flex-col">
-                      <label htmlFor="joiningDate" className={labelclassName}>
-                        Joining Date
-                      </label>
-                      <FormField
-                        errors={errors}
-                        value={formValues?.joiningDate}
-                        name={'joiningDate'}
-                        type={'date'}
-                        placeholder={'Enter your joining date'}
-                        onChange={onInputChange}
-                        className={className}
-                        id={'joiningDate'}
-                        disabled={true}
-                      />
-                    </div>
-                    <div className="mb-4 flex flex-col">
-                      <label htmlFor="workMode" className={labelclassName}>
-                        Work Mode
-                      </label>
-                      <FormField
-                        errors={errors}
-                        value={formValues?.workMode}
-                        name={'workMode'}
-                        type={'text'}
-                        placeholder={'Hybrid/Remote/Onsite'}
-                        onChange={onInputChange}
-                        className={className}
-                        id={'workMode'}
-                        disabled={true}
-                      />
-                    </div>
-                    <div className="mb-4 flex flex-col">
-                      <label htmlFor="location" className={labelclassName}>
-                        Location
-                      </label>
-                      <FormField
-                        errors={errors}
-                        value={formValues?.location}
-                        name={'location'}
-                        type={'text'}
-                        placeholder={'Enter your location'}
-                        onChange={onInputChange}
-                        className={className}
-                        id={'location'}
-                        disabled={true}
-                      />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="flex flex-col">
+                        <label htmlFor="empId" className={labelclassName}>
+                          Employee ID
+                        </label>
+                        <FormField
+                          errors={errors}
+                          value={formValues?.empId}
+                          name={'empId'}
+                          type={'text'}
+                          placeholder={'Enter your ID'}
+                          onChange={onInputChange}
+                          className={className}
+                          id={'empId'}
+                          disabled={true}
+                        />
+                      </div>
+                      <div className="flex flex-col">
+                        <label htmlFor="joiningDate" className={labelclassName}>
+                          Joining Date
+                        </label>
+                        <FormField
+                          errors={errors}
+                          value={formValues?.joiningDate}
+                          name={'joiningDate'}
+                          type={'date'}
+                          placeholder={'Enter your joining date'}
+                          onChange={onInputChange}
+                          className={className}
+                          id={'joiningDate'}
+                          disabled={true}
+                        />
+                      </div>
+                      <div className="flex flex-col">
+                        <label htmlFor="workMode" className={labelclassName}>
+                          Work Mode
+                        </label>
+                        <FormField
+                          errors={errors}
+                          value={formValues?.workMode}
+                          name={'workMode'}
+                          type={'text'}
+                          placeholder={'Hybrid/Remote/Onsite'}
+                          onChange={onInputChange}
+                          className={className}
+                          id={'workMode'}
+                          disabled={true}
+                        />
+                      </div>
+                      <div className="flex flex-col">
+                        <label htmlFor="location" className={labelclassName}>
+                          Location
+                        </label>
+                        <FormField
+                          errors={errors}
+                          value={formValues?.location}
+                          name={'location'}
+                          type={'text'}
+                          placeholder={'Enter your location'}
+                          onChange={onInputChange}
+                          className={className}
+                          id={'location'}
+                          disabled={true}
+                        />
+                      </div>
                     </div>
                   </div>
-                  <hr className="border-t-2  border-gray-300 border-dotted dark:border-gray-600"></hr>
+
+                  <hr className="border-t border-slate-200 dark:border-slate-800" />
+
                   {!isEditing && (
-                    <div className="flex justify-between items-center p-4">
+                    <div className="flex justify-between items-center gap-3 p-4">
                       <button
                         type="submit"
-                        className="
-                        px-6 py-2.5
-                        bg-linear-to-r from-indigo-600 to-violet-600
-                        text-white font-semibold text-xs xl:text-base
-                        rounded-xl
-                        shadow-lg shadow-indigo-500/30
-                        hover:enabled:shadow-xl hover:enabled:shadow-indigo-500/40
-                        hover:enabled:from-indigo-700 hover:enabled:to-violet-700
-                        transition-all duration-200
-                        cursor-pointer disabled:text-gray-400 disabled:cursor-not-allowed
-                    "
+                        className="px-5 py-2.5 bg-indigo-600 text-white font-medium text-xs xl:text-sm rounded-lg transition-colors duration-150 cursor-pointer hover:enabled:bg-indigo-700 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed dark:disabled:bg-slate-800 dark:disabled:text-slate-600"
                         disabled={!isCreateAllowed}
                       >
                         {isLoading ? (
@@ -502,17 +507,7 @@ function ProfileSettings() {
                       <button
                         type="reset"
                         id="reset"
-                        className="
-                    px-6 py-2.5
-                bg-linear-to-r from-slate-600 to-violet-200
-                text-white font-semibold text-xs xl:text-base
-                rounded-xl
-                shadow-lg shadow-indigo-500/30
-                hover:shadow-xl hover:shadow-indigo-500/40
-                hover:from-slate-300 hover:to-violet-200
-                transition-all duration-200
-                cursor-pointer
-                "
+                        className="px-5 py-2.5 border border-slate-300 text-slate-700 font-medium text-xs xl:text-sm rounded-lg transition-colors duration-150 cursor-pointer hover:enabled:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed dark:border-slate-700 dark:text-slate-300 dark:hover:enabled:bg-slate-800"
                         disabled={!isCreateAllowed}
                       >
                         Reset
@@ -524,18 +519,7 @@ function ProfileSettings() {
                       <button
                         type="submit"
                         id="edit"
-                        className={`
-                          px-6 py-2.5
-                        bg-linear-to-r from-indigo-600 to-violet-600
-                        text-white font-semibold text-xs xl:text-base
-                        rounded-xl
-                        shadow-lg shadow-indigo-500/30
-                        hover:shadow-xl hover:shadow-indigo-500/40
-                        hover:from-indigo-700 hover:to-violet-700
-                        transition-all duration-200
-                        ${!isUpdateAllowed ? 'disabled:text-gray-400 disabled:cursor-not-allowed' : 'cursor-pointer'}
-                        
-                    `}
+                        className="px-5 py-2.5 bg-indigo-600 text-white font-medium text-xs xl:text-sm rounded-lg transition-colors duration-150 cursor-pointer hover:enabled:bg-indigo-700 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed dark:disabled:bg-slate-800 dark:disabled:text-slate-600"
                         disabled={!isUpdateAllowed}
                       >
                         {isLoading ? (

@@ -13,7 +13,10 @@ function App() {
   // const isGuest = searchParams?.get('isGuest') === 'true';
   useLayoutEffect(() => {
     const root = document.documentElement;
-    if (localStorage.getItem('theme') === 'dark') {
+    if (
+      !localStorage.getItem('theme') ||
+      localStorage.getItem('theme') === 'dark'
+    ) {
       root.setAttribute('data-theme', 'dark');
     }
   }, []);
