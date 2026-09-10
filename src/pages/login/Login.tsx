@@ -17,17 +17,17 @@ import {
 import FormField from '../../components/Form/FormField';
 import { validateField } from '../../services/form-validation.service';
 import type { LoginData, LoginForm } from '../../types/types';
-import { checkHealth, doLogin } from '../../api/admin-portal.api';
+import { doLogin } from '../../api/admin-portal.api';
 import { TailSpin } from 'react-loader-spinner';
 import { toast, type ToastContent } from 'react-toastify';
 import { useAuth } from '../../context/AuthContext';
 import { getApiErrorDetails } from '../../services/utils.service';
-import { loadDashboardPage } from '../../router/router';
+// import { loadDashboardPage } from '../../router/router';
 
-type ServerHealth = {
-  status: boolean;
-  message: string;
-};
+// type ServerHealth = {
+//   status: boolean;
+//   message: string;
+// };
 
 // LoginCard.jsx
 function Login({
@@ -47,10 +47,10 @@ function Login({
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
   const guestLoginStarted = useRef(false);
-  const [serverWakingUp, setServerWakingUp] = useState<ServerHealth>({
-    status: false,
-    message: '⚡Waking up free demo server...',
-  });
+  // const [serverWakingUp, setServerWakingUp] = useState<ServerHealth>({
+  //   status: false,
+  //   message: '⚡Waking up free demo server...',
+  // });
 
   useEffect(() => {
     if (!isGuest || guestLoginStarted.current) return;
@@ -92,7 +92,7 @@ function Login({
         // console.log("inside herer")
         setIsLoading(true);
         // first check render server(free) health check
-        await wakeUpServer();
+        // await wakeUpServer();
         const res: {
           status?: number;
           data?: { data?: LoginData; message?: ToastContent<unknown> };
@@ -135,27 +135,27 @@ function Login({
       console.error(err);
     }
   };
-  const wakeUpServer = async () => {
-    const timer = setTimeout(() => {
-      setServerWakingUp((prev) => ({ ...prev, status: true }));
-    }, 1000);
-    try {
-      const response = await checkHealth();
-      console.log('response health', response);
-      setServerWakingUp((prev) => ({
-        ...prev,
-        message:
-          response?.data?.status === 'ok'
-            ? '✓ Demo server is ready!'
-            : prev.message,
-      }));
-    } catch (error) {
-      toast.error('Request timed out.Please try again!');
-    } finally {
-      clearTimeout(timer);
-      setServerWakingUp((prev) => ({ ...prev, status: false }));
-    }
-  };
+  // const wakeUpServer = async () => {
+  //   const timer = setTimeout(() => {
+  //     setServerWakingUp((prev) => ({ ...prev, status: true }));
+  //   }, 1000);
+  //   try {
+  //     const response = await checkHealth();
+  //     console.log('response health', response);
+  //     setServerWakingUp((prev) => ({
+  //       ...prev,
+  //       message:
+  //         response?.data?.status === 'ok'
+  //           ? '✓ Demo server is ready!'
+  //           : prev.message,
+  //     }));
+  //   } catch (error) {
+  //     toast.error('Request timed out.Please try again!');
+  //   } finally {
+  //     clearTimeout(timer);
+  //     setServerWakingUp((prev) => ({ ...prev, status: false }));
+  //   }
+  // };
   return (
     <div className="h-100 md:max-h-150 md:h-127.5 bg-violet-50 border-violet-200 dark:bg-[#211a3d] border dark:border-[#7c3aed]/20  rounded-2xl shadow-2xl shadow-[#2d1b4e]/60 p-4 md:p-8 w-full max-w-md">
       {/* Header */}
@@ -205,12 +205,12 @@ function Login({
         <button
           type="submit"
           disabled={isLoading}
-          onMouseEnter={() => {
-            loadDashboardPage();
-          }}
-          onPointerDown={() => {
-            loadDashboardPage();
-          }}
+          // onMouseEnter={() => {
+          //   loadDashboardPage();
+          // }}
+          // onPointerDown={() => {
+          //   loadDashboardPage();
+          // }}
           className={` w-full bg-[#534ab7] text-white font-semibold py-3 rounded-lg mt-4  mb-4 px-6 
                          text-sm
                         shadow-lg shadow-indigo-500/30
@@ -235,11 +235,11 @@ function Login({
           )}
         </button>
       </form>
-      {serverWakingUp?.status && (
+      {/* {serverWakingUp?.status && (
         <p className="mb-2 text-xs text-center font-medium text-amber-600 dark:text-amber-400">
           {serverWakingUp?.message}
         </p>
-      )}
+      )} */}
       <p className="text-center text-slate-600 dark:text-slate-400 text-sm">
         Don't have an account?{' '}
         <button

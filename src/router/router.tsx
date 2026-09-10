@@ -1,11 +1,8 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
-import App from '../App';
 import ErrorBoundaryPage from '../components/Error/ErrorBoundaryPage';
 import { ProtectedRoute } from '../pages/protected-routes/ProtectedRoutes';
 import React from 'react';
 import Landing from '../pages/landing/Landing.tsx';
-const Home = React.lazy(() => import('../components/Home/Home.tsx'));
-const Dashboard = React.lazy(() => import('../pages/dashboard/Dashboard.tsx'));
 const Employees = React.lazy(() => import('../pages/employee/Employees.tsx'));
 export const loadAnalyticsPage = () =>
   import('../pages/analytics/Analytics.tsx');
@@ -20,6 +17,25 @@ const ViewMore = React.lazy(loadViewMorePage);
 export const loadDashboardPage = () =>
   import('../pages/dashboard/DashboardRoot.tsx');
 const DashboardRoot = React.lazy(loadDashboardPage);
+
+export const loginAppPage = () => import('../App.tsx');
+const App = React.lazy(loginAppPage);
+
+export const loadDashboardChildPage = () =>
+  import('../pages/dashboard/Dashboard.tsx');
+const Dashboard = React.lazy(loadDashboardChildPage);
+
+export const loadHome = () => import('../components/Home/Home.tsx');
+const Home = React.lazy(loadHome);
+
+let done = false;
+export const prefetchDashboard = () => {
+  if (done) return;
+  done = true;
+  loadHome();
+  loadDashboardPage();
+  loadDashboardChildPage();
+};
 
 export const router = createBrowserRouter([
   {

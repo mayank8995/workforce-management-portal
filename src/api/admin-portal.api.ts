@@ -11,8 +11,8 @@ import type {
   TableQueryParams,
 } from '../types/types';
 import { router } from '../router/router';
-import axios from 'axios';
-import { getEnv } from '../config/env';
+// import axios from 'axios';
+// import { getEnv } from '../config/env';
 
 export default async function getEmployees() {
   try {
@@ -298,19 +298,32 @@ export const guestLogin = async (form: LoginForm) => {
 };
 
 // for this api different timeout
-export const checkHealth = async () => {
+// export const checkHealth = async () => {
+//   try {
+//     const { apiUrl } = getEnv();
+//     const response = await axios.get('/health', {
+//       baseURL: apiUrl || 'http://localhost:3500/',
+//       timeout: 90000,
+//       withCredentials: true,
+//       headers: {
+//         'Content-type': 'application/json',
+//       },
+//     });
+//     return response;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
+
+export const aiChat = async (data: string) => {
   try {
-    const { apiUrl } = getEnv();
-    const response = await axios.get('/health', {
-      baseURL: apiUrl || 'http://localhost:3500/',
-      timeout: 90000,
-      withCredentials: true,
-      headers: {
-        'Content-type': 'application/json',
-      },
-    });
-    return response;
-  } catch (error) {
-    throw error;
+    const res = await apiClient.post('/ai/query', data);
+    return res;
+  } catch (err: unknown) {
+    const { message, status, url } = getApiErrorDetails(err);
+    console.error('API Error:', message);
+    console.error('Status:', status);
+    console.error('URL:', url);
+    throw err;
   }
 };
