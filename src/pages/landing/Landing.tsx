@@ -1,6 +1,12 @@
 import { useLayoutEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LayoutGrid, ArrowRight, Menu, X } from 'lucide-react';
+import {
+  LayoutGrid,
+  ArrowRight,
+  Menu,
+  X,
+  // MessageSquareIcon,
+} from 'lucide-react';
 import type { LoginData, LoginForm } from '../../types/types';
 import {
   ACCOUNT_CREATION_COMING_SOON,
@@ -14,6 +20,10 @@ import { toast } from 'react-toastify';
 import { guestLogin } from '../../api/admin-portal.api';
 import { getApiErrorDetails } from '../../services/utils.service';
 import { TailSpin } from 'react-loader-spinner';
+import { prefetchDashboard } from '../../router/router';
+// import { loadDashboardChildPage } from '../../router/router';
+// import { useModal } from '../../context/ModalContext';
+// import ChatWidget from '../../components/ChatWidget/ChatWidget';
 
 export default function Landing() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -21,6 +31,7 @@ export default function Landing() {
   const { login } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
 
+  // const { openModal } = useModal();
   useLayoutEffect(() => {
     const root = document.documentElement;
     if (
@@ -68,7 +79,17 @@ export default function Landing() {
             <LayoutGrid className="h-6 w-6 text-[#534ab7]" />
             <span className="font-semibold">Admin Portal</span>
           </div>
-
+          {/**AI Chat Bot */}
+          {/* <div className="flex items-center gap-2">
+            <button
+              onClick={() => openModal(ChatWidget)}
+              aria-label="Ask about this project"
+              className="cursor-pointer inline-flex items-center gap-2 rounded-lg border border-[#534ab7]/30 px-2.5 py-2 text-sm text-slate-700 transition hover:border-[#534ab7] hover:bg-[#534ab7]/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#534ab7] dark:border-[#534ab7]/40 dark:text-slate-200 dark:hover:border-[#7f77dd] dark:hover:bg-[#534ab7]/10 dark:focus-visible:outline-[#7f77dd] sm:px-3"
+            >
+              <MessageSquareIcon className="h-4 w-4 shrink-0 text-[#534ab7] dark:text-[#7f77dd]" />
+              <span className="hidden sm:inline">Ask about this project</span>
+            </button>
+          </div> */}
           <div className="hidden md:flex items-center gap-3">
             <a
               href="https://www.linkedin.com/in/mgupta8995/"
@@ -140,6 +161,9 @@ export default function Landing() {
             </button>
             <button
               onClick={(e) => handleSubmit(e, GUEST_LOGIN)}
+              onMouseEnter={prefetchDashboard}
+              onFocus={prefetchDashboard}
+              onPointerDown={prefetchDashboard}
               className="flex justify-between cursor-pointer text-sm font-medium px-4 py-2 bg-[#534ab7] rounded-lg border border-[#534ab7] text-white dark:text-[#a29bec] dark:border-[#7f77dd] text-center"
             >
               <>Continue as Guest</>{' '}
@@ -187,6 +211,9 @@ export default function Landing() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <button
               onClick={(e) => handleSubmit(e, GUEST_LOGIN)}
+              onMouseEnter={prefetchDashboard}
+              onFocus={prefetchDashboard}
+              onPointerDown={prefetchDashboard}
               className="cursor-pointer w-full sm:w-auto px-6 py-3 rounded-lg bg-[#534ab7] text-white font-medium hover:bg-[#463fa1] transition flex items-center justify-center gap-2"
             >
               Continue as Guest{' '}

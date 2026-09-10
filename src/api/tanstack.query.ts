@@ -145,3 +145,13 @@ export function useEmployeeDetail(_id: { _id: string }) {
     enabled: !!userId, // Only run the query if _id is provided
   });
 }
+// export function useAIChat(data: string) {
+//   return useQuery({
+//     queryKey: ['AIChat'],
+//     queryFn: () => aiChat(data),
+//     staleTime: 1000 * 60 * 10,
+//     refetchOnWindowFocus: false,
+//     refetchOnMount: false,
+//     refetchOnReconnect: false,
+//   });
+// }
