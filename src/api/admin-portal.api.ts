@@ -285,35 +285,19 @@ export const editEmployee = async (
   }
 };
 
-export const guestLogin = async (form: LoginForm) => {
+export const guestLogin = async () => {
   try {
-    const res = await doLogin(form);
+    const res = await apiClient.post('/guest');
     return res;
   } catch (err: unknown) {
+    console.error('err>>>', err);
     const { message, status, url } = getApiErrorDetails(err);
+    toast.error(message);
     console.error('API Error:', message);
     console.error('Status:', status);
     console.error('URL:', url);
   }
 };
-
-// for this api different timeout
-// export const checkHealth = async () => {
-//   try {
-//     const { apiUrl } = getEnv();
-//     const response = await axios.get('/health', {
-//       baseURL: apiUrl || 'http://localhost:3500/',
-//       timeout: 90000,
-//       withCredentials: true,
-//       headers: {
-//         'Content-type': 'application/json',
-//       },
-//     });
-//     return response;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
 
 export const aiChat = async (data: string) => {
   try {
