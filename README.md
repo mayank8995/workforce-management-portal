@@ -20,6 +20,9 @@ The project focuses on building an workforce management dashboard similar to app
 * 📱 Responsive UI
 * 🚨 Global error handling
 * 🔐 Route-based application structure
+* Role-based access control
+* Production database integration
+* Audit logs
 
 ## 🛠️ Tech Stack
 
@@ -31,7 +34,7 @@ The project focuses on building an workforce management dashboard similar to app
 * **Node.js**
 * **Express.js**
 * **REST APIs**
-* **lowdb**
+* **mongodb**
 
 ## 🏗️ Architecture
 
@@ -135,15 +138,11 @@ The dashboard provides an overview of important business metrics such as:
 * Performance metrics
 
 ## 🔮 Future Improvements
-
-* Role-based access control
 * Advanced analytics
-* Audit logs
 * Real-time notifications
 * Virtualized tables for very large datasets
 * Automated testing
 * CI/CD pipeline
-* Production database integration
 
 ## 🎯 Why I Built This
 
