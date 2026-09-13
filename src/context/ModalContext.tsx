@@ -1,4 +1,11 @@
-import { createContext, useState, useContext, type ReactNode } from 'react';
+import {
+  createContext,
+  useState,
+  useContext,
+  type ReactNode,
+  useMemo,
+  useCallback,
+} from 'react';
 import type { MODAL_COMPONENTS, ModalType } from '../utils/modalRegistry';
 import OverlayContainer from '../components/Overlay/OverlayContainer';
 
@@ -23,28 +30,35 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
   >(null);
   const [modalProps, setModalProps] = useState<Record<any, any>>({});
 
-  const openModal = <T extends ModalType>(
-    component: (typeof MODAL_COMPONENTS)[T],
-    props?: Record<any, any>
-  ) => {
-    setModalComponent(() => component);
-    setModalProps(props as Record<any, any>);
-  };
+  const openModal = useCallback(
+    <T extends ModalType>(
+      component: (typeof MODAL_COMPONENTS)[T],
+      props?: Record<any, any>
+    ) => {
+      setModalComponent(() => component);
+      setModalProps(props as Record<any, any>);
+    },
+    []
+  );
 
-  const updateModalProps = (newProps: Record<any, any>) => {
+  const updateModalProps = useCallback((newProps: Record<any, any>) => {
     setModalProps((prev) => ({
       ...prev,
       ...newProps,
     }));
-  };
+  }, []);
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setModalComponent(null);
     setModalProps({});
-  };
+  }, []);
+  const value = useMemo(
+    () => ({ openModal, closeModal, updateModalProps }),
+    [openModal, closeModal, updateModalProps]
+  );
 
   return (
-    <ModalContext value={{ openModal, closeModal, updateModalProps }}>
+    <ModalContext value={value}>
       {children}
       {modalComponent && (
         <OverlayContainer
