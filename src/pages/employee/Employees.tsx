@@ -6,13 +6,13 @@ import {
   EMPLOYEE_DIREC,
   headers_employees,
 } from '../../utils/constants';
-import { useTableData } from '../../services/utils.service';
 import type {
   EmployeeDirectoryResponse,
   TableQueryParams,
 } from '../../types/types';
 import { useLoader } from '../../context/Loadercontext';
 import { columns_employees } from '../../components/EditableTable/CustomCellRenderer';
+import { useTableData } from '../../api/tanstack.query';
 
 function Employees() {
   const { setIsLoading } = useLoader();
@@ -29,8 +29,8 @@ function Employees() {
   } = useTableData({ ...query }, setIsLoading, signal);
 
   const list =
-    (tableQuery?.['data'] as EmployeeDirectoryResponse)?.['employees'] || [];
-
+    (tableQuery?.['data']?.data as EmployeeDirectoryResponse)?.['employees'] ||
+    [];
   function handleTableQuery(queryData: TableQueryParams, signal?: AbortSignal) {
     setQuery((prev) => ({ ...prev, ...queryData }));
     setSignal(signal);
@@ -40,8 +40,9 @@ function Employees() {
       handleTableQuery={handleTableQuery}
       list={list || []}
       tableQueryParams={
-        (tableQuery?.['data'] as EmployeeDirectoryResponse)?.['pagination'] ||
-        DEFAULT_TABLE_QUERY_PARAMS
+        (tableQuery?.['data']?.data as EmployeeDirectoryResponse)?.[
+          'pagination'
+        ] || DEFAULT_TABLE_QUERY_PARAMS
       }
       columnsData={columns_employees}
       headersData={headers_employees}

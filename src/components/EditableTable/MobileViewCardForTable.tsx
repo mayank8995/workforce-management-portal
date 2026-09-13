@@ -1,10 +1,18 @@
 import React, { useEffect } from 'react';
 import type { ListType, MobileTableProps } from '../../types/types';
-import { bgColors, gradients, NAME } from '../../utils/constants';
+import {
+  bgColors,
+  EDIT_EMPLOYEE_SUBTITLE,
+  EDIT_EMPLOYEE_TITLE,
+  gradients,
+  NAME,
+} from '../../utils/constants';
 import FormField from '../Form/FormField';
 import { useModal } from '../../context/ModalContext';
-import DetailModal from '../Overlay/DetailModal';
+// import DetailModal from '../Overlay/DetailModal';
 import AndOthersComponent from '../AndOthers/AndOthersComponent';
+import EmployeeForm from '../Form/EmployeeForm/EmployeeForm';
+import { useAuth } from '../../context/AuthContext';
 
 function MobileViewCardForTable<T extends ListType>({
   list,
@@ -15,7 +23,8 @@ function MobileViewCardForTable<T extends ListType>({
   handleOnChange,
 }: MobileTableProps<T>) {
   const { openModal } = useModal();
-
+  const { can } = useAuth();
+  const isUpdateAllowed = can('employee', 'update');
   // const { selectedRow, setSelectedRow, handleOnChange } = useCheckBox(list);
 
   // to do - uses cases of when checkbox should be selected or not.
@@ -43,7 +52,7 @@ function MobileViewCardForTable<T extends ListType>({
     <>
       {list?.map((row, index: number) => (
         <div
-          key={`${row.id}-data`}
+          key={`${row._id}-data`}
           className="bg-linear-to-br from-white to-indigo-50/40 rounded-2xl border-t-4 shadow-sm border border-slate-100 p-5 flex flex-col gap-3  dark:bg-linear-to-br dark:from-slate-900 dark:to-purple-950/20  mb-2  odd:bg-white even:bg-slate-50 dark:odd:bg-slate-900 dark:even:bg-slate-800/40 dark:border-slate-900/50 "
         >
           {columnsData?.map((coloumn) => {
@@ -65,9 +74,11 @@ function MobileViewCardForTable<T extends ListType>({
                         type="button"
                         className={` flex flex-col gap-1 min-w-0 cursor-pointer`}
                         onClick={() => {
-                          openModal(DetailModal, {
-                            id: row.id,
+                          openModal(EmployeeForm, {
+                            _id: row._id,
                             tableQueryParams,
+                            title: EDIT_EMPLOYEE_TITLE,
+                            subtitle: EDIT_EMPLOYEE_SUBTITLE,
                           });
                         }}
                       >
@@ -79,43 +90,45 @@ function MobileViewCardForTable<T extends ListType>({
                       </button>
                     </div>
                     <FormField
-                      className={`cursor-pointer w-auto`}
-                      name={String(row?.id)}
+                      className={`${!isUpdateAllowed ? 'cursor-pointer-none' : 'cursor-pointer'} w-auto`}
+                      disabled={!isUpdateAllowed}
+                      name={String(row?._id)}
                       type={'checkbox'}
-                      id={String(row?.id)}
-                      checked={selectedRow.has(String(row?.id))}
+                      id={String(row?._id)}
+                      checked={selectedRow.has(String(row?._id))}
                       onChange={handleOnChange}
                     />
                   </div>
                 )}
                 <>
-                  {coloumn?.key !== 'name' && (
-                    <div className={getRowCss(coloumn?.key)}>
-                      <h2 className="text-slate-500 text-xs xl:text-base truncate">
-                        {coloumn?.header
-                          ?.split(' ')
-                          .map(
-                            (n: string) => n[0] + n.substring(1).toLowerCase()
-                          )
-                          .join(' ')}
-                      </h2>
-                      <h2 className=" text-slate-800 dark:text-slate-300 text-xs xl:text-base">
-                        {Array.isArray(value) && value?.length > 0 ? (
-                          <AndOthersComponent
-                            values={value}
-                            id={coloumn?.key}
-                            render={coloumn?.render}
-                          />
-                        ) : (
-                          <>
-                            {!coloumn?.render
-                              ? row[coloumn?.key]
-                              : coloumn?.render(String(value), coloumn?.key)}
-                          </>
-                        )}
-                      </h2>
-                    </div>
-                  )}
+                  {coloumn?.key !== 'name' &&
+                    !(coloumn?.metadata?.show === false) && (
+                      <div className={getRowCss(coloumn?.key)}>
+                        <h2 className="text-slate-500 text-xs xl:text-base truncate">
+                          {coloumn?.header
+                            ?.split(' ')
+                            .map(
+                              (n: string) => n[0] + n.substring(1).toLowerCase()
+                            )
+                            .join(' ')}
+                        </h2>
+                        <h2 className=" text-slate-800 dark:text-slate-300 text-xs xl:text-base">
+                          {Array.isArray(value) && value?.length > 0 ? (
+                            <AndOthersComponent
+                              values={value}
+                              id={coloumn?.key}
+                              render={coloumn?.render}
+                            />
+                          ) : (
+                            <>
+                              {!coloumn?.render
+                                ? row[coloumn?.key]
+                                : coloumn?.render(String(value), coloumn?.key)}
+                            </>
+                          )}
+                        </h2>
+                      </div>
+                    )}
                 </>
               </React.Fragment>
             );

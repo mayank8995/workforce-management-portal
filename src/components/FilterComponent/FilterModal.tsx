@@ -8,15 +8,17 @@ import type {
   TableQueryParams,
   TableTypeMap,
 } from '../../types/types';
-import { useFilterList } from '../../services/utils.service';
 import FilterModalSkeleton from '../Skeleton/FilterModalSkeleton';
 import ErrorPage from '../Error/ErrorPage';
 import { useQueryClient } from '@tanstack/react-query';
+import { useFilterList } from '../../api/tanstack.query';
 
 type FilterListItem = [string, string[]];
 interface FilterListResponse {
   data?: {
-    list?: FilterListItem[];
+    data?: {
+      list?: FilterListItem[];
+    };
   };
 }
 interface FilterModalComponentProps {
@@ -30,7 +32,7 @@ interface FilterModalComponentProps {
   searchParams: URLSearchParams;
 }
 
-const FilterModal: React.FC<FilterModalComponentProps> = ({
+const FilterModal = ({
   onClose,
   submitFilterData,
   clearAllFilter,
@@ -53,8 +55,7 @@ const FilterModal: React.FC<FilterModalComponentProps> = ({
   const [loading, setLoading] = useState(false);
 
   const dataList =
-    (filterList as FilterListResponse | undefined)?.data?.list ?? [];
-
+    (filterList as FilterListResponse | undefined)?.data?.data?.list ?? [];
   /**
    * Only show tabs which have filters.
    */
@@ -174,7 +175,7 @@ const FilterModal: React.FC<FilterModalComponentProps> = ({
       limit: prev.limit,
       search: prev.search,
       sortBy: prev.sortBy,
-      order: prev.order,
+      sortOrder: prev.sortOrder,
       tableType: prev.tableType,
     }));
 

@@ -19,7 +19,7 @@ function renderPage() {
         <ModalProvider>
           <ToastContainer autoClose={1000} />
           <LoaderFlagProvider>
-            <MemoryRouter initialEntries={['/']}>
+            <MemoryRouter initialEntries={['/auth']}>
               <Login onCustomEvent={() => {}} isGuest={false} />
             </MemoryRouter>
           </LoaderFlagProvider>

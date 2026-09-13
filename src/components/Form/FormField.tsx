@@ -17,6 +17,7 @@ function FormField({
   onClick,
   id,
   ref,
+  disabled,
 }: InputFieldType) {
   function handleOnchange(e: ChangeEvent<HTMLInputElement>) {
     onChange?.(e);
@@ -30,7 +31,10 @@ function FormField({
         type={type || 'text'}
         name={name || 'text'}
         onChange={handleOnchange}
-        className={className || defaultClass}
+        className={
+          `${className} ${disabled ? 'disabled:cursor-not-allowed disabled:opacity-60disabled:bg-slate-100 disabled:text-slate-400 disabled:border-slate-200 dark:disabled:bg-slate-800/50 dark:disabled:text-slate-500 dark:disabled:border-slate-700' : ''}` ||
+          `${defaultClass} ${disabled ? 'disabled:cursor-not-allowed disabled:opacity-60disabled:bg-slate-100 disabled:text-slate-400 disabled:border-slate-200 dark:disabled:bg-slate-800/50 dark:disabled:text-slate-500 dark:disabled:border-slate-700' : ''}`
+        }
         placeholder={placeholder}
         checked={checked}
         onClick={onClick}
@@ -41,6 +45,7 @@ function FormField({
         spellCheck="false"
         aria-describedby={`${name}-error-message`}
         ref={ref}
+        disabled={disabled}
       />
       {name && errors && errors[name] && (
         <span

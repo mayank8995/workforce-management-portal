@@ -31,10 +31,19 @@ const useScreenType = () => {
       return;
     }
 
+    // const onResize = () => {
+    //   setScreenType(getScreenType(window.innerWidth));
+    // };
     const onResize = () => {
       setScreenType(getScreenType(window.innerWidth));
     };
-    window.addEventListener('resize', onResize);
+    const debouncedHandleResize = () => {
+      if (timeoutIdRef.current !== null) {
+        clearTimeout(timeoutIdRef.current);
+      }
+      timeoutIdRef.current = setTimeout(onResize, 300);
+    };
+    window.addEventListener('resize', debouncedHandleResize);
     return () => {
       window.removeEventListener('resize', onResize);
       if (timeoutIdRef.current) {

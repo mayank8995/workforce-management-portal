@@ -11,12 +11,13 @@ interface ApiError extends AxiosError {
   data: unknown;
   statusText: string;
 }
+const SESSION_DEAD = ['SESSION_EXPIRED', 'INVALID_TOKEN', 'NO_TOKEN'];
 const MAX_RETRIES = 5;
 const RETRY_DELAY_MS = 500;
 const { apiUrl } = getEnv();
 const apiClient = axios.create({
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  baseURL: apiUrl || 'http://localhost:3000/',
+  baseURL: apiUrl || 'http://localhost:3500/',
   timeout: 5000,
   withCredentials: true,
   headers: {
@@ -27,18 +28,6 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(
   function (config: InternalAxiosRequestConfig) {
     // Do something before request is sent
-    if (
-      !(
-        config.url === '/login' ||
-        config.url === '/signup' ||
-        config.url === '/logout'
-      )
-    ) {
-      let access_token: string | null = localStorage.getItem('access-token');
-      if (access_token) {
-        config.headers.set('Authorization', `Bearer ${access_token}`);
-      }
-    }
     return config;
   },
   function (error: AxiosError) {
@@ -52,32 +41,18 @@ apiClient.interceptors.response.use(
   function (response: AxiosResponse) {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
-    if (response?.config?.url === '/login') {
-      localStorage.setItem('access-token', response?.data?.token);
-    }
+    // if (response?.config?.url === '/login') {
+    //   localStorage.setItem('access-token', response?.data?.token);
+    // }
     return normalizeApiResponse(response);
   },
-  async function (error: AxiosError) {
+  async function (error: any) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
-    reportError(error);
-    if (error.response?.status === 403) {
-      localStorage.removeItem('access-token');
+    if (SESSION_DEAD.includes(error.response?.data?.code)) {
       doLogout();
-      return Promise.reject(new Error('Auth token expired'));
+      return Promise.reject(new Error(error.response?.data?.code));
     }
-    // if (error.response?.status === 401) {
-    //   console.log('error>>>>>', error?.response);
-    //   const responseData = error?.response?.data as
-    //     | Record<string, unknown>
-    //     | undefined;
-    //   const isTokenVerified = responseData?.token;
-    //   if (isTokenVerified === false) {
-    //     // refetch token
-    //     const token = await refreshToken();
-    //     console.log('token>>>', token);
-    //     // config.headers.set('Authorization', `Bearer ${access_token}`);
-    //   }
-    // }
+    reportError(error);
     const config = error.config as InternalAxiosRequestConfig & {
       _retryCount?: number;
     };

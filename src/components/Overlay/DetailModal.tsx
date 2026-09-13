@@ -3,18 +3,18 @@ import React from 'react';
 import StatusBadge from '../UtilComponents/StatusBadge';
 import { accordians } from '../Accordian/AccordianRenderer';
 import Accordion from '../Accordian/Accordian';
-import { useEmployeeDetail } from '../../services/utils.service';
 import EmployeeDetailSkeleton from '../Skeleton/EmployeeDetailSkeleton';
 import ErrorPage from '../Error/ErrorPage';
+import { useEmployeeDetail } from '../../api/tanstack.query';
 
 interface DetailModalProps {
   onClose: () => void;
-  id: number;
+  _id: string;
 }
 
-const DetailModal = ({ onClose, id }: DetailModalProps) => {
-  const { data: details, isError, isLoading } = useEmployeeDetail({ id });
-  const row = details?.['data'] ?? [];
+const DetailModal = ({ onClose, _id }: DetailModalProps) => {
+  const { data: details, isError, isLoading } = useEmployeeDetail({ _id });
+  const row = details?.['data']?.data?.result ?? [];
 
   return (
     <>

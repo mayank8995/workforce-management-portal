@@ -14,8 +14,11 @@ import StatusBadge from '../UtilComponents/StatusBadge';
 
 export const columns_employees: Column<Employee>[] = [
   {
-    key: 'id',
+    key: '_id',
     header: 'Id',
+    metadata: {
+      show: false,
+    },
   },
   {
     key: 'name',
@@ -52,8 +55,11 @@ export const columns_employees: Column<Employee>[] = [
 
 export const columns_top_performers: Column<TopPerformer>[] = [
   {
-    key: 'id',
+    key: '_id',
     header: 'Id',
+    metadata: {
+      show: false,
+    },
   },
   {
     key: 'name',
@@ -97,8 +103,11 @@ export const columns_top_projects: Column<TopProject>[] = [
 ];
 export const columns_promotedThisYear: Column<PromotedEmployee>[] = [
   {
-    key: 'id',
+    key: '_id',
     header: 'id',
+    metadata: {
+      show: false,
+    },
   },
   {
     key: 'name',
@@ -120,13 +129,31 @@ export const columns_promotedThisYear: Column<PromotedEmployee>[] = [
   {
     key: 'promotedOn',
     header: 'Promoted On',
+    render: (value: string) => {
+      const date = new Date().toISOString()?.split('T')?.[0];
+      const formattedDate = new Date(value).toISOString()?.split('T')?.[0];
+      return (
+        <time dateTime={value}>
+          {formattedDate === date
+            ? 'Today'
+            : new Date(value).toLocaleDateString('en-US', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+              })}
+        </time>
+      );
+    },
   },
 ];
 
 export const columns_requiringReview: Column<EmployeeRequiringReview>[] = [
   {
-    key: 'id',
+    key: '_id',
     header: 'id',
+    metadata: {
+      show: false,
+    },
   },
   {
     key: 'name',
