@@ -12,7 +12,15 @@ dist
 dist-ssr
 *.local
 
-*.env
+# Ignore all environment files explicitly
+.env
+.env.development
+.env.production
+.env.local
+.env.*.local
+
+# Wildcard fallback to ignore any file starting with .env
+.env.*
 
 # Editor directories and files
 .vscode/*
