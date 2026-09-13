@@ -1,8 +1,8 @@
-# Admin Portal
+# Workforce Management Portal
 
-A production-style **Admin Portal** built to demonstrate scalable frontend architecture, reusable UI components, server-state management, data-heavy interfaces, and real-world application patterns.
+A production-style **Workforce Management Portal** built to demonstrate scalable frontend architecture, reusable UI components, server-state management, data-heavy interfaces, and real-world application patterns.
 
-The project focuses on building an admin dashboard similar to applications used for managing employees, projects, users, analytics, and other business data.
+The project focuses on building an workforce management dashboard similar to applications used for managing employees, projects, users, analytics, and other business data.
 
 ## 🚀 Features
 
@@ -161,7 +161,7 @@ This project is focused on solving problems commonly encountered while building 
 
 🚧 **Actively under development**
 
-New features and improvements are continuously being added as the application evolves toward a production-grade admin platform.
+New features and improvements are continuously being added as the application evolves toward a production-grade workforce management platform.
 
 ## 👨‍💻 Author
 
