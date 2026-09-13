@@ -3,13 +3,16 @@ import { FORM_FIELD_ERROR_LABELS } from '../utils/constants';
 
 export function validateField(name: string, value: any) {
   let errorMsg = '';
-  if (!/^[a-zA-Z0-9\s-._@\/]*$/.test(value))
+  if (!/^[a-zA-Z0-9\s-._@\/]*$/.test(value) && name !== 'phone')
     errorMsg = 'Special characters not allowed';
 
   if (name === 'name' && value.length < 3) {
     errorMsg = 'Username must be at least 3 characters';
   }
-  if (name === 'phone' && !/^[(?:\+91|91)?[6-9]\d{9}]*$/.test(value)) {
+  if (
+    name === 'phone' &&
+    !/^\+?(?:1[-.]?)?555[-.]?\d{6}$|^(?:\+91)?[6-9]\d{9}$/.test(value)
+  ) {
     errorMsg = 'Phone number is invalid';
   }
   if (
@@ -29,7 +32,7 @@ export function validateField(name: string, value: any) {
       name === 'department' ||
       name === 'designation' ||
       name === 'empId' ||
-      name === 'jdate') &&
+      name === 'joiningDate') &&
     !value.trim()
   ) {
     errorMsg = `${FORM_FIELD_ERROR_LABELS[name] ?? name} is required!`;

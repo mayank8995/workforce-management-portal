@@ -1,130 +1,6 @@
 /* eslint-disable no-useless-catch */
-import { keepPreviousData, useQueries, useQuery } from '@tanstack/react-query';
-import {
-  getAnalytics,
-  getTableEmployees,
-  getPerformanceCards,
-  getProfileData,
-  getFilterList,
-  fetchEmployeeDetails,
-} from '../api/admin-portal.api';
-import type {
-  FilterList,
-  ListType,
-  LoginProfile,
-  TableHeader,
-  TableQueryParams,
-} from '../types/types';
+import type { ListType, TableHeader } from '../types/types';
 import axios from 'axios';
-import { REFETCH_TRY } from '../utils/constants';
-
-export function useFilterList(params: FilterList) {
-  return useQuery({
-    queryKey: ['filterList', params.tableType],
-    queryFn: () => getFilterList(params),
-    staleTime: Infinity, // Keep the data "fresh" forever so it doesn't re-fetch
-    retry: REFETCH_TRY,
-  });
-}
-
-export function useTableData(
-  params: TableQueryParams,
-  setIsLoading: (loading: boolean) => void,
-  signal?: AbortSignal
-) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { totalPages, totalItems, ...updatedParams } = params;
-
-  // const reqParams = {};
-  const queryParams: TableQueryParams =
-    'tableType' in updatedParams
-      ? updatedParams
-      : { ...updatedParams, tableType: 'employees' };
-
-  return useQuery({
-    queryKey: [
-      'employees',
-      ...Object.values(queryParams).map((v) => String(v)),
-    ],
-    queryFn: () => getTableEmployees(queryParams, setIsLoading, signal),
-    placeholderData: keepPreviousData, // Smooth transitions,
-    staleTime: Infinity,
-    retry: REFETCH_TRY,
-  });
-}
-
-export function usePerFormanceTableData(params: TableQueryParams) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { totalPages, totalItems, ...updatedParams } = params;
-  const queryParams =
-    'tableType' in updatedParams
-      ? updatedParams
-      : ({ ...updatedParams, tableType: 'employees' } as TableQueryParams);
-
-  return useQuery({
-    queryKey: [
-      'performance',
-      ...Object.values(queryParams).map((v) => String(v)),
-    ],
-    queryFn: () => getTableEmployees(queryParams),
-    placeholderData: keepPreviousData, // Smooth transitions,
-    staleTime: Infinity,
-    retry: REFETCH_TRY,
-  });
-}
-
-export function useAllData(params: TableQueryParams) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { totalPages, totalItems, ...updatedParams } = params;
-  const queryParams =
-    'tableType' in updatedParams
-      ? updatedParams
-      : ({ ...updatedParams, tableType: 'employees' } as TableQueryParams);
-  return useQueries({
-    queries: [
-      {
-        queryKey: ['analyticsData'],
-        queryFn: getAnalytics,
-        staleTime: Infinity,
-        retry: REFETCH_TRY,
-      },
-      {
-        queryKey: ['performanceCardsData'],
-        queryFn: getPerformanceCards,
-        staleTime: Infinity,
-        retry: REFETCH_TRY,
-      },
-      {
-        queryKey: [
-          'performance',
-          ...Object.values(queryParams).map((v) => String(v)),
-        ],
-        queryFn: () => getTableEmployees(queryParams),
-        placeholderData: keepPreviousData, // Smooth transitions,
-        staleTime: Infinity,
-        retry: REFETCH_TRY,
-      },
-    ],
-  });
-}
-
-export function useProfileData(user: LoginProfile) {
-  return useQuery({
-    queryKey: ['profileData'],
-    queryFn: () => getProfileData(user),
-    staleTime: Infinity, // Keep the data "fresh" forever so it doesn't re-fetch
-    retry: REFETCH_TRY,
-  });
-}
-
-export function useEmployeeDetail(id: { id: number }) {
-  return useQuery({
-    queryKey: ['employeeDetail', id],
-    queryFn: () => fetchEmployeeDetails(id),
-    staleTime: Infinity, // Keep the data "fresh" forever so it doesn't re-fetch
-    retry: REFETCH_TRY,
-  });
-}
 
 export function exportSelected<T extends ListType>(
   selectedRow: Set<unknown>,
@@ -134,7 +10,7 @@ export function exportSelected<T extends ListType>(
 ) {
   try {
     const rows = data?.filter((item) => {
-      if (selectedRow.has(String(item.id))) {
+      if (selectedRow.has(String(item._id))) {
         return true;
       }
       return false;

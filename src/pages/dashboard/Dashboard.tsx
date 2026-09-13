@@ -13,20 +13,18 @@ import type {
   PromotedThisYearCardProps,
   RequiringReviewCardProps,
   TopPerformersCardProps,
-  TableTypeMap,
 } from '../../types/types';
-import { useAllData } from '../../services/utils.service';
 import Skeleton from '../../components/Skeleton/Skeleton';
 import ErrorPage from '../../components/Error/ErrorPage';
+import { useAllData } from '../../api/tanstack.query';
 
 function Dashboard() {
-  const results = useAllData({
-    tableType: 'topProjects' as keyof TableTypeMap,
-    page: 1,
-    limit: 5,
-  });
+  const results = useAllData();
   const metricData = results[0]?.data?.data;
-  const cachedPerformanceCardData = results[1]?.data?.data;
+  const topPerformers = results[1]?.data?.data;
+  const meetingKPIs = results[2]?.data?.data;
+  const promotedThisYear = results[3]?.data?.data;
+  const requiringReview = results[4]?.data?.data;
   // const topProjects = results[2]?.data;
   const isLoading = results.some((query) => query.isLoading);
   const isError = results.some((query) => query.isError);
@@ -43,26 +41,20 @@ function Dashboard() {
               <KeyMetricCard>
                 <KeyMetric metricData={metricData}></KeyMetric>
               </KeyMetricCard>
-              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 p-2 xl:p-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-2 xl:px-4 pb-2 xl:pb-4">
                 <TopPerformersCard
-                  topPerformersList={
-                    cachedPerformanceCardData?.topPerformers as TopPerformersCardProps
-                  }
+                  topPerformersList={topPerformers as TopPerformersCardProps}
                 ></TopPerformersCard>
                 <PromotedCard
                   promotedThisYear={
-                    cachedPerformanceCardData?.promotedThisYear as PromotedThisYearCardProps
+                    promotedThisYear as PromotedThisYearCardProps
                   }
                 ></PromotedCard>
                 <RequiringReviewCard
-                  requiringReview={
-                    cachedPerformanceCardData?.requiringReview as RequiringReviewCardProps
-                  }
+                  requiringReview={requiringReview as RequiringReviewCardProps}
                 ></RequiringReviewCard>
                 <MeetingKPIsCard
-                  meetingKPIs={
-                    cachedPerformanceCardData?.meetingKPIs as MeetingKPIsCardProps
-                  }
+                  meetingKPIs={meetingKPIs as MeetingKPIsCardProps}
                 ></MeetingKPIsCard>
                 {/* <TopProjectsCard
                   topProjects={

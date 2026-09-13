@@ -2,13 +2,13 @@
 import { useState } from 'react';
 import CustomTable from '../EditableTable/CustomTable';
 import { useSearchParams } from 'react-router-dom';
-import { useTableData } from '../../services/utils.service';
 import {
   DEFAULT_TABLE_QUERY_PARAMS,
   TABLE_CONFIG,
 } from '../../utils/constants';
 import type { TableQueryParams, TableTypeMap } from '../../types/types';
 import { useLoader } from '../../context/Loadercontext';
+import { useEmployeeAnalyticsTableData } from '../../api/tanstack.query';
 
 function ViewMore() {
   const { setIsLoading } = useLoader();
@@ -20,12 +20,12 @@ function ViewMore() {
   const [query, setQuery] = useState<TableQueryParams>(
     DEFAULT_TABLE_QUERY_PARAMS as TableQueryParams
   );
-  const tableQuery = useTableData(
+  const tableQuery = useEmployeeAnalyticsTableData(
     { ...query, tableType: target as keyof TableTypeMap },
     setIsLoading,
     signal
   );
-  const list = tableQuery?.data?.['data']?.['employees'] || [];
+  const list = tableQuery?.['data']?.data?.data?.['employees'] || [];
   function handleTableQuery(queryData: TableQueryParams, signal?: AbortSignal) {
     setQuery(
       (prev) =>
@@ -42,12 +42,13 @@ function ViewMore() {
       handleTableQuery={handleTableQuery}
       list={list || []}
       tableQueryParams={
-        tableQuery?.data?.['data']?.['pagination'] || DEFAULT_TABLE_QUERY_PARAMS
+        tableQuery?.['data']?.data?.data?.['pagination'] ||
+        DEFAULT_TABLE_QUERY_PARAMS
       }
       setQuery={setQuery}
       columnsData={(config.columns as any[]) || []}
       headersData={(config.headers as any[]) || []}
-      title={config.title || tableQuery?.data?.['data']?.title}
+      title={config.title || tableQuery?.data?.data?.['data']?.title}
       isError={tableQuery?.isError}
       isLoading={tableQuery?.isLoading}
       refetch={tableQuery?.refetch}

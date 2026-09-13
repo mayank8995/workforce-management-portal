@@ -6,11 +6,11 @@ export function useTheme() {
   const queryClient = useQueryClient();
 
   // 1. Fetch or initialize the static data
-  const { data: theme = 'light' } = useQuery({
+  const { data: theme = 'dark' } = useQuery({
     queryKey: THEME_KEY,
     queryFn: () => {
       const savedTheme = localStorage.getItem('theme');
-      return savedTheme || 'light';
+      return savedTheme || 'dark';
     },
     staleTime: Infinity,
     gcTime: Infinity,

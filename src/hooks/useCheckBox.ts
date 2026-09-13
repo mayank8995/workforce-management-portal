@@ -30,7 +30,7 @@ export function useCheckBox(list: ListType[]) {
           if (!item) {
             return;
           }
-          return String(item?.id);
+          return String(item?._id);
         });
         setSelectedRow(new Set([...Ids]));
       }

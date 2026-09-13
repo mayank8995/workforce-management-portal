@@ -2,19 +2,22 @@ import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 import type { DonutChartProps } from '../../types/types';
 import { useTheme } from '../../hooks/useTheme';
 import React from 'react';
+import { CARD_BACKGROUND_COLOR } from '../../utils/constants';
 
 const DonutCharts = ({ data: rawData, title }: DonutChartProps) => {
   const { theme: themeMode } = useTheme();
 
   const data = [
-    { name: 'On Track', value: rawData?.onTrack, color: '#4CAF50' },
-    { name: 'At Risk', value: rawData?.atRisk, color: '#F44336' },
-    { name: 'Delayed', value: rawData?.delayed, color: '#FF9800' },
-    { name: 'Completed', value: rawData?.completed, color: '#2196F3' },
+    { name: 'Active', value: rawData?.Active, color: '#4CAF50' },
+    { name: 'Support', value: rawData?.Support, color: '#FF9800' },
+    { name: 'Completed', value: rawData?.Completed, color: '#2196F3' },
   ];
 
   return (
-    <div className="overflow-hidden bg-linear-to-br from-white to-indigo-50/40 rounded-2xl  shadow-sm border border-slate-100 p-5 flex flex-col gap-3 hover:shadow-xl hover:shadow-indigo-100/50 dark:hover:shadow-indigo-950/40 hover:-translate-y-0.5 transition-all duration-200  dark:bg-linear-to-br dark:from-slate-900 dark:to-purple-950/20 dark:border-none">
+    // <div className="overflow-hidden bg-linear-to-br from-white to-indigo-50/40 rounded-2xl  shadow-sm border border-slate-100 p-5 flex flex-col gap-3 hover:shadow-xl hover:shadow-indigo-100/50 dark:hover:shadow-indigo-950/40 hover:-translate-y-0.5 transition-all duration-200  dark:bg-linear-to-br dark:from-slate-900 dark:to-purple-950/20 dark:border-none">
+    <div
+      className={`overflow-hidden ${CARD_BACKGROUND_COLOR} rounded-2xl shadow-sm p-5 flex flex-col gap-3 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200`}
+    >
       <h1 className="flex items-center justify-between text-sm xl:text-base font-bold dark:text-slate-100">
         {title}
       </h1>

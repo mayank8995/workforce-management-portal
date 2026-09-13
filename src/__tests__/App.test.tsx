@@ -15,7 +15,7 @@ function renderPage() {
         <ModalProvider>
           <ToastContainer autoClose={1000} />
           <LoaderFlagProvider>
-            <MemoryRouter initialEntries={['/']}>
+            <MemoryRouter initialEntries={['/auth']}>
               <App />
             </MemoryRouter>
           </LoaderFlagProvider>
