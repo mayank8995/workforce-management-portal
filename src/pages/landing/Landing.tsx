@@ -7,12 +7,11 @@ import {
   X,
   // MessageSquareIcon,
 } from 'lucide-react';
-import type { LoginData, LoginForm } from '../../types/types';
+import type { LoginData } from '../../types/types';
 import {
   ACCOUNT_CREATION_COMING_SOON,
   FEATURE_STYLES,
   FEATURES,
-  GUEST_LOGIN,
   NAV_ITEMS,
 } from '../../utils/constants';
 import { useAuth } from '../../context/AuthContext';
@@ -42,19 +41,16 @@ export default function Landing() {
     }
   }, []);
 
-  const handleSubmit = (
-    e: React.MouseEvent<HTMLButtonElement>,
-    form: LoginForm
-  ) => {
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    handleGuest(form);
+    handleGuest();
   };
-  const handleGuest = async (form: LoginForm) => {
+  const handleGuest = async () => {
     try {
       setIsLoading(true);
 
-      const res = await guestLogin(form);
+      const res = await guestLogin();
       if (res?.status === 200) {
         login(res?.data?.data as LoginData);
         toast.success(res?.data?.message, {});
@@ -160,7 +156,7 @@ export default function Landing() {
               Sign In
             </button>
             <button
-              onClick={(e) => handleSubmit(e, GUEST_LOGIN)}
+              onClick={(e) => handleSubmit(e)}
               onMouseEnter={prefetchDashboard}
               onFocus={prefetchDashboard}
               onPointerDown={prefetchDashboard}
@@ -210,7 +206,7 @@ export default function Landing() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <button
-              onClick={(e) => handleSubmit(e, GUEST_LOGIN)}
+              onClick={(e) => handleSubmit(e)}
               onMouseEnter={prefetchDashboard}
               onFocus={prefetchDashboard}
               onPointerDown={prefetchDashboard}
