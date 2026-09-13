@@ -5,6 +5,7 @@ import {
   ArrowRight,
   Menu,
   X,
+  MessageSquareIcon,
   // MessageSquareIcon,
 } from 'lucide-react';
 import type { LoginData } from '../../types/types';
@@ -21,8 +22,8 @@ import { getApiErrorDetails } from '../../services/utils.service';
 import { TailSpin } from 'react-loader-spinner';
 import { prefetchDashboard } from '../../router/router';
 // import { loadDashboardChildPage } from '../../router/router';
-// import { useModal } from '../../context/ModalContext';
-// import ChatWidget from '../../components/ChatWidget/ChatWidget';
+import { useModal } from '../../context/ModalContext';
+import ChatWidget from '../../components/ChatWidget/ChatWidget';
 
 export default function Landing() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -30,7 +31,7 @@ export default function Landing() {
   const { login } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
 
-  // const { openModal } = useModal();
+  const { openModal } = useModal();
   useLayoutEffect(() => {
     const root = document.documentElement;
     if (
@@ -76,7 +77,7 @@ export default function Landing() {
             <span className="font-semibold">Admin Portal</span>
           </div>
           {/**AI Chat Bot */}
-          {/* <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
             <button
               onClick={() => openModal(ChatWidget)}
               aria-label="Ask about this project"
@@ -85,7 +86,7 @@ export default function Landing() {
               <MessageSquareIcon className="h-4 w-4 shrink-0 text-[#534ab7] dark:text-[#7f77dd]" />
               <span className="hidden sm:inline">Ask about this project</span>
             </button>
-          </div> */}
+          </div>
           <div className="hidden md:flex items-center gap-3">
             <a
               href="https://www.linkedin.com/in/mgupta8995/"
