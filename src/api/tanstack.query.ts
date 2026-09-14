@@ -48,7 +48,7 @@ export function useTableData(
     ],
     queryFn: () => getTableEmployees(queryParams, setIsLoading, signal),
     placeholderData: keepPreviousData, // Smooth transitions,
-    staleTime: 1000 * 60 * 10,
+    staleTime: 1000 * 60 * 20,
     retry: REFETCH_TRY,
   });
 }
@@ -75,7 +75,7 @@ export function useEmployeeAnalyticsTableData(
     queryFn: () =>
       getAnalyticsEmployeesTable(queryParams, setIsLoading, signal),
     placeholderData: keepPreviousData, // Smooth transitions,
-    staleTime: 1000 * 60 * 10,
+    staleTime: 1000 * 60 * 20,
     retry: REFETCH_TRY,
   });
 }
@@ -86,19 +86,19 @@ export function useAllData() {
       {
         queryKey: ['analyticsData'],
         queryFn: getAnalytics,
-        staleTime: 1000 * 60 * 10,
+        staleTime: 1000 * 60 * 20,
         retry: REFETCH_TRY,
       },
       {
         queryKey: ['topPerformers'],
         queryFn: getTopPerformers,
-        staleTime: 1000 * 60 * 10,
+        staleTime: 1000 * 60 * 20,
         retry: REFETCH_TRY,
       },
       {
         queryKey: ['meetingKPIs'],
         queryFn: getMeetingKPIs,
-        staleTime: 1000 * 60 * 10,
+        staleTime: 1000 * 60 * 20,
         retry: REFETCH_TRY,
       },
       {
@@ -110,7 +110,7 @@ export function useAllData() {
       {
         queryKey: ['requiringReview'],
         queryFn: getRequiringReview,
-        staleTime: 1000 * 60 * 10,
+        staleTime: 1000 * 60 * 20,
         retry: REFETCH_TRY,
       },
     ],
@@ -121,7 +121,7 @@ export function useAnalytics() {
   return useQuery({
     queryKey: ['analyticsView'],
     queryFn: getAnalytics,
-    staleTime: 1000 * 60 * 10,
+    staleTime: 1000 * 60 * 20,
     retry: REFETCH_TRY,
   });
 }
@@ -140,7 +140,7 @@ export function useEmployeeDetail(_id: { _id: string }) {
   return useQuery({
     queryKey: ['employeeDetail', _id],
     queryFn: () => fetchEmployeeDetails(_id),
-    staleTime: 1000 * 60 * 10,
+    staleTime: 1000 * 60 * 20,
     retry: REFETCH_TRY,
     enabled: !!userId, // Only run the query if _id is provided
   });
