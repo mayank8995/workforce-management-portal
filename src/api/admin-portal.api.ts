@@ -11,6 +11,8 @@ import type {
   TableQueryParams,
 } from '../types/types';
 import { router } from '../router/router';
+import { getEnv } from '../config/env';
+import axios from 'axios';
 // import axios from 'axios';
 // import { getEnv } from '../config/env';
 
@@ -301,7 +303,15 @@ export const guestLogin = async () => {
 
 export const aiChat = async (data: string) => {
   try {
-    const res = await apiClient.post('/ai/query', data);
+    const { apiUrl } = getEnv();
+    const res = await axios.post('/ai/query', data, {
+      baseURL: apiUrl || 'http://localhost:3500/',
+      timeout: 90000,
+      withCredentials: true,
+      headers: {
+        'Content-type': 'application/json',
+      },
+    });
     return res;
   } catch (err: unknown) {
     const { message, status, url } = getApiErrorDetails(err);
