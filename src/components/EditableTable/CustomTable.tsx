@@ -44,6 +44,7 @@ function CustomTable<T extends ListType>(
     isError,
     isLoading,
     refetch,
+    handleTableQuery,
   } = props;
   const { screenType } = useScreenType();
   const [searchParams] = useSearchParams();
@@ -100,13 +101,21 @@ function CustomTable<T extends ListType>(
   useEffect(() => {
     const controller = new AbortController();
     const timerId = setTimeout(() => {
-      setQuery((prev) => {
-        return {
-          ...prev,
+      // setQuery((prev) => {
+      //   return {
+      //     ...prev,
+      //     page: 1,
+      //     search: txtToBeSearched,
+      //   };
+      // });
+      handleTableQuery(
+        {
+          ...tableQueryParams,
           page: 1,
           search: txtToBeSearched,
-        };
-      });
+        },
+        controller.signal
+      );
     }, 300);
     return () => {
       clearTimeout(timerId);
