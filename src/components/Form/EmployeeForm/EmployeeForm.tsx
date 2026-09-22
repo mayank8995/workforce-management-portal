@@ -8,6 +8,7 @@ import { validateField } from '../../../services/form-validation.service';
 import { getApiErrorDetails } from '../../../services/utils.service';
 import {
   className,
+  iconActive,
   labelclassName,
   VIEW_EMPLOYEE_SUB_TTILE,
   VIEW_EMPLOYEE_TTILE,
@@ -26,7 +27,9 @@ import ErrorPage from '../../Error/ErrorPage';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEmployeeDetail } from '../../../api/tanstack.query';
 import { useAuth } from '../../../context/AuthContext';
-import { X } from 'lucide-react';
+import { Upload, X } from 'lucide-react';
+import FileUpload from '../../FileUpload/FileUpload';
+import { useModal } from '../../../context/ModalContext';
 
 function EmployeeForm({
   onClose,
@@ -51,6 +54,8 @@ function EmployeeForm({
   const row = details?.['data']?.data?.result ?? [];
 
   const { can } = useAuth();
+  const { openModal } = useModal();
+
   const isUpdateAllowed = can('employee', 'update');
 
   const [formValues, setFormValues] = useState<EmployeeFormType>({
@@ -102,7 +107,6 @@ function EmployeeForm({
     const { name, value, type, checked } = e?.target;
 
     const fieldValue = type === 'checkbox' ? checked : value;
-
     setFormValues((prevData) => ({
       ...prevData,
       [name]: fieldValue,
@@ -377,7 +381,7 @@ function EmployeeForm({
             bg-white dark:bg-slate-900
             text-slate-900 dark:text-slate-100
             shadow-2xl border-l border-slate-200 dark:border-slate-800
-            fixed z-[300] right-0 top-0"
+            fixed z-300 right-0 top-0"
         >
           {!isError ? (
             <div>
@@ -397,6 +401,16 @@ function EmployeeForm({
                   <X width={18} height={18} />
                 </button>
               </div>
+              <button
+                type="button"
+                className="cursor-pointer flex items-center justify-end"
+                onClick={() => {
+                  openModal(FileUpload);
+                }}
+              >
+                <span>Upload documents</span>
+                <Upload size={24} className={iconActive} />
+              </button>
 
               <form
                 onSubmit={handleSubmit}

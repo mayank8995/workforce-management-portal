@@ -576,3 +576,7 @@ export const CARD_BACKGROUND_COLOR = `bg-white border border-slate-200
 dark:bg-[#151B32] dark:border-[#27304D]`;
 
 export const BACKGROUND_COLOR = `dark:bg-gradient-to-br dark:from-[#0f172a] dark:via-[#161233] dark:to-[#2a1a52]`;
+export const iconBtn =
+  'p-1.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 disabled:hover:bg-transparent';
+export const iconActive = 'text-blue-600 dark:text-blue-400';
+export const iconMuted = 'text-slate-400 dark:text-slate-600';
