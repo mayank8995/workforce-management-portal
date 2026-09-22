@@ -13,6 +13,9 @@ import {
 } from 'lucide-react';
 import {
   className,
+  iconActive,
+  iconBtn,
+  iconMuted,
   selectDropDownClass,
   selectOptionsClass,
 } from '../../utils/constants';
@@ -44,11 +47,6 @@ const TableToolbar = ({
   const { can } = useAuth();
   const isUpdateAllowed = can('employee', 'update');
   const isCreateAllowed = can('employee', 'create');
-
-  const iconBtn =
-    'p-1.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 disabled:hover:bg-transparent';
-  const iconActive = 'text-blue-600 dark:text-blue-400';
-  const iconMuted = 'text-slate-400 dark:text-slate-600';
 
   return (
     <React.Fragment>
