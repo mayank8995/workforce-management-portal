@@ -7,6 +7,7 @@ import {
   getMeetingKPIs,
   getProfileData,
   getPromotedThisYear,
+  getPromotionHistory,
   getRequiringReview,
   getTableEmployees,
   getTopPerformers,
@@ -143,6 +144,15 @@ export function useEmployeeDetail(_id: { _id: string }) {
     staleTime: 1000 * 60 * 20,
     retry: REFETCH_TRY,
     enabled: !!userId, // Only run the query if _id is provided
+  });
+}
+export function usePromotionHistory(_id: string) {
+  return useQuery({
+    queryKey: ['promotionHistory', _id],
+    queryFn: () => getPromotionHistory(_id),
+    staleTime: 1000 * 60 * 20,
+    retry: REFETCH_TRY,
+    enabled: !!_id,
   });
 }
 // export function useAIChat(data: string) {
