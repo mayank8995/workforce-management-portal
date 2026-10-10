@@ -3,6 +3,22 @@
 
 @custom-variant max-xs (@media (max-width: 330px));
 
+/* Brand palette — used through utilities such as bg-brand-600, text-brand-700.
+   Class recipes built on these live in src/theme/theme.ts. */
+@theme {
+  --color-brand-50: #f0effb;
+  --color-brand-100: #e2e0f6;
+  --color-brand-200: #c8c4ee;
+  --color-brand-300: #a7a1e3;
+  --color-brand-400: #7f77dd;
+  --color-brand-500: #6a61cb;
+  --color-brand-600: #534ab7;
+  --color-brand-700: #463ea0;
+  --color-brand-800: #3a3484;
+  --color-brand-900: #2f2a69;
+  --color-brand-950: #1e1b3a;
+}
+
 @font-face {
   font-family: 'Inter';
   src: url('/fonts/inter-400.woff2') format('woff2');

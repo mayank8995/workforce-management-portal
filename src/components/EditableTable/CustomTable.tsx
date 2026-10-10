@@ -7,6 +7,7 @@ import SortModalComponent from '../SortModal/SortModalComponent';
 import TableToolbar from './TableToolbar';
 import DesktopTable from './DesktopTable';
 import MobileTable from './MobileTable';
+import TablePagination from './TablePagination';
 import useLockBodyScroll from '../../hooks/useLockBodyScroll';
 import type {
   CustomTableProps,
@@ -149,13 +150,13 @@ function CustomTable<T extends ListType>(
   const getSortIcon = (key: string) => {
     if (tableQueryParams.sortBy !== key) {
       return (
-        <ArrowUpDown className="w-4 h-4 text-slate-400 dark:text-slate-500 dark:hover:text-indigo-400" />
+        <ArrowUpDown className="w-3.5 h-3.5 text-slate-300 dark:text-slate-600" />
       );
     }
     return tableQueryParams.sortOrder === 'asc' ? (
-      <ArrowUp className="w-4 h-4 text-slate-400 dark:text-slate-500 dark:hover:text-indigo-400" />
+      <ArrowUp className="w-3.5 h-3.5 text-brand-600 dark:text-brand-300" />
     ) : (
-      <ArrowDown className="w-4 h-4 text-slate-400 dark:text-slate-500 dark:hover:text-indigo-400" />
+      <ArrowDown className="w-3.5 h-3.5 text-brand-600 dark:text-brand-300" />
     );
   };
 
@@ -237,20 +238,20 @@ function CustomTable<T extends ListType>(
     <>
       {!isLoading ? (
         <div
-          className={`min-h-screen bg-slate-50 p-2 xl:p-4 ${BACKGROUND_COLOR}`}
+          className={`min-h-screen bg-slate-50 p-2 max-xs:p-1.5 sm:p-3 xl:p-4 ${BACKGROUND_COLOR}`}
         >
-          <div className="bg-white rounded-2xl shadow-md border border-slate-200 flex-1 overflow-x-auto dark:bg-slate-950 dark:border-none">
-            <div className="flex items-center justify-between gap-3 px-4 lg:px-6 py-4 pb-0">
-              <h2 className="flex flex-row min-w-0 text-slate-800 dark:text-slate-100 font-semibold text-sm xl:text-base items-center gap-2">
+          <div className="min-w-0 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden dark:bg-slate-950 dark:border-slate-800">
+            <div className="flex items-center justify-between gap-3 max-xs:gap-2 px-4 max-xs:px-3 lg:px-6 pt-4 max-xs:pt-3 sm:pt-5">
+              <h2 className="flex flex-row min-w-0 text-slate-900 dark:text-slate-100 font-semibold text-base xl:text-lg items-center gap-2">
                 <Breadcrumb />
                 <span className="truncate">{title}</span>
               </h2>
               <span
-                className="shrink-0 px-3 py-0.5 xl:py-1
+                className="shrink-0 px-2.5 py-0.5 xl:py-1
                   rounded-full
                   bg-green-100
                   text-green-700
-                  text-[10px] xl:text-xs
+                  text-[11px] xl:text-xs
                   font-semibold tabular-nums
                   ring-1 ring-green-200
                   dark:bg-emerald-900/40 dark:text-emerald-400 dark:ring-emerald-800"
@@ -261,12 +262,8 @@ function CustomTable<T extends ListType>(
             <TableToolbar
               txtToBeSearched={txtToBeSearched}
               setTextToBeSearched={setTxtToBeSearched}
-              tableQueryParams={tableQueryParams}
-              handleRowsPerPageChange={handleRowsPerPageChange}
               openFilterModal={openFilterModal}
               openSortModal={openSortModal}
-              handlePrevious={handlePrevious}
-              handleNext={handleNext}
               bulkAction={bulkAction}
               selectedRow={selectedRow}
               handleOnChange={handleOnChange}
@@ -302,6 +299,12 @@ function CustomTable<T extends ListType>(
                     ref={ref}
                   />
                 )}
+                <TablePagination
+                  tableQueryParams={tableQueryParams}
+                  handleRowsPerPageChange={handleRowsPerPageChange}
+                  handlePrevious={handlePrevious}
+                  handleNext={handleNext}
+                />
               </div>
             ) : (
               <ErrorPage refetchAll={() => refetch?.()} />

@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { ArrowDown, ArrowUp, ArrowUpDown, X } from 'lucide-react';
 import FormField from '../Form/FormField';
 import type { ListType, TableHeader } from '../../types/types';
+import { button, cx, form, modal, surface, text } from '../../theme/theme';
 
 type SortConfig = {
   key: string;
@@ -57,66 +58,63 @@ const SortModalComponent = <T extends ListType>({
   return (
     <>
       <div className={`${containerCss}`}>
-        <div className="flex flex-row justify-between items-center p-2 text-sm font-semibold border-b border-b-slate-200 dark:border-b-white/10">
-          <h2 className="text-sm font-bold text-slate-900 dark:text-white">
-            Sorting
-          </h2>
+        <div className={modal.handle} />
+        <div className={modal.header}>
+          <h2 className={modal.title}>Sorting</h2>
           <button
             type="button"
             onClick={() => onClose?.()}
             aria-label="Close sort modal"
+            className={button.icon}
           >
-            <X
-              className="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 cursor-pointer"
-              width={16}
-              height={20}
-            />
+            <X size={18} />
           </button>
         </div>
-        <div className="grid grid-cols-2 max-h-150 h-fit overflow-y-auto p-4 ">
-          {headersData?.map((header) => (
-            // <div >
-            <button
-              ref={myElementRef}
-              key={header.key}
-              id={focusedIndex}
-              className={`cursor-pointer m-1 h-10 inline-flex items-center gap-1.5 
-                                                px-2 py-2  font-medium whitespace-nowrap 
-                                                border  
-                                                text-xs
-                                                outline-none
-                                                ${
-                                                  !(focusedIndex === header.key)
-                                                    ? 'border-slate-300 dark:border-white/15 text-slate-700 dark:text-slate-300 hover:border-slate-400 dark:hover:border-white/25'
-                                                    : 'bg-[#534ab7] text-white hover:bg-[#7f77dd]'
-                                                }`}
-              onClick={() => handleRadio(header.key)}
-            >
-              <FormField
-                name={header.value}
-                value={header.value}
-                type={'radio'}
-                id={header.value}
-                checked={focusedIndex === header.key}
-                onChange={() => handleRadio(header.key)}
-                className={`m-2 outline-none ${focusedIndex === header.key ? 'w-4 h-4 accent-indigo-600' : ''}`}
-              />
-              <span className="truncate">{header.value}</span>
-            </button>
-          ))}
-          <div className="p-2 flex flex-row items-center">
-            <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 uppercase">
-              Direction:
-            </span>
-            <button
-              onClick={handleSort}
-              type="button"
-              className={`ml-2 flex items-center cursor-pointer px-2 py-2 rounded-md transition-colors ${!focusedIndex ? 'text-slate-500 bg-slate-700/50' : 'bg-[#534ab7] text-white '}`}
-              disabled={!focusedIndex}
-            >
-              {getSortIcon(sortConfig, focusedIndex)}
-            </button>
-          </div>
+        <div className="grid grid-cols-1 min-[360px]:grid-cols-2 gap-2 max-h-150 h-fit overflow-y-auto p-4">
+          {headersData?.map((header) => {
+            const isSelected = focusedIndex === header.key;
+            return (
+              <button
+                ref={myElementRef}
+                key={header.key}
+                id={focusedIndex}
+                className={cx(
+                  'cursor-pointer h-11 min-w-0 inline-flex items-center gap-2.5 px-3 rounded-lg border text-sm font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-brand-600',
+                  isSelected
+                    ? 'border-brand-600 bg-brand-50 text-brand-700 dark:border-brand-400 dark:bg-brand-500/10 dark:text-brand-200'
+                    : `${surface.border} ${text.secondary} hover:bg-slate-50 dark:hover:bg-white/5`
+                )}
+                onClick={() => handleRadio(header.key)}
+              >
+                <FormField
+                  name={header.value}
+                  value={header.value}
+                  type={'radio'}
+                  id={header.value}
+                  checked={isSelected}
+                  onChange={() => handleRadio(header.key)}
+                  className={`${form.radio} m-0 cursor-pointer outline-none`}
+                />
+                <span className="truncate">{header.value}</span>
+              </button>
+            );
+          })}
+        </div>
+        <div className={modal.footer}>
+          <span
+            className={`text-xs font-semibold uppercase tracking-wide ${text.muted}`}
+          >
+            Direction
+          </span>
+          <button
+            onClick={handleSort}
+            type="button"
+            className={`${button.primary} px-3!`}
+            disabled={!focusedIndex}
+            aria-label="Apply sort direction"
+          >
+            {getSortIcon(sortConfig, focusedIndex)}
+          </button>
         </div>
       </div>
     </>
