@@ -1,4 +1,13 @@
-import { BarChart3, FolderKanban, ShieldCheck, Users } from 'lucide-react';
+import {
+  BarChart3,
+  FolderKanban,
+  MessageSquare,
+  MonitorSmartphone,
+  Radio,
+  ShieldCheck,
+  TrendingUp,
+  Users,
+} from 'lucide-react';
 import {
   columns_promotedThisYear,
   columns_requiringReview,
@@ -151,6 +160,8 @@ export type HeadersType =
   | TableHeader<PromotedEmployee>
   | TableHeader<EmployeeRequiringReview>;
 export const ADMIN_PORTAL = 'Admin Portal';
+/** Product name shown on public pages (landing, sign in, sign up). */
+export const PRODUCT_NAME = 'Work Sphere';
 
 export const NO_RESULT_FOUND = 'No match found';
 
@@ -372,6 +383,52 @@ export const FEATURES = [
     desc: 'Guest, employee, and admin views scoped to the right data.',
   },
 ] as const;
+
+/** Product highlights shown near the bottom of the landing page. */
+export const LANDING_HIGHLIGHTS = [
+  {
+    icon: Radio,
+    tone: 'success',
+    title: 'Real-time updates',
+    desc: 'Employee changes, dashboard numbers and the activity feed sync live across every open session.',
+  },
+  {
+    icon: TrendingUp,
+    tone: 'accent',
+    title: 'Promotions & history',
+    desc: 'Promote employees in a couple of clicks and keep a full promotion timeline for each person.',
+  },
+  {
+    icon: MessageSquare,
+    tone: 'info',
+    title: 'AI project assistant',
+    desc: 'Ask the built-in assistant what the portal does, how it was built, or how to try it.',
+  },
+  {
+    icon: MonitorSmartphone,
+    tone: 'caution',
+    title: 'Works on any screen',
+    desc: 'Responsive tables, cards and dialogs with both light and dark themes.',
+  },
+] as const;
+
+/** Main libraries the front end is built with. */
+export const TECH_STACK = [
+  'React 19',
+  'TypeScript',
+  'Tailwind CSS v4',
+  'TanStack Query',
+  'React Router',
+  'Socket.IO',
+  'Recharts',
+  'Vite',
+];
+
+/** External profile links used on public pages. */
+export const SOCIAL_LINKS = {
+  github: 'https://github.com/mayank8995',
+  linkedin: 'https://www.linkedin.com/in/mgupta8995/',
+};
 
 export const ACCOUNT_CREATION_COMING_SOON = `Account creation is coming soon. Use Guest access to explore the
             portal, or sign in if you already have access.`;

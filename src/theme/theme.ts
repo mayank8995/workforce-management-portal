@@ -449,8 +449,7 @@ export const section = {
  * App shell
  * ========================================================================== */
 export const shell = {
-  /** Top header bar. */
-  /** `relative` so header dropdowns can anchor to it on small screens. */
+  /** Top header bar; `relative` so dropdowns can anchor to it on phones. */
   header:
     'relative h-14 min-h-14 flex items-center sm:justify-start md:justify-between gap-3 pl-4 pr-14 md:px-5 bg-surface border-b border-line',
   /** Header title. */
@@ -462,6 +461,41 @@ export const shell = {
   /** Page title block on content pages. */
   pageTitle: 'text-base xl:text-xl font-semibold text-ink',
   pageSubtitle: 'text-xs xl:text-sm text-ink-muted mt-0.5',
+};
+
+/* =============================================================================
+ * Public (marketing) pages
+ * ========================================================================== */
+export const marketing = {
+  /** Centred content column for a page section. */
+  section: 'mx-auto max-w-5xl px-4 sm:px-6',
+  /** Small upper-case pill above a heading. */
+  eyebrow:
+    'inline-block text-xs font-medium tracking-wide uppercase text-accent bg-accent-soft px-3 py-1 rounded-full',
+  /** Section heading. */
+  heading: 'text-2xl sm:text-3xl font-bold tracking-tight text-ink',
+  /** Paragraph under a section heading. */
+  lead: 'mt-2 text-sm sm:text-base text-ink-secondary',
+  /** Icon + text card used by every feature grid on the landing page. */
+  featureCard:
+    'flex gap-4 rounded-xl border border-line bg-surface p-5 shadow-sm',
+  /** Tinted square holding a feature icon; combine with a `tone` entry. */
+  featureIcon: 'shrink-0 h-10 w-10 rounded-lg flex items-center justify-center',
+  featureTitle: 'font-semibold mb-1 text-ink',
+  featureText: 'text-sm text-ink-secondary',
+  /** Technology chip. */
+  techChip:
+    'inline-flex items-center rounded-full border border-line bg-surface px-3 py-1 text-xs font-medium text-ink-secondary',
+  /** Page footer. */
+  footer: 'border-t border-line bg-surface/60 backdrop-blur-sm',
+  /** Muted link in the footer. */
+  footerLink:
+    'inline-flex items-center gap-2 text-sm text-ink-muted transition-colors hover:text-ink',
+  /** "Back" link pinned to the top-left corner of auth pages (compact on phones). */
+  backLink:
+    'absolute top-3 left-3 sm:top-4 sm:left-4 z-20 inline-flex items-center gap-1 sm:gap-1.5 h-7 sm:h-9 px-2 sm:px-3 rounded-md sm:rounded-lg border border-line bg-surface/70 backdrop-blur-sm text-xs sm:text-sm font-medium text-ink-secondary shadow-sm transition-colors hover:bg-surface hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600',
+  /** Small round chip behind a social logo (logos are black SVGs). */
+  socialIcon: 'h-6 w-6 p-1 rounded-md bg-white ring-1 ring-line',
 };
 
 /**

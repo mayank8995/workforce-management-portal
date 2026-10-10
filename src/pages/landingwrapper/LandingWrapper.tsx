@@ -1,6 +1,8 @@
 // components/AuthLayout.tsx
-import { LayoutGrid, CheckCircle2 } from 'lucide-react';
-import { cx, icon, surface, text } from '../../theme/theme';
+import { Link } from 'react-router-dom';
+import { ArrowLeft, LayoutGrid, CheckCircle2 } from 'lucide-react';
+import { cx, icon, marketing, surface, text } from '../../theme/theme';
+import { PRODUCT_NAME } from '../../utils/constants';
 
 const CHECKLIST = [
   'Analytics',
@@ -11,15 +13,19 @@ const CHECKLIST = [
 export function LandingWrapper({ children }: { children: React.ReactNode }) {
   return (
     <div className={cx('h-screen max-h-full relative', surface.marketing)}>
+      <Link to="/" className={marketing.backLink}>
+        <ArrowLeft className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+        Back
+      </Link>
       <div className={` w-full px-4 `}>
         <div
-          className={`relative z-10 h-screen  flex flex-1 flex-col md:flex-row justify-center items-center transition-opacity duration-300`}
+          className={`relative z-10 h-screen pt-12 pb-4 md:py-0 flex flex-1 flex-col md:flex-row justify-center items-center transition-opacity duration-300`}
         >
           <div className="hidden md:flex flex-col justify-center gap-6 p-12">
             <div className="flex items-center gap-2">
               <LayoutGrid className={cx('h-7 w-7', icon.active)} />
               <span className={cx(text.primary, 'text-xl font-bold')}>
-                Admin Portal
+                {PRODUCT_NAME}
               </span>
             </div>
             <h1
@@ -44,8 +50,8 @@ export function LandingWrapper({ children }: { children: React.ReactNode }) {
           </div>
           <div className="flex md:hidden flex-col items-center mb-2">
             <LayoutGrid className={cx('h-7 w-7', icon.active)} />
-            <span className={cx(text.primary, 'text-lg font-bold')}>
-              Admin Portal
+            <span className={cx(text.primary, 'text-lg font-bold text-center')}>
+              {PRODUCT_NAME}
             </span>
           </div>
           {children}

@@ -12,7 +12,11 @@ import type { LoginData } from '../../types/types';
 import {
   ACCOUNT_CREATION_COMING_SOON,
   FEATURES,
+  LANDING_HIGHLIGHTS,
+  SOCIAL_LINKS,
+  TECH_STACK,
   NAV_ITEMS,
+  PRODUCT_NAME,
 } from '../../utils/constants';
 import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
@@ -27,11 +31,11 @@ import {
   button,
   cx,
   icon,
+  marketing,
   palette,
   surface,
   text,
   tone,
-  toneBorder,
 } from '../../theme/theme';
 
 export default function Landing() {
@@ -81,9 +85,11 @@ export default function Landing() {
     <div className={cx('min-h-screen', surface.marketing, text.primary)}>
       <header className="sticky top-0 z-20 backdrop-blur-md bg-surface/60 border-b border-line">
         <div className="mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <LayoutGrid className={cx('h-6 w-6', icon.active)} />
-            <span className="font-semibold">Admin Portal</span>
+          <div className="flex items-center gap-2 min-w-0">
+            <LayoutGrid className={cx('h-6 w-6 shrink-0', icon.active)} />
+            <span className="min-w-0 font-semibold leading-tight text-sm sm:text-base">
+              {PRODUCT_NAME}
+            </span>
           </div>
           {/**AI Chat Bot */}
           <div className="flex items-center gap-2">
@@ -102,36 +108,6 @@ export default function Landing() {
             </button>
           </div>
           <div className="hidden md:flex items-center gap-3">
-            <a
-              href="https://www.linkedin.com/in/mgupta8995/"
-              target="_blank"
-              rel="noreferrer"
-              className="w-8 h-8 p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 dark:bg-white transition"
-              aria-label="View source on LinkedIn"
-            >
-              {/* <GithubI className="h-5 w-5" /> */}
-              <img
-                loading="eager"
-                src={'/assets/linkedin.svg'}
-                className="aspect-circle object-cover w-full h-full"
-                alt="LinkedIn Link"
-              />
-            </a>
-            <a
-              href="https://github.com/mayank8995"
-              target="_blank"
-              rel="noreferrer"
-              className="w-8 h-8 p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 dark:bg-white transition"
-              aria-label="View source on GitHub"
-            >
-              {/* <GithubI className="h-5 w-5" /> */}
-              <img
-                loading="eager"
-                src={'/assets/GitHub_Invertocat_Black.svg'}
-                className="aspect-circle object-cover w-full h-full"
-                alt="Github Link"
-              />
-            </a>
             <button
               onClick={() => navigate('/auth')}
               className={button.primary}
@@ -215,7 +191,7 @@ export default function Landing() {
 
       <main>
         <section className="mx-auto max-w-3xl px-4 sm:px-6 pt-16 sm:pt-14 pb-16 text-center">
-          <span className="inline-block text-xs font-medium tracking-wide uppercase text-accent bg-accent-soft px-3 py-1 rounded-full mb-6">
+          <span className={cx(marketing.eyebrow, 'mb-6')}>
             WORKFORCE MANAGEMENT PLATFORM
           </span>
           <h1 className="text-3xl sm:text-5xl font-bold tracking-tight mb-4">
@@ -223,7 +199,7 @@ export default function Landing() {
           </h1>
           <p className={cx(text.secondary, 'text-base sm:text-lg mb-8')}>
             Employee directory, performance tracking, and analytics — all from a
-            single dashboard. No signup needed to look around.
+            single dashboard.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -264,50 +240,138 @@ export default function Landing() {
               Sign In
             </button>
           </div>
-          <p className={cx(text.muted, 'text-sm mt-4')}>
-            New here?{' '}
-            <button
-              //   onClick={() => navigate('/auth')}
-              className={button.linkMd}
-            >
-              Create an account
-            </button>
-          </p>
-          <small className={cx(text.muted, 'text-xs')}>
+          <p className={cx(text.muted, 'mt-4 text-xs')}>
             {ACCOUNT_CREATION_COMING_SOON}
-          </small>
+          </p>
         </section>
 
-        <section className="mx-auto max-w-5xl px-4 sm:px-6 pb-20">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Highlights */}
+        <section className={cx(marketing.section, 'pb-16')}>
+          <div className="text-center max-w-2xl mx-auto mb-8">
+            <span className={cx(marketing.eyebrow, 'mb-4')}>
+              Why {PRODUCT_NAME}
+            </span>
+            <h2 className={marketing.heading}>Built for day-to-day HR work</h2>
+            <p className={marketing.lead}>
+              Everything a people team checks every morning, kept in sync and
+              easy to reach from any device.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {LANDING_HIGHLIGHTS.map(
+              ({ icon: Icon, tone: highlightTone, title, desc }) => (
+                <div key={title} className={marketing.featureCard}>
+                  <div
+                    className={cx(marketing.featureIcon, tone[highlightTone])}
+                  >
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className={marketing.featureTitle}>{title}</h3>
+                    <p className={marketing.featureText}>{desc}</p>
+                  </div>
+                </div>
+              )
+            )}
+          </div>
+        </section>
+
+        {/* Modules */}
+        <section className={cx(marketing.section, 'pb-16')}>
+          <div className="text-center max-w-2xl mx-auto mb-8">
+            <h2 className={marketing.heading}>What's inside</h2>
+            <p className={marketing.lead}>
+              The core modules you get access to as soon as you sign in.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {FEATURES.map(({ icon: Icon, tone: featureTone, title, desc }) => (
-              <div
-                key={title}
-                className={cx(
-                  'rounded-xl border-l-4 bg-surface p-5 shadow-sm',
-                  toneBorder[featureTone]
-                )}
-              >
-                <div
-                  className={cx(icon.tile, 'h-9 w-9 mb-3', tone[featureTone])}
-                >
+              <div key={title} className={marketing.featureCard}>
+                <div className={cx(marketing.featureIcon, tone[featureTone])}>
                   <Icon className="h-5 w-5" />
                 </div>
-                <h3 className="font-semibold mb-1">{title}</h3>
-                <p className={cx(text.secondary, 'text-sm')}>{desc}</p>
+                <div className="min-w-0">
+                  <h3 className={marketing.featureTitle}>{title}</h3>
+                  <p className={marketing.featureText}>{desc}</p>
+                </div>
               </div>
             ))}
           </div>
         </section>
+
+        {/* Tech stack */}
+        <section className={cx(marketing.section, 'pb-20 text-center')}>
+          <h2
+            className={cx(
+              text.muted,
+              'text-xs font-semibold uppercase tracking-wide mb-4'
+            )}
+          >
+            Built with
+          </h2>
+          <ul className="flex flex-wrap justify-center gap-2">
+            {TECH_STACK.map((tech) => (
+              <li key={tech} className={marketing.techChip}>
+                {tech}
+              </li>
+            ))}
+          </ul>
+        </section>
       </main>
 
-      <footer
-        className={cx(
-          'border-t border-line py-6 text-center text-xs',
-          text.muted
-        )}
-      >
-        © 2026 Admin Dashboard
+      <footer className={marketing.footer}>
+        <div
+          className={cx(
+            marketing.section,
+            'py-8 flex flex-col sm:flex-row gap-6 sm:items-center sm:justify-between'
+          )}
+        >
+          <div>
+            <div className="flex items-center gap-2">
+              <LayoutGrid className={cx('h-5 w-5', icon.active)} />
+              <span className="font-semibold">{PRODUCT_NAME}</span>
+            </div>
+            <p className={cx(text.muted, 'mt-1 text-sm')}>
+              Workforce management, analytics and directory in one place.
+            </p>
+          </div>
+          <nav aria-label="Social links" className="flex flex-wrap gap-4">
+            <a
+              href={SOCIAL_LINKS.github}
+              target="_blank"
+              rel="noreferrer"
+              className={marketing.footerLink}
+            >
+              <img
+                src={'/assets/GitHub_Invertocat_Black.svg'}
+                className={marketing.socialIcon}
+                alt=""
+              />
+              GitHub
+            </a>
+            <a
+              href={SOCIAL_LINKS.linkedin}
+              target="_blank"
+              rel="noreferrer"
+              className={marketing.footerLink}
+            >
+              <img
+                src={'/assets/linkedin.svg'}
+                className={marketing.socialIcon}
+                alt=""
+              />
+              LinkedIn
+            </a>
+          </nav>
+        </div>
+        <p
+          className={cx(
+            text.muted,
+            'border-t border-line py-4 text-center text-xs'
+          )}
+        >
+          © 2026 {PRODUCT_NAME}
+        </p>
       </footer>
     </div>
   );
