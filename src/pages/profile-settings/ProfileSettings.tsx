@@ -1,12 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @eslint-react/set-state-in-effect */
-import {
-  useEffect,
-  useRef,
-  useState,
-  type ChangeEvent,
-  type SubmitEvent,
-} from 'react';
+import { useEffect, useState, type SubmitEvent } from 'react';
 import FormField from '../../components/Form/FormField';
 import { PROFILE_SUBHEAD, SIDE_BAR_ITEMS } from '../../utils/constants';
 import type { LoginProfile, ProfileForm } from '../../types/types';
@@ -35,6 +29,10 @@ import {
 import ErrorPage from '../../components/Error/ErrorPage';
 import { useProfileData } from '../../api/tanstack.query';
 import { Pencil } from 'lucide-react';
+import { useModal } from '../../context/ModalContext';
+import FileUpload from '../../components/FileUpload/FileUpload';
+
+const AVATAR_MAX_BYTES = 50 * 1024;
 
 function ProfileSettings() {
   const { user, can } = useAuth();
@@ -58,7 +56,7 @@ function ProfileSettings() {
     location: '',
     image: null,
   });
-  const uploadRef = useRef<HTMLInputElement>(null); // separate ref for image upload
+  const { openModal } = useModal();
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const queryClient = useQueryClient();
@@ -188,55 +186,42 @@ function ProfileSettings() {
     }
   }
 
-  function handleUpload() {
-    try {
-      if (uploadRef?.current) {
-        uploadRef?.current?.click();
-      }
-    } catch (e) {
-      const { message } = getApiErrorDetails(e);
-      toast.error(message, {});
-      console.error('Upload error:', e);
-    }
-  }
-  function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
-    const file = e?.target?.files?.[0];
-    if (!file) {
-      return;
-    }
-
+  function validateAvatar(file: File): string | null {
     if (!file.type.startsWith('image/')) {
-      alert('Please upload an image file');
-      return;
+      return 'Please upload an image file';
     }
-
-    // (e.g. max 50KB)
-    if (file.size > 50 * 1024) {
-      alert('File too large, max 50KB');
-      return;
+    if (file.size > AVATAR_MAX_BYTES) {
+      return 'File too large, max 50KB';
     }
+    return null;
+  }
 
+  function applyAvatar(file: File) {
     const reader = new FileReader();
     // Fires once the file is fully read as a Base64 Data URL string
     reader.onload = () => {
       const base64String = reader.result;
       if (typeof base64String !== 'string') {
-        alert('Failed to read image file.');
+        toast.error('Failed to read image file.');
         return;
       }
-      try {
-        setFormValues((prevData) => ({
-          ...prevData,
-          image: base64String,
-        }));
-      } catch (error) {
-        console.error('Storage limit exceeded or failed:', error, file.size);
-        alert('The image is too large to store in local storage.');
-      }
+      setFormValues((prevData) => ({
+        ...prevData,
+        image: base64String,
+      }));
     };
-
-    // Convert the file blob into a reusable string
     reader.readAsDataURL(file);
+  }
+
+  function handleUpload() {
+    openModal(FileUpload, {
+      title: 'Update profile photo',
+      description: 'Upload a new photo, then press Save to apply it.',
+      accept: 'image/*',
+      hint: 'PNG, JPG or GIF · up to 50 KB',
+      validate: validateAvatar,
+      onComplete: applyAvatar,
+    });
   }
   return (
     <>
@@ -280,12 +265,6 @@ function ProfileSettings() {
                               alt="User Profile"
                             />
                           </div>
-                          <input
-                            ref={uploadRef}
-                            onChange={handleFileChange}
-                            type="file"
-                            style={{ display: 'none' }}
-                          />
                           <button
                             onClick={handleUpload}
                             type="button"
