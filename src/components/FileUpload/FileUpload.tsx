@@ -1,5 +1,6 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
+import { X } from 'lucide-react';
 import {
   button,
   cx,
@@ -24,8 +25,37 @@ import type { UploadStatus } from '../../types/types';
 const CHUNK_SIZE = 5 * 1024 * 1024; // 5 MB
 const MAX_RETRIES = 3;
 
-const FileUpload = () => {
+type FileUploadProps = {
+  onClose?: () => void;
+  title?: string;
+  description?: string;
+  accept?: string;
+  hint?: string;
+  validate?: (file: File) => string | null;
+  onComplete?: (file: File) => void;
+};
+
+const FileUpload = ({
+  onClose,
+  title = 'Upload File',
+  description = 'Upload files with pause, resume and retry.',
+  accept,
+  hint = 'PDF, DOCX, images, videos, etc.',
+  validate,
+  onComplete,
+}: FileUploadProps) => {
   const [file, setFile] = useState<File | null>(null);
+
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  useEffect(() => {
+    if (!file || !file.type.startsWith('image/')) {
+      setPreviewUrl(null);
+      return;
+    }
+    const url = URL.createObjectURL(file);
+    setPreviewUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [file]);
 
   const [uploadId, setUploadId] = useState<string | null>(null);
 
@@ -75,7 +105,18 @@ const FileUpload = () => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
 
+    // Allow picking the same file again after a rejection.
+    event.target.value = '';
+
     if (!selectedFile) return;
+
+    const validationError = validate?.(selectedFile);
+    if (validationError) {
+      setFile(null);
+      setStatus('idle');
+      setError(validationError);
+      return;
+    }
 
     setFile(selectedFile);
 
@@ -252,6 +293,8 @@ const FileUpload = () => {
       setProgress(100);
       setCurrentChunk(null);
       setStatus('completed');
+
+      onComplete?.(file);
     } catch (error) {
       console.error('Upload process failed:', error);
 
@@ -364,14 +407,22 @@ const FileUpload = () => {
     <div className={cx(modal.dialog, 'p-4 sm:p-5 overflow-y-auto')}>
       {/* Header */}
 
-      <div className="mb-5">
-        <h2 className={cx(text.primary, 'text-lg font-semibold')}>
-          Upload File
-        </h2>
+      <div className="mb-5 flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <h2 className={cx(text.primary, 'text-lg font-semibold')}>{title}</h2>
 
-        <p className={cx(text.muted, 'mt-1 text-sm')}>
-          Upload files with pause, resume and retry.
-        </p>
+          <p className={cx(text.muted, 'mt-1 text-sm')}>{description}</p>
+        </div>
+        {onClose && (
+          <button
+            type="button"
+            aria-label="Close"
+            onClick={onClose}
+            className={button.icon}
+          >
+            <X size={18} />
+          </button>
+        )}
       </div>
 
       {/* File picker */}
@@ -395,12 +446,23 @@ const FileUpload = () => {
           Choose a file
         </span>
 
-        <span className={cx(text.muted, 'mt-1 text-xs')}>
-          PDF, DOCX, images, videos, etc.
+        <span className={cx(text.muted, 'mt-1 text-xs text-center')}>
+          {hint}
         </span>
 
-        <input type="file" className="hidden" onChange={handleFileChange} />
+        <input
+          type="file"
+          accept={accept}
+          className="hidden"
+          onChange={handleFileChange}
+        />
       </label>
+
+      {/* Validation error before a file is accepted */}
+
+      {!file && error && (
+        <div className={cx(form.alert, 'mt-4 text-sm')}>{error}</div>
+      )}
 
       {/* File details */}
 
@@ -409,7 +471,14 @@ const FileUpload = () => {
           {/* File name + progress */}
 
           <div className="flex items-start justify-between gap-4">
-            <div className="min-w-0">
+            {previewUrl && (
+              <img
+                src={previewUrl}
+                alt="Selected file preview"
+                className="h-12 w-12 shrink-0 rounded-full object-cover ring-2 ring-line"
+              />
+            )}
+            <div className="min-w-0 flex-1">
               <p className={cx(text.primary, 'truncate text-sm font-medium')}>
                 {file.name}
               </p>
@@ -515,14 +584,25 @@ const FileUpload = () => {
             {/* Completed */}
 
             {status === 'completed' && (
-              <div
-                className={cx(
-                  tone.success,
-                  'rounded-md px-4 py-2 text-sm font-medium'
+              <>
+                <div
+                  className={cx(
+                    tone.success,
+                    'rounded-md px-4 py-2 text-sm font-medium'
+                  )}
+                >
+                  ✓ Upload completed
+                </div>
+                {onClose && (
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    className={cx(button.primary, 'ml-auto')}
+                  >
+                    Done
+                  </button>
                 )}
-              >
-                ✓ Upload completed
-              </div>
+              </>
             )}
           </div>
         </div>
