@@ -18,6 +18,7 @@ import type {
   TopProject,
 } from '../types/types';
 import { getEnv } from '../config/env';
+import { button, form, modal } from '../theme/theme';
 
 export const KEY_TRACK_METRIC = {
   TOTAL_EMPLOYEES: 'Total Employees',
@@ -143,28 +144,7 @@ focus:transition-all
 focus:duration-200
   `;
 
-export const className = `w-full
-rounded-lg
-px-3
-py-2.5
-text-sm
-
-bg-slate-50
-border border-slate-200
-text-slate-900
-placeholder:text-slate-400
-
-dark:bg-[#0f0a1f]
-dark:border-white/10
-dark:text-slate-200
-dark:placeholder:text-slate-500
-
-focus:outline-none
-focus:ring-2
-focus:ring-[#534ab7]
-focus:border-transparent
-focus:transition-all
-focus:duration-200`;
+export const className = form.input;
 
 export const selectDropDownClass = `cursor-pointer
             px-2 py-1
@@ -179,7 +159,7 @@ export const selectDropDownClass = `cursor-pointer
             dark:outline-none dark:focus:outline-none`;
 export const selectOptionsClass = `text-sm font-bold outline-none`;
 
-export const labelclassName = `block mb-1.5 text-slate-500 dark:text-slate-400 text-xs font-medium`;
+export const labelclassName = form.label;
 
 export const loginLabelclassNAme = `block mb-1.5 mt-1.5 text-slate-600 dark:text-slate-400 text-xs font-medium tracking-wide uppercase`;
 
@@ -497,7 +477,7 @@ export const FORM_FIELD_ERROR_LABELS: Record<string, string> = {
 
 export const NAME = 'name';
 
-export const sortModalContainerCss = `bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-white/10  fixed z-300 left-0 right-0 bottom-0 rounded-t-2xl`;
+export const sortModalContainerCss = modal.sheet;
 export const employeeDetailModalContainerCss = `h-full max-h-full overflow-auto w-screen md:w-fit  bg-white dark:bg-slate-950  border border-slate-200 dark:border-white/10  fixed z-300 right-0 top-0`;
 export const REFETCH_TRY = 3;
 
@@ -580,3 +560,7 @@ export const iconBtn =
   'p-1.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 disabled:hover:bg-transparent';
 export const iconActive = 'text-blue-600 dark:text-blue-400';
 export const iconMuted = 'text-slate-400 dark:text-slate-600';
+export const checkboxClass = form.checkbox;
+export const toolbarBtn = button.toolbar;
+export const toolbarPrimaryBtn = button.toolbarPrimary;
+export const ROWS_PER_PAGE_OPTIONS = [2, 3, 5, 7, 10, 15];

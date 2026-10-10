@@ -134,12 +134,8 @@ export type ReviewList = {
 export type TableToolbarProps = {
   txtToBeSearched: string;
   setTextToBeSearched: (e: string) => void;
-  tableQueryParams: TableQueryParams;
-  handleRowsPerPageChange: (e: ChangeEvent<HTMLSelectElement>) => void;
   openFilterModal: () => void;
   openSortModal: () => void;
-  handlePrevious: () => void;
-  handleNext: () => void;
   bulkAction: () => void;
   selectedRow: Set<unknown>;
   handleOnChange: (
@@ -149,6 +145,12 @@ export type TableToolbarProps = {
   ref?: RefObject<HTMLInputElement | null>;
   listSize: number;
   openCreateEmployeeModal: () => void;
+};
+export type TablePaginationProps = {
+  tableQueryParams: TableQueryParams;
+  handleRowsPerPageChange: (e: ChangeEvent<HTMLSelectElement>) => void;
+  handlePrevious: () => void;
+  handleNext: () => void;
 };
 export type TableTypeMap = {
   employees: Employee;
