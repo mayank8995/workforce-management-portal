@@ -13,6 +13,10 @@ import { card, chartTheme, cx } from '../../theme/theme';
 function MultiCityBarChartComponent({ title, X, Y, data }: any) {
   const { theme: themeMode } = useTheme();
   const chart = chartTheme(themeMode);
+  // Grow the chart with the number of rows so every bar gets the same
+  // spacing and the list scrolls instead of squeezing/clipping rows.
+  const ROW_HEIGHT = 32;
+  const chartHeight = Math.max((data?.length ?? 0) * ROW_HEIGHT + 20, 200);
   return (
     <>
       <div className={card.chart}>
@@ -20,15 +24,15 @@ function MultiCityBarChartComponent({ title, X, Y, data }: any) {
           {title}
         </h1>
 
-        <div className="overflow-y-auto min-h-0 max-h-87.5 w-full overflow-hidden">
-          <ResponsiveContainer width="100%" height={550}>
+        <div className="scrollbar-thin max-h-87.5 min-h-0 w-full overflow-x-hidden overflow-y-auto pr-1">
+          <ResponsiveContainer width="100%" height={chartHeight}>
             {/* Crucial: layout="vertical" makes the chart horizontal */}
             <BarChart
               responsive
               data={data}
               layout="vertical"
               className="flex items-center justify-between text-sm font-bold"
-              margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
+              margin={{ top: 10, right: 30, left: 0, bottom: 10 }}
             >
               {/* Hide the grid lines and X-axis line/ticks to match the clean look */}
               <XAxis
@@ -43,8 +47,9 @@ function MultiCityBarChartComponent({ title, X, Y, data }: any) {
                 type="category"
                 axisLine={false}
                 tickLine={false}
-                // width={80}
-                width={100}
+                interval={0}
+                tick={{ fill: chart.textMuted, fontSize: 12, fontWeight: 600 }}
+                width={110}
                 className="flex items-center justify-between text-sm font-bold outline-0"
               />
 
