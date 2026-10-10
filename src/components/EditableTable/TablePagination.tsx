@@ -1,12 +1,8 @@
 import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import {
-  ROWS_PER_PAGE_OPTIONS,
-  selectDropDownClass,
-  selectOptionsClass,
-  toolbarBtn,
-} from '../../utils/constants';
+import { ROWS_PER_PAGE_OPTIONS } from '../../utils/constants';
 import type { TablePaginationProps } from '../../types/types';
+import { button, form } from '../../theme/theme';
 
 const TablePagination = ({
   tableQueryParams,
@@ -23,22 +19,19 @@ const TablePagination = ({
   const to = Math.min(page * limit, total);
 
   return (
-    <div className="flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-3 px-4 max-xs:px-3 lg:px-6 py-3 border-t border-slate-100 dark:border-slate-800">
-      <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 tabular-nums text-center sm:text-left">
+    <div className="flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-3 px-4 max-xs:px-3 lg:px-6 py-3 border-t border-line-subtle">
+      <p className="text-xs sm:text-sm text-ink-muted tabular-nums text-center sm:text-left">
         Showing{' '}
-        <span className="font-semibold text-slate-700 dark:text-slate-200">
+        <span className="font-semibold text-ink-secondary">
           {from}–{to}
         </span>{' '}
-        of{' '}
-        <span className="font-semibold text-slate-700 dark:text-slate-200">
-          {total}
-        </span>
+        of <span className="font-semibold text-ink-secondary">{total}</span>
       </p>
 
       <div className="flex items-center justify-between sm:justify-end gap-3 max-xs:gap-2 sm:gap-5">
         <label
           htmlFor="limit"
-          className="flex gap-2 max-xs:gap-1.5 text-xs sm:text-sm items-center text-slate-500 dark:text-slate-400 whitespace-nowrap"
+          className="flex gap-2 max-xs:gap-1.5 text-xs sm:text-sm items-center text-ink-muted whitespace-nowrap"
         >
           <span className="max-xs:hidden">Rows per page</span>
           <span className="hidden max-xs:inline">Rows</span>
@@ -47,12 +40,12 @@ const TablePagination = ({
             name="limit"
             value={limit}
             onChange={handleRowsPerPageChange}
-            className={selectDropDownClass}
+            className={form.selectCompact}
           >
             {ROWS_PER_PAGE_OPTIONS.map((option) => (
               <option
                 key={`option-${option}`}
-                className={selectOptionsClass}
+                className={form.option}
                 value={option}
               >
                 {option}
@@ -67,11 +60,11 @@ const TablePagination = ({
             aria-label="Previous page"
             disabled={isPrevDisabled}
             onClick={handlePrevious}
-            className={`${toolbarBtn} px-0! ${isPrevDisabled ? 'pointer-events-none' : 'cursor-pointer'}`}
+            className={`${button.toolbar} px-0! ${isPrevDisabled ? 'pointer-events-none' : 'cursor-pointer'}`}
           >
             <ChevronLeft size={16} />
           </button>
-          <span className="text-xs sm:text-sm font-medium tabular-nums whitespace-nowrap text-slate-700 dark:text-slate-200">
+          <span className="text-xs sm:text-sm font-medium tabular-nums whitespace-nowrap text-ink-secondary">
             {page} / {totalPages || 1}
           </span>
           <button
@@ -79,7 +72,7 @@ const TablePagination = ({
             aria-label="Next page"
             disabled={isNextDisabled}
             onClick={handleNext}
-            className={`${toolbarBtn} px-0! ${isNextDisabled ? 'pointer-events-none' : 'cursor-pointer'}`}
+            className={`${button.toolbar} px-0! ${isNextDisabled ? 'pointer-events-none' : 'cursor-pointer'}`}
           >
             <ChevronRight size={16} />
           </button>

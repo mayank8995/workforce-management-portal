@@ -1,5 +1,6 @@
 // components/AuthLayout.tsx
 import { LayoutGrid, CheckCircle2 } from 'lucide-react';
+import { cx, icon, surface, text } from '../../theme/theme';
 
 const CHECKLIST = [
   'Analytics',
@@ -9,39 +10,41 @@ const CHECKLIST = [
 
 export function LandingWrapper({ children }: { children: React.ReactNode }) {
   return (
-    <div className="h-screen max-h-full relative bg-gradient-to-br from-[#eef0fc] via-[#e7e9fb] to-[#dee1f7] dark:from-[#0f172a] dark:via-[#161233] dark:to-[#2a1a52]">
+    <div className={cx('h-screen max-h-full relative', surface.marketing)}>
       <div className={` w-full px-4 `}>
         <div
           className={`relative z-10 h-screen  flex flex-1 flex-col md:flex-row justify-center items-center transition-opacity duration-300`}
         >
           <div className="hidden md:flex flex-col justify-center gap-6 p-12">
             <div className="flex items-center gap-2">
-              <LayoutGrid className="h-7 w-7 text-[#534ab7]" />
-              <span className="text-xl font-bold text-slate-900 dark:text-white">
+              <LayoutGrid className={cx('h-7 w-7', icon.active)} />
+              <span className={cx(text.primary, 'text-xl font-bold')}>
                 Admin Portal
               </span>
             </div>
-            <h1 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
+            <h1
+              className={cx(text.primary, 'text-4xl font-bold tracking-tight')}
+            >
               Manage your entire workforce, in one place.
             </h1>
-            <p className="text-slate-600 dark:text-slate-300">
+            <p className={text.secondary}>
               Track performance, and analytics — all from a single dashboard.
             </p>
             <ul className="flex flex-col gap-3">
               {CHECKLIST.map((item) => (
                 <li
                   key={item}
-                  className="flex items-center gap-2 text-slate-700 dark:text-slate-200"
+                  className={cx(text.secondary, 'flex items-center gap-2')}
                 >
-                  <CheckCircle2 className="h-4 w-4 text-[#534ab7] dark:text-[#a29bec]" />
+                  <CheckCircle2 className={cx('h-4 w-4', icon.active)} />
                   {item}
                 </li>
               ))}
             </ul>
           </div>
           <div className="flex md:hidden flex-col items-center mb-2">
-            <LayoutGrid className="h-7 w-7 text-[#534ab7]" />
-            <span className="text-lg font-bold text-slate-900 dark:text-white">
+            <LayoutGrid className={cx('h-7 w-7', icon.active)} />
+            <span className={cx(text.primary, 'text-lg font-bold')}>
               Admin Portal
             </span>
           </div>

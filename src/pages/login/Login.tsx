@@ -8,12 +8,7 @@ import {
   type SubmitEvent,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  GUEST_LOGIN,
-  loginClassName,
-  loginLabelclassNAme,
-  NAV_ITEMS,
-} from '../../utils/constants';
+import { GUEST_LOGIN, NAV_ITEMS } from '../../utils/constants';
 import FormField from '../../components/Form/FormField';
 import { validateField } from '../../services/form-validation.service';
 import type { LoginData, LoginForm } from '../../types/types';
@@ -22,6 +17,14 @@ import { TailSpin } from 'react-loader-spinner';
 import { toast, type ToastContent } from 'react-toastify';
 import { useAuth } from '../../context/AuthContext';
 import { getApiErrorDetails } from '../../services/utils.service';
+import {
+  button,
+  card,
+  cx,
+  form as formStyles,
+  palette,
+  text,
+} from '../../theme/theme';
 // import { loadDashboardPage } from '../../router/router';
 
 // type ServerHealth = {
@@ -157,22 +160,18 @@ function Login({
   //   }
   // };
   return (
-    <div className="h-100 md:max-h-150 md:h-127.5 bg-violet-50 border-violet-200 dark:bg-[#211a3d] border dark:border-[#7c3aed]/20  rounded-2xl shadow-2xl shadow-[#2d1b4e]/60 p-4 md:p-8 w-full max-w-md">
+    <div className={cx(card.auth, 'h-100 md:max-h-150 md:h-127.5')}>
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-slate-900 dark:text-white font-bold text-lg md:text-xl">
-          Welcome back
-        </h2>
-        <p className="text-slate-900 dark:text-white text-sm font-medium">
-          Sign in to your account
-        </p>
+        <h2 className="text-ink font-bold text-lg md:text-xl">Welcome back</h2>
+        <p className="text-ink text-sm font-medium">Sign in to your account</p>
       </div>
 
       {/* Email */}
       <form onSubmit={handleSubmit} noValidate>
         <div>
           <div className="mb-4 flex flex-col">
-            <label htmlFor="email" className={loginLabelclassNAme}>
+            <label htmlFor="email" className={formStyles.labelCaps}>
               Email Id
             </label>
             <FormField
@@ -181,13 +180,13 @@ function Login({
               name={'email'}
               type={'email'}
               placeholder={'you@example.com'}
-              className={loginClassName}
+              className={formStyles.input}
               id={'email'}
               onChange={handleOnChange}
             />
           </div>
           <div className="mb-4 flex flex-col">
-            <label htmlFor="password" className={loginLabelclassNAme}>
+            <label htmlFor="password" className={formStyles.labelCaps}>
               Password
             </label>
             <FormField
@@ -196,7 +195,7 @@ function Login({
               name={'password'}
               type={'password'}
               placeholder={'••••••••'}
-              className={loginClassName}
+              className={formStyles.input}
               id={'password'}
               onChange={handleOnChange}
             />
@@ -211,20 +210,17 @@ function Login({
           // onPointerDown={() => {
           //   loadDashboardPage();
           // }}
-          className={` w-full bg-[#534ab7] text-white font-semibold py-3 rounded-lg mt-4  mb-4 px-6 
-                         text-sm
-                        shadow-lg shadow-indigo-500/30
-                        hover:enabled:shadow-xl hover:enabled:shadow-indigo-500/40   
-                        hover:enabled:bg-[#8e89f2]                     
-                        cursor-pointer disabled:text-gray-400 disabled:cursor-not-allowed
-                         ${[isLoading ? 'disabled:bg-[#8e89f2] cursor-not-allowed' : undefined].filter(Boolean).join(' ')}
-                        `}
+          className={cx(
+            button.primaryLg,
+            'w-full mt-4 mb-4',
+            isLoading && button.loading
+          )}
         >
           {isLoading ? (
             <TailSpin
               visible={true}
               height={20}
-              color="#fff"
+              color={palette.white}
               radius="4"
               ariaLabel="tail-spin-loading"
               wrapperStyle={{}}
@@ -240,18 +236,15 @@ function Login({
           {serverWakingUp?.message}
         </p>
       )} */}
-      <p className="text-center text-slate-600 dark:text-slate-400 text-sm">
+      <p className={cx(text.muted, 'text-center text-sm')}>
         Don't have an account?{' '}
-        <button
-          onClick={() => onCustomEvent(false)}
-          className="text-[#9d8df1] cursor-pointer"
-        >
+        <button onClick={() => onCustomEvent(false)} className={button.linkMd}>
           Create one
         </button>
       </p>
       <button
         onClick={() => handleLogin(GUEST_LOGIN)}
-        className="w-full text-sm text-[#9d8df1] mt-2 hover:underline cursor-pointer"
+        className={cx(button.linkMd, 'w-full justify-center mt-2')}
       >
         Continue as guest
       </button>

@@ -1,15 +1,12 @@
 import { useState } from 'react';
 import { initialFormData, type Errors, type FormData } from '../../types/types';
-import {
-  loginClassName,
-  loginLabelclassNAme,
-  stepConfig,
-} from '../../utils/constants';
+import { stepConfig } from '../../utils/constants';
 import FormField from '../../components/Form/FormField';
 import { TailSpin } from 'react-loader-spinner';
 import { validateField } from '../../services/form-validation.service';
 import { doSignup } from '../../api/admin-portal.api';
 import { toast, type ToastContent } from 'react-toastify';
+import { button, card, cx, form, palette } from '../../theme/theme';
 import { ChevronLeft, StepBack, StepForward } from 'lucide-react';
 import { getApiErrorDetails } from '../../services/utils.service';
 
@@ -114,7 +111,9 @@ export default function Signup({
   const isLastStep = step === stepConfig.length - 1;
 
   return (
-    <div className="overflow-y-auto h-100 md:max-h-150 md:h-127.5 bg-violet-50 border-violet-200 dark:bg-[#211a3d] border dark:border-[#7c3aed]/20 rounded-2xl shadow-2xl shadow-[#2d1b4e]/60 p-4 md:p-8 w-full max-w-md">
+    <div
+      className={cx(card.auth, 'overflow-y-auto h-100 md:max-h-150 md:h-127.5')}
+    >
       <form noValidate>
         {steps[step]}
         <div>
@@ -125,27 +124,23 @@ export default function Signup({
                 className="mb-2 md:hidden flex flex-row font-medium tracking-wide cursor-pointer"
                 onClick={handleBack}
               >
-                <ChevronLeft className="text-slate-900 dark:text-white text-xs font-medium tracking-wide" />{' '}
-                <span className="pl-1 text-slate-900 dark:text-white">
-                  Back
-                </span>
+                <ChevronLeft className="text-ink text-xs font-medium tracking-wide" />{' '}
+                <span className="pl-1 text-ink">Back</span>
               </button>
               <button
                 type="button"
                 onClick={handleFinalSubmit}
-                className={`w-fit md:w-full bg-[#534ab7] text-white font-semibold py-3 rounded-lg mt-0 md:mt-4  px-6 
-                         text-sm
-                        shadow-lg shadow-indigo-500/30
-                        hover:enabled:shadow-xl hover:enabled:shadow-indigo-500/40   
-                        hover:enabled:bg-[#8e89f2]                     
-                        cursor-pointer disabled:text-gray-400 disabled:cursor-not-allowed
-                         ${[isLoading ? 'disabled:bg-[#8e89f2] cursor-not-allowed' : undefined].filter(Boolean).join(' ')}`}
+                className={cx(
+                  button.primaryLg,
+                  'w-fit md:w-full md:mt-4',
+                  isLoading && button.loading
+                )}
               >
                 {isLoading ? (
                   <TailSpin
                     visible={true}
                     height={20}
-                    color="#fff"
+                    color={palette.white}
                     radius="4"
                     ariaLabel="tail-spin-loading"
                     wrapperStyle={{}}
@@ -163,28 +158,24 @@ export default function Signup({
                 className="md:hidden mb-2 flex flex-row font-medium cursor-pointer"
                 onClick={onCustomEvent}
               >
-                <StepBack className="text-slate-900 dark:text-white text-xs font-medium tracking-wide" />{' '}
-                <span className="pl-2 text-slate-900 dark:text-white">
-                  Back to Login
-                </span>
+                <StepBack className="text-ink text-xs font-medium tracking-wide" />{' '}
+                <span className="pl-2 text-ink">Back to Login</span>
               </button>
               <button
                 type="button"
-                className="md:hidden mb-2 flex flex-row-reverse text-slate-900 dark:text-white font-medium cursor-pointer"
+                className="md:hidden mb-2 flex flex-row-reverse text-ink font-medium cursor-pointer"
                 onClick={handleNext}
               >
-                <StepForward className="text-slate-900 dark:text-white text-xs font-medium tracking-wide" />{' '}
+                <StepForward className="text-ink text-xs font-medium tracking-wide" />{' '}
                 <span className="pr-2">Next</span>
               </button>
               <button
                 type="button"
-                className={`hidden md:flex justify-center w-full bg-[#534ab7] text-white font-semibold py-3 rounded-lg mt-0 md:mt-4  px-6 
-                         text-sm
-                        shadow-lg shadow-indigo-500/30
-                        hover:enabled:shadow-xl hover:enabled:shadow-indigo-500/40   
-                        hover:enabled:bg-[#8e89f2]                     
-                        cursor-pointer disabled:text-gray-400 disabled:cursor-not-allowed
-                         ${[isLoading ? 'disabled:bg-[#8e89f2] cursor-not-allowed' : undefined].filter(Boolean).join(' ')}`}
+                className={cx(
+                  button.primaryLg,
+                  'max-md:hidden w-full md:mt-4',
+                  isLoading && button.loading
+                )}
                 onClick={handleNext}
               >
                 Next
@@ -215,13 +206,11 @@ export function StepOneForm({
         className="hidden md:flex mb-2 flex-row font-medium cursor-pointer"
         onClick={onCustomEvent}
       >
-        <StepBack className="text-slate-900 dark:text-white text-xs font-medium tracking-wide" />{' '}
-        <span className="pl-2 text-slate-900 dark:text-white">
-          Back to Login
-        </span>
+        <StepBack className="text-ink text-xs font-medium tracking-wide" />{' '}
+        <span className="pl-2 text-ink">Back to Login</span>
       </button>
       <div className="mb-2 flex flex-col">
-        <label htmlFor="name" className={loginLabelclassNAme}>
+        <label htmlFor="name" className={form.labelCaps}>
           Name
         </label>
         <FormField
@@ -233,12 +222,12 @@ export function StepOneForm({
           onChange={(event) =>
             handleOnChange({ ...data, name: event.target.value }, 'name')
           }
-          className={loginClassName}
+          className={form.input}
           id={'name'}
         />
       </div>
       <div className="mb-2 flex flex-col">
-        <label htmlFor="email" className={loginLabelclassNAme}>
+        <label htmlFor="email" className={form.labelCaps}>
           Email
         </label>
         <FormField
@@ -250,12 +239,12 @@ export function StepOneForm({
           onChange={(event) =>
             handleOnChange({ ...data, email: event.target.value }, 'email')
           }
-          className={loginClassName}
+          className={form.input}
           id={'email'}
         />
       </div>
       <div className="mb-2 flex flex-col">
-        <label htmlFor="password" className={loginLabelclassNAme}>
+        <label htmlFor="password" className={form.labelCaps}>
           Password
         </label>
         <FormField
@@ -270,12 +259,12 @@ export function StepOneForm({
               'password'
             )
           }
-          className={loginClassName}
+          className={form.input}
           id={'password'}
         />
       </div>
       <div className="mb-2 flex flex-col">
-        <label htmlFor="confirmPassword" className={loginLabelclassNAme}>
+        <label htmlFor="confirmPassword" className={form.labelCaps}>
           Confirm Password
         </label>
         <FormField
@@ -290,7 +279,7 @@ export function StepOneForm({
               'confirmPassword'
             )
           }
-          className={loginClassName}
+          className={form.input}
           id={'confirmPassword'}
         />
       </div>
@@ -316,11 +305,11 @@ export function StepTwoForm({
         className="mb-2 hidden md:flex flex-row font-medium tracking-wide cursor-pointer"
         onClick={handleBack}
       >
-        <ChevronLeft className="text-slate-900 dark:text-white text-xs font-medium tracking-wide" />{' '}
-        <span className="pl-1 text-slate-900 dark:text-white">Back</span>
+        <ChevronLeft className="text-ink text-xs font-medium tracking-wide" />{' '}
+        <span className="pl-1 text-ink">Back</span>
       </button>
       <div className="mb-2 flex flex-col">
-        <label htmlFor="department" className={loginLabelclassNAme}>
+        <label htmlFor="department" className={form.labelCaps}>
           Department
         </label>
         <FormField
@@ -335,12 +324,12 @@ export function StepTwoForm({
               'department'
             )
           }
-          className={loginClassName}
+          className={form.input}
           id={'department'}
         />
       </div>
       <div className="mb-2 flex flex-col">
-        <label htmlFor="designation" className={loginLabelclassNAme}>
+        <label htmlFor="designation" className={form.labelCaps}>
           Designation
         </label>
         <FormField
@@ -355,12 +344,12 @@ export function StepTwoForm({
               'designation'
             )
           }
-          className={loginClassName}
+          className={form.input}
           id={'designation'}
         />
       </div>
       {/* <div className="mb-2 flex flex-col">
-        <label htmlFor="empId" className={loginLabelclassNAme}>
+        <label htmlFor="empId" className={form.labelCaps}>
           Employee Id
         </label>
         <FormField
@@ -372,7 +361,7 @@ export function StepTwoForm({
           onChange={(event) =>
             handleOnChange({ ...data, empId: event.target.value }, 'empId')
           }
-          className={loginClassName}
+          className={form.input}
           id={'empId'}
         />
       </div> */}

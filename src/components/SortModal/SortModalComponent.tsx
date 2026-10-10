@@ -81,8 +81,8 @@ const SortModalComponent = <T extends ListType>({
                 className={cx(
                   'cursor-pointer h-11 min-w-0 inline-flex items-center gap-2.5 px-3 rounded-lg border text-sm font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-brand-600',
                   isSelected
-                    ? 'border-brand-600 bg-brand-50 text-brand-700 dark:border-brand-400 dark:bg-brand-500/10 dark:text-brand-200'
-                    : `${surface.border} ${text.secondary} hover:bg-slate-50 dark:hover:bg-white/5`
+                    ? 'border-accent bg-accent-soft text-accent'
+                    : `${surface.border} ${text.secondary} hover:bg-surface-hover`
                 )}
                 onClick={() => handleRadio(header.key)}
               >

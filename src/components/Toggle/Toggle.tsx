@@ -35,8 +35,8 @@ export default function Toggle() {
       />
       {/* Track */}
       <div
-        className={`relative w-12 h-6 rounded-full transition-colors duration-200 ease-in-out peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-blue-500 dark:peer-focus-visible:ring-offset-slate-950 ${
-          enabled ? 'bg-slate-700' : 'bg-blue-500'
+        className={`relative w-12 h-6 rounded-full transition-colors duration-200 ease-in-out peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-brand-600 peer-focus-visible:ring-offset-surface ${
+          enabled ? 'bg-line-strong' : 'bg-brand-600'
         }`}
       >
         {/* Thumb */}

@@ -18,7 +18,6 @@ import type {
   TopProject,
 } from '../types/types';
 import { getEnv } from '../config/env';
-import { button, form, modal } from '../theme/theme';
 
 export const KEY_TRACK_METRIC = {
   TOTAL_EMPLOYEES: 'Total Employees',
@@ -38,32 +37,10 @@ export const KEY_TRACK_METRIC_ICON = {
   CIRCLE_PERCENT: 'CIRCLE_PERCENT',
   FOLDER_DOT: 'FOLDER_DOT',
 };
-export const gradients = [
-  'bg-gradient-to-br from-pink-400 to-rose-500',
-  'bg-gradient-to-br from-indigo-400 to-violet-500',
-  'bg-gradient-to-br from-emerald-400 to-teal-500',
-  'bg-gradient-to-br from-amber-400 to-orange-500',
-  'bg-gradient-to-br from-sky-400 to-blue-500',
-];
-
-export const bgColors = [
-  'bg-purple-500',
-  'bg-violet-500',
-  'bg-teal-500',
-  'bg-orange-500',
-  'bg-blue-500',
-];
 
 export const TOP_PROJECTS = 'Top Projects';
 export const ATTRITION_INSIGHTS = 'Attrition Insights';
 export const DEPARTMENT_WISE_HEADCOUNT = 'Department-wise Headcount';
-export const PIE_COLORS = [
-  '#0088FE',
-  '#00C49F',
-  '#FFBB28',
-  '#FF8042',
-  '#8884d8',
-];
 export const REVENUE_TREND_IN_CR = 'Revenue Trend (₹ Cr)';
 export const REVENUE_IN_THIS_MONTH = 'Revenue Trend (₹ Cr)';
 export const SKILLS_IN_DEMAND = 'Skils in Demand';
@@ -99,69 +76,6 @@ export const RISK_STATUS = {
 export const PROJECT_DETAILS = {
   MANAGER: 'Project Lead',
 };
-
-export const className_ = `w-full
-px-4
-py-3
-mb-2
-rounded-xl
-border
-border-slate-300
-bg-white
-text-base
-font-medium
-text-slate-800
-placeholder:text-slate-400
-placeholder:font-normal
-focus:border-blue-500
-focus:ring-4
-focus:ring-blue-100
-outline-none
-transition-all
-duration-200`;
-
-export const loginClassName = `w-full
-rounded-lg
-px-3
-py-2.5
-text-sm
-
-bg-slate-50
-border border-slate-200
-text-slate-900
-placeholder:text-slate-400
-
-dark:bg-[#0f0a1f]
-dark:border-white/10
-dark:text-slate-200
-dark:placeholder:text-slate-500
-
-focus:outline-none
-focus:ring-2
-focus:ring-[#534ab7]
-focus:border-transparent
-focus:transition-all
-focus:duration-200
-  `;
-
-export const className = form.input;
-
-export const selectDropDownClass = `cursor-pointer
-            px-2 py-1
-            border
-            border-slate-300 dark:border-slate-700
-            rounded-lg
-            bg-white dark:bg-slate-800
-            text-sm
-            shadow-sm
-            focus:ring-2
-            focus:ring-blue-500 dark:text-slate-300
-            dark:outline-none dark:focus:outline-none`;
-export const selectOptionsClass = `text-sm font-bold outline-none`;
-
-export const labelclassName = form.label;
-
-export const loginLabelclassNAme = `block mb-1.5 mt-1.5 text-slate-600 dark:text-slate-400 text-xs font-medium tracking-wide uppercase`;
 
 export const PROFILE_SUBHEAD =
   'Manage your personal information and account details';
@@ -325,74 +239,6 @@ export const DEFAULT_TABLE_QUERY_PARAMS = {
   sortOrder: '',
 };
 
-export const statusColors: Record<string, string> = {
-  'on track': 'bg-emerald-400',
-  completed: 'bg-[#534ab7]/20',
-  'at risk': 'bg-orange-400',
-  'on notice': 'bg-orange-400',
-  active: 'bg-green-100',
-  dead: 'bg-slate-500/20',
-  support: 'bg-fuchsia-500/20',
-};
-
-export const textColors: Record<string, string> = {
-  'on track': `text-white`,
-  completed: `text-emerald-500`,
-  'at risk': `text-white`,
-  'on notice': 'text-white',
-  active: `text-green-700`,
-  dead: `text-slate-600`,
-  support: `text-amber-500`,
-};
-
-export const statusColorsDark: Record<string, string> = {
-  'on track': 'bg-emerald-900/40',
-  completed: 'bg-[#534ab7]/20',
-  'at risk': 'bg-emerald-900/40',
-  'on notice': 'bg-emerald-900/40',
-  active: 'bg-green-100',
-  dead: 'bg-slate-500/20',
-  support: 'bg-fuchsia-500/20',
-};
-
-export const textColorsDark: Record<string, string> = {
-  'on track': `text-emerald-400`,
-  completed: `text-emerald-500`,
-  'at risk': `text-orange-400`,
-  'on notice': 'text-orange-400',
-  active: `text-green-700`,
-  dead: `text-slate-600`,
-  support: `text-amber-500`,
-};
-
-export const reviewColors: Record<string, string> = {
-  'low rating': 'bg-orange-100',
-  'low attendance': 'bg-yellow-100',
-  'on notice': 'bg-red-100',
-  'low satisfaction': 'bg-purple-100',
-};
-
-export const reviewtextColors: Record<string, string> = {
-  'low rating': 'text-orange-600',
-  'low attendance': 'text-yellow-600',
-  'on notice': 'text-red-600',
-  'low satisfaction': 'text-purple-600',
-};
-
-export const reviewColorsDark: Record<string, string> = {
-  'low rating': 'bg-emerald-900/40',
-  'low attendance': 'bg-[#534ab7]/20',
-  'on notice': 'bg-orange-400',
-  'low satisfaction': 'bg-green-100',
-};
-
-export const reviewtextColorsDark: Record<string, string> = {
-  'low rating': 'text-orange-400',
-  'low attendance': 'text-yellow-600',
-  'on notice': 'text-red-400',
-  'low satisfaction': 'text-purple-400',
-};
-
 export const FIELD_LABELS: Record<keyof Employee, string> = {
   _id: 'ID',
   name: 'Name',
@@ -477,8 +323,6 @@ export const FORM_FIELD_ERROR_LABELS: Record<string, string> = {
 
 export const NAME = 'name';
 
-export const sortModalContainerCss = modal.sheet;
-export const employeeDetailModalContainerCss = `h-full max-h-full overflow-auto w-screen md:w-fit  bg-white dark:bg-slate-950  border border-slate-200 dark:border-white/10  fixed z-300 right-0 top-0`;
 export const REFETCH_TRY = 3;
 
 export const GUEST_LOGIN = {
@@ -505,62 +349,31 @@ export const VIEW_EMPLOYEE_SUB_TTILE = 'View Employee Details';
 export const FEATURES = [
   {
     icon: Users,
-    color: 'blue',
+    tone: 'info',
     title: 'Employee Directory',
     desc: 'Searchable, sortable, paginated directory across the whole org.',
   },
   {
     icon: BarChart3,
-    color: 'purple',
+    tone: 'accent',
     title: 'Analytics & Insights',
     desc: 'Attrition, revenue, and profit margin in one dashboard.',
   },
   {
     icon: FolderKanban,
-    color: 'orange',
+    tone: 'caution',
     title: 'Project Tracking',
     desc: 'Active projects and delivery status across every team.',
   },
   {
     icon: ShieldCheck,
-    color: 'green',
+    tone: 'success',
     title: 'Role-Based Access',
     desc: 'Guest, employee, and admin views scoped to the right data.',
   },
 ] as const;
 
-export const FEATURE_STYLES: Record<string, { icon: string; border: string }> =
-  {
-    blue: {
-      icon: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
-      border: 'border-blue-500',
-    },
-    purple: {
-      icon: 'bg-[#534ab7]/10 text-[#534ab7] dark:text-[#a29bec]',
-      border: 'border-[#534ab7]',
-    },
-    orange: {
-      icon: 'bg-orange-500/10 text-orange-600 dark:text-orange-400',
-      border: 'border-orange-500',
-    },
-    green: {
-      icon: 'bg-green-500/10 text-green-600 dark:text-green-400',
-      border: 'border-green-500',
-    },
-  };
-
 export const ACCOUNT_CREATION_COMING_SOON = `Account creation is coming soon. Use Guest access to explore the
             portal, or sign in if you already have access.`;
 
-export const CARD_BACKGROUND_COLOR = `bg-white border border-slate-200
-dark:bg-[#151B32] dark:border-[#27304D]`;
-
-export const BACKGROUND_COLOR = `dark:bg-gradient-to-br dark:from-[#0f172a] dark:via-[#161233] dark:to-[#2a1a52]`;
-export const iconBtn =
-  'p-1.5 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 disabled:hover:bg-transparent';
-export const iconActive = 'text-blue-600 dark:text-blue-400';
-export const iconMuted = 'text-slate-400 dark:text-slate-600';
-export const checkboxClass = form.checkbox;
-export const toolbarBtn = button.toolbar;
-export const toolbarPrimaryBtn = button.toolbarPrimary;
 export const ROWS_PER_PAGE_OPTIONS = [2, 3, 5, 7, 10, 15];

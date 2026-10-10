@@ -22,15 +22,14 @@ import { toast } from 'react-toastify';
 import useScreenType from '../../hooks/useScreenSize';
 import { useModal } from '../../context/ModalContext';
 import {
-  BACKGROUND_COLOR,
   CREATE_EMPLOYEE_SUBTITLE,
   CREATE_EMPLOYEE_TITLE,
   EMPLOYEE_TABLE,
   ERROR_OCCURRED_WHILE_DOWNLOADING_FILE,
-  sortModalContainerCss,
 } from '../../utils/constants';
 import { useSearchParams } from 'react-router-dom';
 import EmployeeForm from '../Form/EmployeeForm/EmployeeForm';
+import { cx, modal, surface, table, toneBadge } from '../../theme/theme';
 
 function CustomTable<T extends ListType>(
   props: CustomTableProps<T>
@@ -149,14 +148,12 @@ function CustomTable<T extends ListType>(
 
   const getSortIcon = (key: string) => {
     if (tableQueryParams.sortBy !== key) {
-      return (
-        <ArrowUpDown className="w-3.5 h-3.5 text-slate-300 dark:text-slate-600" />
-      );
+      return <ArrowUpDown className={cx('w-3.5 h-3.5', table.sortIdle)} />;
     }
     return tableQueryParams.sortOrder === 'asc' ? (
-      <ArrowUp className="w-3.5 h-3.5 text-brand-600 dark:text-brand-300" />
+      <ArrowUp className={cx('w-3.5 h-3.5', table.sortActive)} />
     ) : (
-      <ArrowDown className="w-3.5 h-3.5 text-brand-600 dark:text-brand-300" />
+      <ArrowDown className={cx('w-3.5 h-3.5', table.sortActive)} />
     );
   };
 
@@ -178,7 +175,7 @@ function CustomTable<T extends ListType>(
         key: tableQueryParams.sortBy as string,
         direction: tableQueryParams.sortOrder as string,
       },
-      containerCss: sortModalContainerCss,
+      containerCss: modal.sheet,
     });
   };
 
@@ -238,24 +235,18 @@ function CustomTable<T extends ListType>(
     <>
       {!isLoading ? (
         <div
-          className={`min-h-screen bg-slate-50 p-2 max-xs:p-1.5 sm:p-3 xl:p-4 ${BACKGROUND_COLOR}`}
+          className={cx(
+            'min-h-screen p-2 max-xs:p-1.5 sm:p-3 xl:p-4',
+            surface.page
+          )}
         >
-          <div className="min-w-0 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden dark:bg-slate-950 dark:border-slate-800">
+          <div className={table.container}>
             <div className="flex items-center justify-between gap-3 max-xs:gap-2 px-4 max-xs:px-3 lg:px-6 pt-4 max-xs:pt-3 sm:pt-5">
-              <h2 className="flex flex-row min-w-0 text-slate-900 dark:text-slate-100 font-semibold text-base xl:text-lg items-center gap-2">
+              <h2 className={table.title}>
                 <Breadcrumb />
                 <span className="truncate">{title}</span>
               </h2>
-              <span
-                className="shrink-0 px-2.5 py-0.5 xl:py-1
-                  rounded-full
-                  bg-green-100
-                  text-green-700
-                  text-[11px] xl:text-xs
-                  font-semibold tabular-nums
-                  ring-1 ring-green-200
-                  dark:bg-emerald-900/40 dark:text-emerald-400 dark:ring-emerald-800"
-              >
+              <span className={cx(toneBadge('success'), 'tabular-nums')}>
                 Total: {tableQueryParams?.total || 0}
               </span>
             </div>

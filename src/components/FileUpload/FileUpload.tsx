@@ -1,5 +1,14 @@
 import { useRef, useState } from 'react';
 import axios from 'axios';
+import {
+  button,
+  cx,
+  form,
+  modal,
+  skeleton,
+  text,
+  tone,
+} from '../../theme/theme';
 
 import {
   completeUpload,
@@ -352,24 +361,24 @@ const FileUpload = () => {
   // UI
 
   return (
-    <div
-      className={`bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-white/10 flex flex-col max-h-[85vh] md:h-125 md:max-h-125 shadow-sm fixed z-300 left-0 right-0 bottom-0 md:absolute md:top-[50%] md:left-[50%] md:transform md:-translate-x-1/2 md:-translate-y-1/2 rounded-t-2xl md:rounded-2xl`}
-    >
+    <div className={cx(modal.dialog, 'p-4 sm:p-5 overflow-y-auto')}>
       {/* Header */}
 
       <div className="mb-5">
-        <h2 className="text-lg font-semibold text-gray-900">Upload File</h2>
+        <h2 className={cx(text.primary, 'text-lg font-semibold')}>
+          Upload File
+        </h2>
 
-        <p className="mt-1 text-sm text-gray-500">
+        <p className={cx(text.muted, 'mt-1 text-sm')}>
           Upload files with pause, resume and retry.
         </p>
       </div>
 
       {/* File picker */}
 
-      <label className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-8 transition hover:bg-gray-50">
+      <label className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-line-strong p-8 transition hover:bg-surface-hover">
         <svg
-          className="mb-3 h-8 w-8 text-gray-400"
+          className={cx(text.subtle, 'mb-3 h-8 w-8')}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -382,9 +391,11 @@ const FileUpload = () => {
           />
         </svg>
 
-        <span className="text-sm font-medium text-gray-700">Choose a file</span>
+        <span className={cx(text.secondary, 'text-sm font-medium')}>
+          Choose a file
+        </span>
 
-        <span className="mt-1 text-xs text-gray-500">
+        <span className={cx(text.muted, 'mt-1 text-xs')}>
           PDF, DOCX, images, videos, etc.
         </span>
 
@@ -399,26 +410,33 @@ const FileUpload = () => {
 
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">
-              <p className="truncate text-sm font-medium text-gray-900">
+              <p className={cx(text.primary, 'truncate text-sm font-medium')}>
                 {file.name}
               </p>
 
-              <p className="mt-1 text-xs text-gray-500">
+              <p className={cx(text.muted, 'mt-1 text-xs')}>
                 {formatBytes(file.size)} · {totalChunks}{' '}
                 {totalChunks === 1 ? 'chunk' : 'chunks'}
               </p>
             </div>
 
-            <span className="shrink-0 text-sm font-semibold text-gray-700">
+            <span
+              className={cx(text.secondary, 'shrink-0 text-sm font-semibold')}
+            >
               {Math.round(progress)}%
             </span>
           </div>
 
           {/* Progress bar */}
 
-          <div className="mt-4 h-2 w-full overflow-hidden rounded-full bg-gray-200">
+          <div
+            className={cx(
+              skeleton.fill,
+              'mt-4 h-2 w-full overflow-hidden rounded-full'
+            )}
+          >
             <div
-              className="h-full rounded-full bg-gray-900 transition-all duration-200"
+              className="h-full rounded-full bg-brand-600 transition-all duration-200"
               style={{
                 width: `${progress}%`,
               }}
@@ -427,7 +445,7 @@ const FileUpload = () => {
 
           {/* Chunk info */}
 
-          <div className="mt-2 flex justify-between text-xs text-gray-500">
+          <div className={cx(text.muted, 'mt-2 flex justify-between text-xs')}>
             <span>
               {currentChunk !== null
                 ? `Uploading chunk ${currentChunk + 1} of ${totalChunks}`
@@ -440,9 +458,7 @@ const FileUpload = () => {
           {/* Error */}
 
           {error && (
-            <div className="mt-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-              {error}
-            </div>
+            <div className={cx(form.alert, 'mt-4 text-sm')}>{error}</div>
           )}
 
           {/* Actions */}
@@ -454,7 +470,7 @@ const FileUpload = () => {
               <button
                 type="button"
                 onClick={handleUpload}
-                className="cursor-pointer rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
+                className={button.primary}
               >
                 Upload
               </button>
@@ -466,7 +482,7 @@ const FileUpload = () => {
               <button
                 type="button"
                 onClick={handlePause}
-                className="cursor-pointer rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className={button.secondary}
               >
                 Pause
               </button>
@@ -478,7 +494,7 @@ const FileUpload = () => {
               <button
                 type="button"
                 onClick={handleResume}
-                className="cursor-pointer rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
+                className={button.primary}
               >
                 Resume
               </button>
@@ -490,7 +506,7 @@ const FileUpload = () => {
               <button
                 type="button"
                 onClick={handleRetry}
-                className="cursor-pointer rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
+                className={button.primary}
               >
                 Retry
               </button>
@@ -499,7 +515,12 @@ const FileUpload = () => {
             {/* Completed */}
 
             {status === 'completed' && (
-              <div className="rounded-md bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700">
+              <div
+                className={cx(
+                  tone.success,
+                  'rounded-md px-4 py-2 text-sm font-medium'
+                )}
+              >
                 ✓ Upload completed
               </div>
             )}

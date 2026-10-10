@@ -6,9 +6,12 @@ import {
   Tooltip,
   type PieSectorShapeProps,
 } from 'recharts';
-import { CARD_BACKGROUND_COLOR, PIE_COLORS } from '../../utils/constants';
+import { card, chartTheme, cx } from '../../theme/theme';
 import { useTheme } from '../../hooks/useTheme';
 import React from 'react';
+
+/** Series colours are the same in both themes, so they are read once. */
+const PIE_COLORS = chartTheme('light').series;
 
 const MyCustomPie = (props: PieSectorShapeProps) => {
   return (
@@ -18,6 +21,7 @@ const MyCustomPie = (props: PieSectorShapeProps) => {
 
 function PieChartComponent({ data, title, X, Y }: any) {
   const { theme: themeMode } = useTheme();
+  const chart = chartTheme(themeMode);
   const RenderCustomLegend = () => {
     return (
       <div className="grid grid-cols-2">
@@ -40,7 +44,7 @@ function PieChartComponent({ data, title, X, Y }: any) {
                 <span
                   style={{
                     fontSize: '12px',
-                    color: themeMode === 'dark' ? '#f3f4f6' : '#333',
+                    color: chart.text,
                   }}
                 >
                   {entry[X]}
@@ -54,11 +58,8 @@ function PieChartComponent({ data, title, X, Y }: any) {
 
   return (
     <>
-      {/* <div className="overflow-hidden bg-linear-to-br from-white to-indigo-50/40 rounded-2xl shadow-sm border border-slate-100 p-5 flex flex-col gap-3 hover:shadow-xl hover:shadow-indigo-100/50 dark:hover:shadow-indigo-950/40 hover:-translate-y-0.5 transition-all duration-200  dark:bg-linear-to-br dark:from-slate-900 dark:to-purple-950/20 dark:border-none"> */}
-      <div
-        className={`overflow-hidden ${CARD_BACKGROUND_COLOR} rounded-2xl shadow-sm p-5 flex flex-col gap-3 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200`}
-      >
-        <h1 className="flex items-center justify-between text-sm xl:text-base font-bold dark:text-slate-100">
+      <div className={card.chart}>
+        <h1 className={cx(card.title, 'flex items-center justify-between')}>
           {title}
         </h1>
         <div className="overflow-y-auto min-h-0 max-h-87.5">
@@ -76,36 +77,15 @@ function PieChartComponent({ data, title, X, Y }: any) {
               style={{ outline: 'none', fontSize: '12px' }}
             />
             <Tooltip
-              contentStyle={{
-                backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                border: '1px solid #E2E8F0',
-                borderRadius: '8px',
-                padding: '10px 14px',
-                boxShadow:
-                  '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-              }}
-              // 2. Style the header / label text (e.g., "Jan", "Feb")
-              labelStyle={{
-                fontWeight: 600,
-                color: '#1E293B',
-                fontSize: '12px',
-                marginBottom: '4px',
-                letterSpacing: '0.05em',
-              }}
-              // 3. Style the row containers for the items
-              itemStyle={{
-                fontSize: '12px',
-                padding: '3px 0',
-                color: '#475569',
-              }}
-              // 4. Format the raw number values (adds currency formatting)
+              {...chart.tooltip}
+              // Format the raw number values (adds currency formatting)
               // formatter={(value: any) => {
               //   const formattedValue = new Intl.NumberFormat('en-IN').format(
               //     value
               //   );
               //   return [formattedValue];
               // }}
-              // 5. Clean up the hover cursor guide line
+              // Clean up the hover cursor guide line
               cursor={{ fill: 'transparent' }}
             />
             <Legend

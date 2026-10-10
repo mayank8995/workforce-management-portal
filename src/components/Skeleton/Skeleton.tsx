@@ -5,7 +5,7 @@ import EmployeeTableSkeleton from './EmployeeTableSkeleton';
 const Skeleton = React.memo(() => {
   const location = useLocation();
   return (
-    <div className="flex min-h-screen flex-auto flex-col bg-slate-50 dark:bg-slate-950">
+    <div className="flex min-h-screen flex-auto flex-col">
       {(location?.pathname?.includes('dashboard') ||
         location?.pathname?.includes('analytics')) &&
         !location?.search?.includes('target') && (
@@ -15,12 +15,10 @@ const Skeleton = React.memo(() => {
                 key={`items-start-${i}`}
                 className="
               flex flex-col gap-3 rounded-xl
-              border border-slate-200
-              bg-white p-4
+              border border-line
+              bg-surface p-4
               shadow-sm
               animate-pulse
-              dark:border-slate-800
-              dark:bg-slate-900
             "
               >
                 <div className="flex flex-row items-center">
@@ -28,8 +26,7 @@ const Skeleton = React.memo(() => {
                     className="
                   flex h-10 w-10 shrink-0 items-center justify-center
                   rounded-xl
-                  bg-slate-200
-                  dark:bg-slate-700
+                  bg-skeleton
                   animate-pulse
                 "
                   />
@@ -38,8 +35,7 @@ const Skeleton = React.memo(() => {
                     <div
                       className="
                     mb-2 h-3 w-32 rounded-md
-                    bg-slate-200
-                    dark:bg-slate-700
+                    bg-skeleton
                     animate-pulse
                     sm:w-40
                   "
@@ -48,8 +44,7 @@ const Skeleton = React.memo(() => {
                     <div
                       className="
                     h-2 w-20 rounded-md
-                    bg-slate-200
-                    dark:bg-slate-700
+                    bg-skeleton
                     animate-pulse
                   "
                     />
@@ -70,11 +65,9 @@ const Skeleton = React.memo(() => {
                   key={`w-full-${id}`}
                   className="
                 w-full rounded-xl
-                border border-slate-200
-                bg-white p-5
+                border border-line
+                bg-surface p-5
                 shadow-sm
-                dark:border-slate-800
-                dark:bg-slate-900
               "
                 >
                   <div className="mb-5 flex items-center justify-between gap-4">
@@ -83,8 +76,7 @@ const Skeleton = React.memo(() => {
                         className="
                       mr-3 h-9 w-10
                       rounded-lg
-                      bg-slate-200
-                      dark:bg-slate-700
+                      bg-skeleton
                       animate-pulse
                     "
                       />
@@ -93,8 +85,7 @@ const Skeleton = React.memo(() => {
                         className="
                       h-3 w-20
                       rounded-md
-                      bg-slate-200
-                      dark:bg-slate-700
+                      bg-skeleton
                       animate-pulse
                     "
                       />
@@ -104,8 +95,7 @@ const Skeleton = React.memo(() => {
                       className="
                     h-5 w-12
                     rounded-full
-                    bg-slate-200
-                    dark:bg-slate-700
+                    bg-skeleton
                     animate-pulse
                   "
                     />
@@ -120,8 +110,7 @@ const Skeleton = React.memo(() => {
                               className="
                             h-9 w-9 shrink-0
                             rounded-full
-                            bg-slate-200
-                            dark:bg-slate-700
+                            bg-skeleton
                             animate-pulse
                           "
                             />
@@ -132,8 +121,7 @@ const Skeleton = React.memo(() => {
                                   className="
                                 mb-2 h-2 w-20
                                 rounded-md
-                                bg-slate-200
-                                dark:bg-slate-700
+                                bg-skeleton
                                 animate-pulse
                               "
                                 />
@@ -142,8 +130,7 @@ const Skeleton = React.memo(() => {
                                   className="
                                 h-2 w-14
                                 rounded-md
-                                bg-slate-200
-                                dark:bg-slate-700
+                                bg-skeleton
                                 animate-pulse
                               "
                                 />
@@ -154,8 +141,7 @@ const Skeleton = React.memo(() => {
                                   className="
                                 h-2 w-12
                                 rounded-md
-                                bg-slate-200
-                                dark:bg-slate-700
+                                bg-skeleton
                                 animate-pulse
                               "
                                 />
@@ -172,8 +158,7 @@ const Skeleton = React.memo(() => {
                       className="
                     h-2 w-12
                     rounded-md
-                    bg-slate-200
-                    dark:bg-slate-700
+                    bg-skeleton
                     animate-pulse
                   "
                     />
@@ -194,12 +179,10 @@ const Skeleton = React.memo(() => {
                         className="
                       w-full max-w-sm
                       rounded-xl
-                      border border-slate-200
-                      bg-white p-6
+                      border border-line
+                      bg-surface p-6
                       shadow-sm
                       animate-pulse
-                      dark:border-slate-800
-                      dark:bg-slate-900
                     "
                       >
                         <div className="flex flex-col">
@@ -207,8 +190,7 @@ const Skeleton = React.memo(() => {
                             className="
                           h-3 w-24
                           rounded-full
-                          bg-slate-200
-                          dark:bg-slate-700
+                          bg-skeleton
                         "
                           />
                         </div>
@@ -218,8 +200,7 @@ const Skeleton = React.memo(() => {
                         relative mx-auto mt-6
                         h-44 w-44
                         overflow-hidden rounded-full
-                        bg-slate-200
-                        dark:bg-slate-700
+                        bg-skeleton
                       "
                           style={{
                             background:
@@ -236,9 +217,9 @@ const Skeleton = React.memo(() => {
                         </div>
 
                         <div className="mt-6 flex flex-col gap-4">
-                          <div className="h-3 w-28 rounded-full bg-slate-200 dark:bg-slate-700" />
-                          <div className="h-3 w-24 rounded-full bg-slate-200 dark:bg-slate-700" />
-                          <div className="h-3 w-32 rounded-full bg-slate-200 dark:bg-slate-700" />
+                          <div className="h-3 w-28 rounded-full bg-skeleton" />
+                          <div className="h-3 w-24 rounded-full bg-skeleton" />
+                          <div className="h-3 w-32 rounded-full bg-skeleton" />
                         </div>
                       </div>
                     );
