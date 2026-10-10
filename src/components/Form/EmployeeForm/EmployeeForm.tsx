@@ -8,7 +8,7 @@ import { validateField } from '../../../services/form-validation.service';
 import { getApiErrorDetails } from '../../../services/utils.service';
 import {
   className,
-  iconActive,
+  // iconActive,
   labelclassName,
   VIEW_EMPLOYEE_SUB_TTILE,
   VIEW_EMPLOYEE_TTILE,
@@ -27,8 +27,8 @@ import ErrorPage from '../../Error/ErrorPage';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEmployeeDetail } from '../../../api/tanstack.query';
 import { useAuth } from '../../../context/AuthContext';
-import { TrendingUp, Upload, X } from 'lucide-react';
-import FileUpload from '../../FileUpload/FileUpload';
+import { TrendingUp, X } from 'lucide-react';
+// import FileUpload from '../../FileUpload/FileUpload';
 import PromoteEmployeeForm from '../PromoteEmployee/PromoteEmployeeForm';
 import { useModal } from '../../../context/ModalContext';
 
