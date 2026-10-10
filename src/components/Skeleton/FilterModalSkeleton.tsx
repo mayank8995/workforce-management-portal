@@ -1,24 +1,9 @@
 import React from 'react';
+import { modal } from '../../theme/theme';
 
 const FilterModalSkeleton = () => {
   return (
-    <div
-      className="
-    fixed bottom-0 left-0 right-0 z-300
-    flex max-h-[85vh] flex-col
-    overflow-hidden
-    rounded-t-2xl
-    border border-slate-200
-    bg-white shadow-xl
-    dark:border-slate-800
-    dark:bg-slate-900
-    md:absolute md:left-1/2 md:top-1/2
-    md:max-h-125
-    md:w-180
-    md:-translate-x-1/2 md:-translate-y-1/2
-    md:rounded-2xl
-  "
-    >
+    <div className={modal.dialog}>
       <div
         className="
       flex h-14 shrink-0 items-center justify-between

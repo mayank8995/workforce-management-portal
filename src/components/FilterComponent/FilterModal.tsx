@@ -1,6 +1,7 @@
 /* eslint-disable @eslint-react/set-state-in-effect */
 import React, { useEffect, useMemo, useState } from 'react';
 import { CORRESPONDING_FILTER_TABLE_KEY_NAME } from '../../utils/constants';
+import { button, chip, cx, modal, surface, text } from '../../theme/theme';
 import { X } from 'lucide-react';
 import { TailSpin } from 'react-loader-spinner';
 import type {
@@ -194,28 +195,34 @@ const FilterModal = ({
   return (
     <>
       {!isLoading ? (
-        <div className="bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-white/10 flex flex-col max-h-[85vh] md:h-125 md:max-h-125 shadow-sm fixed z-300 left-0 right-0 bottom-0 md:absolute md:top-[50%] md:left-[50%] md:transform md:-translate-x-1/2 md:-translate-y-1/2 rounded-t-2xl md:rounded-2xl">
+        <div className={modal.dialog}>
           {!isError ? (
             <>
-              <div className="flex flex-row justify-between items-center p-4 border-b border-b-slate-200 dark:border-b-white/10">
-                <h1 className="text-sm font-bold text-slate-900 dark:text-white">
-                  Filters
-                </h1>
-                <button onClick={handleCloseModal}>
-                  <X
-                    className="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 cursor-pointer"
-                    width={16}
-                    height={20}
-                  />
+              <div className={`${modal.handle} md:hidden`} />
+              <div className={modal.header}>
+                <h1 className={modal.title}>Filters</h1>
+                <button
+                  type="button"
+                  aria-label="Close filters"
+                  onClick={handleCloseModal}
+                  className={button.icon}
+                >
+                  <X size={18} />
                 </button>
               </div>
 
-              <div className="flex flex-1 overflow-y-auto">
+              <div className="flex flex-1 min-h-0">
                 {/* Tabs */}
-                <div className="flex flex-col border-r border-r-slate-200 dark:border-r-white/10">
+                <div
+                  className={`flex flex-col w-28 sm:w-36 shrink-0 overflow-y-auto py-2 border-r ${surface.border} ${surface.muted}`}
+                >
                   {tabList.map(([key], index) => {
                     const filterKey =
                       key as keyof typeof CORRESPONDING_FILTER_TABLE_KEY_NAME;
+                    const isActive = focusedIndex === index;
+                    const selectedCount =
+                      selectedChips.find((chip) => chip.key === key)?.value
+                        ?.length ?? 0;
 
                     return (
                       <button
@@ -224,22 +231,31 @@ const FilterModal = ({
                           setFocusedIndex(event.currentTarget.tabIndex)
                         }
                         key={filterKey}
-                        className={`h-10.5 cursor-pointer text-xs w-28 wrap-anywhere flex items-center justify-center border-slate-200 dark:border-white/10 ${
-                          focusedIndex === index
-                            ? 'bg-[#534ab7] text-white'
-                            : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5'
-                        }`}
+                        className={cx(
+                          'relative flex items-center justify-between gap-1 min-h-10.5 px-3 py-2 text-left text-xs font-medium wrap-anywhere cursor-pointer transition-colors',
+                          isActive
+                            ? 'bg-white text-brand-700 dark:bg-slate-900 dark:text-brand-300'
+                            : `${text.muted} hover:bg-white/70 hover:text-slate-700 dark:hover:bg-white/5 dark:hover:text-slate-200`
+                        )}
                       >
-                        <h1 className="text-center">
+                        {isActive && (
+                          <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-r-full bg-brand-600 dark:bg-brand-400" />
+                        )}
+                        <span>
                           {CORRESPONDING_FILTER_TABLE_KEY_NAME[filterKey]}
-                        </h1>
+                        </span>
+                        {selectedCount > 0 && (
+                          <span className="shrink-0 min-w-4 h-4 px-1 rounded-full bg-brand-600 text-white text-[10px] font-semibold leading-4 text-center tabular-nums">
+                            {selectedCount}
+                          </span>
+                        )}
                       </button>
                     );
                   })}
                 </div>
 
                 {/* Chips */}
-                <div className="flex flex-col flex-1">
+                <div className="flex flex-col flex-1 min-w-0 overflow-y-auto">
                   {tabList.map(([key, values], index) => {
                     if (focusedIndex !== index) {
                       return null;
@@ -248,7 +264,7 @@ const FilterModal = ({
                     return (
                       <div
                         key={`${key}-filters`}
-                        className="transition-all duration-200 ease-out outline-none p-2 relative flex flex-wrap items-center overflow-auto overflow-x-auto"
+                        className="transition-all duration-200 ease-out outline-none p-3 sm:p-4 relative flex flex-wrap content-start items-center gap-2"
                         itemID={`${index}`}
                       >
                         {values.map((value) => {
@@ -258,11 +274,10 @@ const FilterModal = ({
                             <button
                               key={`${key}-filters-${value}`}
                               onClick={() => handleSelectedChip(key, value)}
-                              className={`cursor-pointer m-1 inline-flex items-center gap-1.5 px-4 py-2 rounded-full font-medium whitespace-nowrap border transition-all duration-150 text-xs ${
-                                !selected
-                                  ? 'border-slate-300 dark:border-white/15 text-slate-700 dark:text-slate-300 hover:border-slate-400 dark:hover:border-white/25'
-                                  : 'bg-[#534ab7] text-white hover:bg-[#7f77dd]'
-                              }`}
+                              className={cx(
+                                chip.base,
+                                selected ? chip.active : chip.idle
+                              )}
                             >
                               {value}
                             </button>
@@ -270,7 +285,12 @@ const FilterModal = ({
                         })}
 
                         {seeMore && (
-                          <button onClick={handleSeeMore}>See More</button>
+                          <button
+                            onClick={handleSeeMore}
+                            className={button.link}
+                          >
+                            See More
+                          </button>
                         )}
                       </div>
                     );
@@ -278,22 +298,15 @@ const FilterModal = ({
                 </div>
               </div>
 
-              <div className="flex justify-between flex-row p-4 border-t border-t-slate-200 dark:border-t-white/10">
-                <button
-                  onClick={clearFilter}
-                  className="text-rose-600 dark:text-rose-400 hover:underline font-semibold text-sm cursor-pointer"
-                >
+              <div className={modal.footer}>
+                <button onClick={clearFilter} className={button.dangerLink}>
                   Clear All
                 </button>
 
                 <button
                   onClick={submitModal}
                   disabled={!selectedChips.length}
-                  className={`px-6 py-2.5 font-semibold text-sm rounded-xl shadow-lg text-white ${
-                    selectedChips.length
-                      ? 'bg-[#534ab7] text-white hover:bg-[#7f77dd] hover:enabled:shadow-xl transition-all duration-200 cursor-pointer'
-                      : 'bg-slate-300 text-slate-500 dark:bg-white/5 dark:text-slate-600 cursor-not-allowed'
-                  }`}
+                  className={`${button.primary} min-w-24`}
                 >
                   {loading ? (
                     <TailSpin

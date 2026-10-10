@@ -14,6 +14,15 @@ import {
   VIEW_EMPLOYEE_TTILE,
 } from '../../../utils/constants';
 import FormField from '../FormField';
+import {
+  button,
+  card,
+  chip,
+  form,
+  modal,
+  section,
+  text,
+} from '../../../theme/theme';
 import type {
   EmployeeFormType,
   Project,
@@ -374,30 +383,22 @@ function EmployeeForm({
   return (
     <>
       {!isDataLoading ? (
-        <div
-          className="p-4 sm:p-5
-            w-full sm:w-115 md:w-125 lg:w-135
-            h-full
-            overflow-y-auto
-            bg-white dark:bg-slate-900
-            text-slate-900 dark:text-slate-100
-            shadow-2xl border-l border-slate-200 dark:border-slate-800
-            fixed z-300 right-0 top-0"
-        >
+        <div className={modal.drawer}>
           {!isError ? (
             <div>
-              <div className="mb-5 flex justify-between items-start gap-3">
+              <div className={modal.stickyHeader}>
                 <div className="min-w-0">
-                  <h1 className="text-base xl:text-xl font-semibold text-slate-800 dark:text-slate-100 truncate">
+                  <h1 className={`${modal.title} xl:text-lg`}>
                     {!isUpdateAllowed ? VIEW_EMPLOYEE_TTILE : title}
                   </h1>
-                  <h2 className="text-xs xl:text-sm text-slate-500 mt-0.5 dark:text-slate-400">
+                  <h2 className={modal.subtitle}>
                     {!isUpdateAllowed ? VIEW_EMPLOYEE_SUB_TTILE : subtitle}
                   </h2>
                 </div>
                 <button
                   onClick={onClose}
-                  className="shrink-0 flex items-center justify-center w-8 h-8 rounded-lg cursor-pointer transition-colors text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-300"
+                  aria-label="Close"
+                  className={button.icon}
                 >
                   <X width={18} height={18} />
                 </button>
@@ -416,19 +417,17 @@ function EmployeeForm({
               <form
                 onSubmit={handleSubmit}
                 onReset={formReset}
-                className="rounded-2xl border border-slate-200 bg-white flex flex-col dark:border-slate-800 dark:bg-slate-900/60"
+                className="flex flex-col"
                 noValidate
               >
                 <fieldset disabled={!isUpdateAllowed}>
-                  <div className="p-4">
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="w-1 h-4 bg-indigo-500 rounded-full shrink-0" />
-                      <h2 className="text-sm xl:text-base font-semibold text-slate-800 dark:text-slate-100">
-                        Personal Information
-                      </h2>
+                  <div className={section.wrapper}>
+                    <div className={section.heading}>
+                      <div className={section.accent} />
+                      <h2 className={section.title}>Personal Information</h2>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className={form.grid}>
                       <div className="flex flex-col">
                         <label htmlFor="name" className={labelclassName}>
                           Name
@@ -497,17 +496,15 @@ function EmployeeForm({
                     </div>
                   </div>
 
-                  <hr className="border-t border-slate-200 dark:border-slate-800" />
+                  <hr className={section.divider} />
 
-                  <div className="p-4">
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="w-1 h-4 bg-indigo-500 rounded-full shrink-0" />
-                      <h2 className="text-sm xl:text-base font-semibold text-slate-800 dark:text-slate-100">
-                        Employment Information
-                      </h2>
+                  <div className={section.wrapper}>
+                    <div className={section.heading}>
+                      <div className={section.accent} />
+                      <h2 className={section.title}>Employment Information</h2>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className={form.grid}>
                       <div className="flex flex-col">
                         <label htmlFor="department" className={labelclassName}>
                           Department
@@ -544,7 +541,7 @@ function EmployeeForm({
                                   salary: Number(formValues?.salary),
                                 })
                               }
-                              className="mb-1.5 flex items-center gap-1 text-xs font-medium text-indigo-600 cursor-pointer hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300"
+                              className={`${button.link} mb-1.5`}
                             >
                               <TrendingUp size={14} /> Promote
                             </button>
@@ -647,9 +644,7 @@ function EmployeeForm({
                           <option value="Onsite">Onsite</option>
                         </select>
                         {errors?.workMode && (
-                          <p className="text-xs text-red-600 mt-1 dark:text-red-400">
-                            {errors.workMode}
-                          </p>
+                          <p className={form.error}>{errors.workMode}</p>
                         )}
                       </div>
                       <div className="flex flex-col">
@@ -671,27 +666,23 @@ function EmployeeForm({
                           <option value="executive">Executive</option>
                         </select>
                         {errors?.level && (
-                          <p className="text-xs text-red-600 mt-1 dark:text-red-400">
-                            {errors.level}
-                          </p>
+                          <p className={form.error}>{errors.level}</p>
                         )}
                       </div>
                     </div>
                   </div>
 
-                  <hr className="border-t border-slate-200 dark:border-slate-800" />
+                  <hr className={section.divider} />
 
-                  <div className="p-4">
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="w-1 h-4 bg-indigo-500 rounded-full shrink-0" />
-                      <h2 className="text-sm xl:text-base font-semibold text-slate-800 dark:text-slate-100">
-                        Projects
-                      </h2>
+                  <div className={section.wrapper}>
+                    <div className={section.heading}>
+                      <div className={section.accent} />
+                      <h2 className={section.title}>Projects</h2>
                     </div>
 
                     {isUpdateAllowed && (
                       <>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className={form.grid}>
                           <div className="flex flex-col">
                             <label
                               htmlFor="projectName"
@@ -729,7 +720,7 @@ function EmployeeForm({
                               <option value="Support">Support</option>
                             </select>
                             {projectErrors?.status && (
-                              <p className="text-xs text-red-600 mt-1 dark:text-red-400">
+                              <p className={form.error}>
                                 {projectErrors.status}
                               </p>
                             )}
@@ -754,7 +745,7 @@ function EmployeeForm({
                               <option value="Critical">Critical</option>
                             </select>
                             {projectErrors?.riskStatus && (
-                              <p className="text-xs text-red-600 mt-1 dark:text-red-400">
+                              <p className={form.error}>
                                 {projectErrors.riskStatus}
                               </p>
                             )}
@@ -783,7 +774,7 @@ function EmployeeForm({
                           <button
                             type="button"
                             onClick={addProject}
-                            className="px-4 py-2 bg-indigo-600 text-white font-medium text-xs xl:text-sm rounded-lg transition-colors duration-150 cursor-pointer hover:bg-indigo-700"
+                            className={button.primarySm}
                           >
                             + Add Project
                           </button>
@@ -796,41 +787,49 @@ function EmployeeForm({
                         {formValues?.projects.map((project, index) => (
                           <div
                             key={`${project?.projectName}-${index}`}
-                            className="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:bg-slate-800/40 dark:border-slate-800"
+                            className={card.muted}
                           >
                             <div className="flex justify-between items-start gap-4">
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 mb-3 flex-wrap">
-                                  <span className="text-sm font-medium text-slate-800 dark:text-slate-100">
+                                  <span
+                                    className={`${text.primary} text-sm font-medium`}
+                                  >
                                     {project.projectName}
                                   </span>
-                                  <span className="px-2 py-0.5 text-xs rounded-full bg-indigo-50 text-indigo-700 ring-1 ring-indigo-200 dark:bg-indigo-500/10 dark:text-indigo-300 dark:ring-indigo-900">
+                                  <span className={chip.tag}>
                                     Priority #{project.priorityRanking}
                                   </span>
                                 </div>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                   <div>
-                                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                                    <p className={`${text.muted} text-xs`}>
                                       Status
                                     </p>
-                                    <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                                    <p
+                                      className={`${text.secondary} text-sm font-medium`}
+                                    >
                                       {project.status}
                                     </p>
                                   </div>
                                   <div>
-                                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                                    <p className={`${text.muted} text-xs`}>
                                       Risk Status
                                     </p>
-                                    <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                                    <p
+                                      className={`${text.secondary} text-sm font-medium`}
+                                    >
                                       {project.riskStatus}
                                     </p>
                                   </div>
                                   <div>
-                                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                                    <p className={`${text.muted} text-xs`}>
                                       Priority
                                     </p>
-                                    <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                                    <p
+                                      className={`${text.secondary} text-sm font-medium`}
+                                    >
                                       {project.priorityRanking}
                                     </p>
                                   </div>
@@ -853,17 +852,17 @@ function EmployeeForm({
                     )}
                   </div>
 
-                  <hr className="border-t border-slate-200 dark:border-slate-800" />
+                  <hr className={section.divider} />
 
-                  <div className="p-4">
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="w-1 h-4 bg-indigo-500 rounded-full shrink-0" />
-                      <h2 className="text-sm xl:text-base font-semibold text-slate-800 dark:text-slate-100">
+                  <div className={section.wrapper}>
+                    <div className={section.heading}>
+                      <div className={section.accent} />
+                      <h2 className={section.title}>
                         Compensation & Performance
                       </h2>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className={form.grid}>
                       <div className="flex flex-col">
                         <label htmlFor="salary" className={labelclassName}>
                           Salary
@@ -936,7 +935,7 @@ function EmployeeForm({
                           <option value="Low">Low</option>
                         </select>
                         {errors?.employeeSatisfaction && (
-                          <p className="text-xs text-red-600 mt-1 dark:text-red-400">
+                          <p className={form.error}>
                             {errors?.employeeSatisfaction}
                           </p>
                         )}
@@ -944,14 +943,12 @@ function EmployeeForm({
                     </div>
                   </div>
 
-                  <hr className="border-t border-slate-200 dark:border-slate-800" />
+                  <hr className={section.divider} />
 
-                  <div className="p-4">
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="w-1 h-4 bg-indigo-500 rounded-full shrink-0" />
-                      <h2 className="text-sm xl:text-base font-semibold text-slate-800 dark:text-slate-100">
-                        Skills
-                      </h2>
+                  <div className={section.wrapper}>
+                    <div className={section.heading}>
+                      <div className={section.accent} />
+                      <h2 className={section.title}>Skills</h2>
                     </div>
 
                     {isUpdateAllowed && (
@@ -970,7 +967,7 @@ function EmployeeForm({
                         <button
                           type="button"
                           onClick={addSkill}
-                          className="shrink-0 px-4 py-2 bg-indigo-600 text-white font-medium text-xs xl:text-sm rounded-lg transition-colors duration-150 cursor-pointer hover:bg-indigo-700"
+                          className={`${button.primarySm} shrink-0 h-auto!`}
                         >
                           Add
                         </button>
@@ -982,13 +979,13 @@ function EmployeeForm({
                         {formValues?.skills?.map((skill) => (
                           <div
                             key={skill}
-                            className="flex items-center gap-1.5 pl-3 pr-2 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-medium ring-1 ring-indigo-200 dark:bg-indigo-500/10 dark:text-indigo-300 dark:ring-indigo-900"
+                            className={`${chip.tag} pl-3 pr-2 py-1`}
                           >
                             <span>{skill}</span>
                             <button
                               type="button"
                               onClick={() => removeSkill(skill)}
-                              className="cursor-pointer text-indigo-400 transition-colors hover:text-red-500 disabled:cursor-not-allowed"
+                              className="cursor-pointer text-brand-400 transition-colors hover:text-red-500 disabled:cursor-not-allowed"
                               disabled={!isUpdateAllowed}
                             >
                               <X size={12} />
@@ -999,14 +996,12 @@ function EmployeeForm({
                     )}
                   </div>
 
-                  <hr className="border-t border-slate-200 dark:border-slate-800" />
+                  <hr className={section.divider} />
 
-                  <div className="p-4">
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="w-1 h-4 bg-indigo-500 rounded-full shrink-0" />
-                      <h2 className="text-sm xl:text-base font-semibold text-slate-800 dark:text-slate-100">
-                        Employee Status
-                      </h2>
+                  <div className={section.wrapper}>
+                    <div className={section.heading}>
+                      <div className={section.accent} />
+                      <h2 className={section.title}>Employee Status</h2>
                     </div>
 
                     <div className="flex items-center gap-3">
@@ -1016,28 +1011,28 @@ function EmployeeForm({
                         type="checkbox"
                         checked={formValues?.onNoticePeriod}
                         onChange={onInputChange}
-                        className="w-4 h-4 accent-indigo-600 cursor-pointer"
+                        className={`${form.checkbox} cursor-pointer`}
                         disabled={!isUpdateAllowed}
                       />
                       <label
                         htmlFor="onNoticePeriod"
-                        className="text-sm text-slate-700 dark:text-slate-300 cursor-pointer"
+                        className={`${text.secondary} text-sm cursor-pointer`}
                       >
                         Employee is on notice period
                       </label>
                     </div>
                   </div>
 
-                  <hr className="border-t border-slate-200 dark:border-slate-800" />
+                  <hr className={section.divider} />
 
                   {isUpdateAllowed && (
                     <>
                       {!isEditing ? (
-                        <div className="flex justify-between items-center gap-3 p-4">
+                        <div className={modal.stickyFooter}>
                           <button
                             type="submit"
                             disabled={formDisabled}
-                            className="px-5 py-2.5 bg-indigo-600 text-white font-medium text-xs xl:text-sm rounded-lg transition-colors duration-150 cursor-pointer hover:enabled:bg-indigo-700 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed dark:disabled:bg-slate-800 dark:disabled:text-slate-600"
+                            className={`${button.primary} min-w-36`}
                           >
                             {isLoading ? (
                               <TailSpin
@@ -1058,17 +1053,17 @@ function EmployeeForm({
                             type="reset"
                             id="reset"
                             disabled={formDisabled}
-                            className="px-5 py-2.5 border border-slate-300 text-slate-700 font-medium text-xs xl:text-sm rounded-lg transition-colors duration-150 cursor-pointer hover:enabled:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed dark:border-slate-700 dark:text-slate-300 dark:hover:enabled:bg-slate-800"
+                            className={button.secondary}
                           >
                             Reset
                           </button>
                         </div>
                       ) : (
-                        <div className="flex justify-between items-center p-4">
+                        <div className={modal.stickyFooter}>
                           <button
                             type="submit"
                             id="edit"
-                            className="px-5 py-2.5 bg-indigo-600 text-white font-medium text-xs xl:text-sm rounded-lg transition-colors duration-150 cursor-pointer hover:enabled:bg-indigo-700 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed dark:disabled:bg-slate-800 dark:disabled:text-slate-600"
+                            className={`${button.primary} min-w-36`}
                             disabled={formDisabled}
                           >
                             {isLoading ? (
