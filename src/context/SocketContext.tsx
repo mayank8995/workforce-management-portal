@@ -19,6 +19,7 @@ import {
   type ActivityEvent,
   type EmployeeChangedEvent,
   type OnlineUser,
+  type UserPromotedEvent,
 } from '../socket/events';
 
 const ANALYTICS_QUERY_KEYS = [
@@ -42,18 +43,20 @@ interface SocketContextType {
 const SocketContext = createContext<SocketContextType | null>(null);
 
 export const SocketProvider = ({ children }: { children: ReactNode }) => {
-  const { user, logout } = useAuth();
+  const { user, login, logout } = useAuth();
   const queryClient = useQueryClient();
   const [connected, setConnected] = useState(false);
   const [activity, setActivity] = useState<ActivityEvent[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
 
-  // logout and user are recreated on every render; refs keep the socket from reconnecting.
+  // login, logout and user are recreated on every render; refs keep the socket from reconnecting.
+  const loginRef = useRef(login);
   const logoutRef = useRef(logout);
-  const userNameRef = useRef(user?.name);
+  const userRef = useRef(user);
+  loginRef.current = login;
   logoutRef.current = logout;
-  userNameRef.current = user?.name;
+  userRef.current = user;
 
   const userId = user?._id;
 
@@ -87,6 +90,28 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
         void queryClient.invalidateQueries({
           queryKey: ['employeeDetail', { _id: employeeId }],
         });
+        void queryClient.invalidateQueries({
+          queryKey: ['promotionHistory', employeeId],
+        });
+      }
+    );
+
+    socket.on(
+      SOCKET_EVENTS.USER_PROMOTED,
+      ({ designation, permissions }: UserPromotedEvent) => {
+        const current = userRef.current;
+        if (!current) {return;}
+        // Admins have no level-based permissions; keep what they have.
+        loginRef.current({
+          ...current,
+          designation,
+          permissions:
+            current.role === 'admin' ? current.permissions : permissions,
+        });
+        void queryClient.invalidateQueries({ queryKey: ['profileData'] });
+        toast.success(
+          `Congratulations! You've been promoted to ${designation}`
+        );
       }
     );
     socket.on(SOCKET_EVENTS.ANALYTICS_UPDATED, () => {
@@ -99,7 +124,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       setActivity((prev) => [event, ...prev].slice(0, MAX_ACTIVITY));
       setUnreadCount((count) => Math.min(count + 1, MAX_ACTIVITY));
       // The actor already sees a success toast from the form itself.
-      if (event.actor.name !== userNameRef.current) {
+      if (event.actor.name !== userRef.current?.name) {
         toast.info(describeActivity(event));
       }
     });

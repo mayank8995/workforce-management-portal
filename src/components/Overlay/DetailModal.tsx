@@ -6,6 +6,7 @@ import Accordion from '../Accordian/Accordian';
 import EmployeeDetailSkeleton from '../Skeleton/EmployeeDetailSkeleton';
 import ErrorPage from '../Error/ErrorPage';
 import { useEmployeeDetail } from '../../api/tanstack.query';
+import PromotionHistory from './PromotionHistory';
 
 interface DetailModalProps {
   onClose: () => void;
@@ -160,6 +161,7 @@ const DetailModal = ({ onClose, _id }: DetailModalProps) => {
                     );
                   })}
                 </div>
+                <PromotionHistory _id={_id} />
               </div>
             </>
           ) : (

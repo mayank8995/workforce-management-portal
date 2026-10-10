@@ -27,8 +27,9 @@ import ErrorPage from '../../Error/ErrorPage';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEmployeeDetail } from '../../../api/tanstack.query';
 import { useAuth } from '../../../context/AuthContext';
-import { Upload, X } from 'lucide-react';
+import { TrendingUp, Upload, X } from 'lucide-react';
 import FileUpload from '../../FileUpload/FileUpload';
+import PromoteEmployeeForm from '../PromoteEmployee/PromoteEmployeeForm';
 import { useModal } from '../../../context/ModalContext';
 
 function EmployeeForm({
@@ -401,7 +402,7 @@ function EmployeeForm({
                   <X width={18} height={18} />
                 </button>
               </div>
-              <button
+              {/* <button
                 type="button"
                 className="cursor-pointer flex items-center justify-end"
                 onClick={() => {
@@ -410,7 +411,7 @@ function EmployeeForm({
               >
                 <span>Upload documents</span>
                 <Upload size={24} className={iconActive} />
-              </button>
+              </button> */}
 
               <form
                 onSubmit={handleSubmit}
@@ -524,9 +525,31 @@ function EmployeeForm({
                         />
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="designation" className={labelclassName}>
-                          Designation
-                        </label>
+                        <div className="flex items-center justify-between">
+                          <label
+                            htmlFor="designation"
+                            className={labelclassName}
+                          >
+                            Designation
+                          </label>
+                          {isEditing && isUpdateAllowed && (
+                            <button
+                              type="button"
+                              onClick={() =>
+                                openModal(PromoteEmployeeForm, {
+                                  _id,
+                                  name: formValues?.name,
+                                  designation: formValues?.designation,
+                                  level: formValues?.level,
+                                  salary: Number(formValues?.salary),
+                                })
+                              }
+                              className="mb-1.5 flex items-center gap-1 text-xs font-medium text-indigo-600 cursor-pointer hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300"
+                            >
+                              <TrendingUp size={14} /> Promote
+                            </button>
+                          )}
+                        </div>
                         <FormField
                           errors={errors}
                           value={formValues?.designation}
@@ -536,7 +559,7 @@ function EmployeeForm({
                           onChange={onInputChange}
                           className={className}
                           id="designation"
-                          disabled={!isUpdateAllowed}
+                          disabled={isEditing || !isUpdateAllowed}
                         />
                       </div>
                       <div className="flex flex-col">
@@ -639,7 +662,7 @@ function EmployeeForm({
                           value={formValues?.level}
                           onChange={onSelectChange}
                           className={className}
-                          disabled={!isUpdateAllowed}
+                          disabled={isEditing || !isUpdateAllowed}
                         >
                           <option value="">Select level</option>
                           <option value="junior">Junior</option>
