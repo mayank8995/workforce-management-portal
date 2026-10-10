@@ -8,14 +8,7 @@ import {
   type SubmitEvent,
 } from 'react';
 import FormField from '../../components/Form/FormField';
-import {
-  BACKGROUND_COLOR,
-  CARD_BACKGROUND_COLOR,
-  className,
-  labelclassName,
-  PROFILE_SUBHEAD,
-  SIDE_BAR_ITEMS,
-} from '../../utils/constants';
+import { PROFILE_SUBHEAD, SIDE_BAR_ITEMS } from '../../utils/constants';
 import type { LoginProfile, ProfileForm } from '../../types/types';
 import {
   editProfileData,
@@ -28,6 +21,17 @@ import { getApiErrorDetails } from '../../services/utils.service';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../../context/AuthContext';
 import ProfileSettingSkeleton from '../../components/Skeleton/ProfileSettingSkeleton';
+import {
+  avatar,
+  button,
+  card,
+  cx,
+  form,
+  palette,
+  section,
+  shell,
+  text,
+} from '../../theme/theme';
 import ErrorPage from '../../components/Error/ErrorPage';
 import { useProfileData } from '../../api/tanstack.query';
 import { Pencil } from 'lucide-react';
@@ -237,36 +241,35 @@ function ProfileSettings() {
   return (
     <>
       {!isFormDataLoading ? (
-        <div className={`w-full ${BACKGROUND_COLOR}`}>
+        <div className="w-full">
           {!isError ? (
-            <div className={`p-3 xl:p-4 ${BACKGROUND_COLOR}`}>
+            <div className="p-3 xl:p-4">
               <div className="mb-5">
-                <h1 className="text-base xl:text-xl font-semibold text-slate-800 dark:text-slate-100">
-                  {SIDE_BAR_ITEMS.SETTINGS}
-                </h1>
-                <h2 className="text-xs xl:text-sm text-slate-500 mt-0.5 dark:text-slate-400">
-                  {PROFILE_SUBHEAD}
-                </h2>
+                <h1 className={shell.pageTitle}>{SIDE_BAR_ITEMS.SETTINGS}</h1>
+                <h2 className={shell.pageSubtitle}>{PROFILE_SUBHEAD}</h2>
               </div>
               <form
                 onSubmit={handleSubmit}
                 onReset={formReset}
-                className={`${CARD_BACKGROUND_COLOR} rounded-2xl border border-slate-200 flex flex-col dark:border-slate-800`}
+                className={cx(card.base, 'rounded-2xl flex flex-col')}
                 noValidate
               >
                 <fieldset disabled={!isUpdateAllowed}>
                   <div className="grid grid-cols-1 sm:grid-cols-2 p-4 gap-4 xl:gap-6">
-                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-6 h-full dark:border-slate-800 dark:bg-slate-800/40">
-                      <div className="flex items-center gap-2 mb-4">
-                        <div className="w-1 h-4 bg-indigo-500 rounded-full shrink-0" />
-                        <h2 className="text-sm xl:text-base font-semibold text-slate-800 dark:text-slate-100">
-                          Avatar
-                        </h2>
+                    <div className={cx(card.muted, 'p-6 h-full')}>
+                      <div className={section.heading}>
+                        <div className={section.accent} />
+                        <h2 className={section.title}>Avatar</h2>
                       </div>
 
                       <div className="flex flex-col items-center justify-center gap-4">
                         <div className="relative">
-                          <div className="w-28 h-28 xl:w-32 xl:h-32 rounded-full ring-4 ring-white overflow-hidden dark:ring-slate-800">
+                          <div
+                            className={cx(
+                              avatar.frame,
+                              'w-28 h-28 xl:w-32 xl:h-32 ring-4 ring-surface'
+                            )}
+                          >
                             <img
                               loading="eager"
                               src={
@@ -287,17 +290,27 @@ function ProfileSettings() {
                             onClick={handleUpload}
                             type="button"
                             disabled={!isUpdateAllowed}
-                            className={`${!isUpdateAllowed ? 'disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed dark:disabled:bg-slate-700' : 'cursor-pointer hover:bg-indigo-700'} absolute bottom-0 right-0 w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center ring-2 ring-white transition-colors duration-150 dark:ring-slate-800`}
+                            className={cx(
+                              !isUpdateAllowed
+                                ? 'disabled:bg-skeleton disabled:text-ink-subtle disabled:cursor-not-allowed'
+                                : 'cursor-pointer hover:bg-brand-700',
+                              'absolute bottom-0 right-0 w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center ring-2 ring-surface transition-colors duration-150'
+                            )}
                           >
                             <Pencil size={14} />
                           </button>
                         </div>
                         {formValues?.name && (
                           <div className="text-center min-w-0 max-w-full">
-                            <p className="font-medium text-slate-800 dark:text-slate-100 text-sm xl:text-base truncate">
+                            <p
+                              className={cx(
+                                text.primary,
+                                'font-medium text-sm xl:text-base truncate'
+                              )}
+                            >
                               {formValues?.name}
                             </p>
-                            <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
+                            <p className={cx(text.muted, 'text-xs truncate')}>
                               {formValues?.designation}
                             </p>
                           </div>
@@ -306,15 +319,13 @@ function ProfileSettings() {
                     </div>
 
                     <div>
-                      <div className="flex items-center gap-2 mb-4">
-                        <div className="w-1 h-4 bg-indigo-500 rounded-full shrink-0" />
-                        <h2 className="text-sm xl:text-base font-semibold text-slate-800 dark:text-slate-100">
-                          Personal Information
-                        </h2>
+                      <div className={section.heading}>
+                        <div className={section.accent} />
+                        <h2 className={section.title}>Personal Information</h2>
                       </div>
                       <div className="flex flex-col gap-4">
                         <div className="flex flex-col">
-                          <label htmlFor="name" className={labelclassName}>
+                          <label htmlFor="name" className={form.label}>
                             Name
                           </label>
                           <FormField
@@ -324,13 +335,13 @@ function ProfileSettings() {
                             type={'text'}
                             placeholder={'Enter your name'}
                             onChange={onInputChange}
-                            className={className}
+                            className={form.input}
                             id={'name'}
                             disabled={!isUpdateAllowed}
                           />
                         </div>
                         <div className="flex flex-col">
-                          <label htmlFor="phone" className={labelclassName}>
+                          <label htmlFor="phone" className={form.label}>
                             Phone Number
                           </label>
                           <FormField
@@ -340,13 +351,13 @@ function ProfileSettings() {
                             type={'text'}
                             placeholder={'Enter your phone number'}
                             onChange={onInputChange}
-                            className={className}
+                            className={form.input}
                             id={'phone'}
                             disabled={!isUpdateAllowed}
                           />
                         </div>
                         <div className="flex flex-col">
-                          <label htmlFor="email" className={labelclassName}>
+                          <label htmlFor="email" className={form.label}>
                             Email
                           </label>
                           <FormField
@@ -356,16 +367,13 @@ function ProfileSettings() {
                             type={'email'}
                             placeholder={'Enter your email'}
                             onChange={onInputChange}
-                            className={className}
+                            className={form.input}
                             id={'email'}
                             disabled={true}
                           />
                         </div>
                         <div className="flex flex-col">
-                          <label
-                            htmlFor="department"
-                            className={labelclassName}
-                          >
+                          <label htmlFor="department" className={form.label}>
                             Department
                           </label>
                           <FormField
@@ -375,16 +383,13 @@ function ProfileSettings() {
                             type={'text'}
                             placeholder={'Enter your department'}
                             onChange={onInputChange}
-                            className={className}
+                            className={form.input}
                             id={'department'}
                             disabled={true}
                           />
                         </div>
                         <div className="flex flex-col">
-                          <label
-                            htmlFor="designation"
-                            className={labelclassName}
-                          >
+                          <label htmlFor="designation" className={form.label}>
                             Designation
                           </label>
                           <FormField
@@ -394,7 +399,7 @@ function ProfileSettings() {
                             type={'text'}
                             placeholder={'Enter your designation'}
                             onChange={onInputChange}
-                            className={className}
+                            className={form.input}
                             id={'designation'}
                             disabled={true}
                           />
@@ -403,18 +408,16 @@ function ProfileSettings() {
                     </div>
                   </div>
 
-                  <hr className="border-t border-slate-200 dark:border-slate-800" />
+                  <hr className={section.divider} />
 
                   <div className="p-4">
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="w-1 h-4 bg-indigo-500 rounded-full shrink-0" />
-                      <h2 className="text-sm xl:text-base font-semibold text-slate-800 dark:text-slate-100">
-                        Account Information
-                      </h2>
+                    <div className={section.heading}>
+                      <div className={section.accent} />
+                      <h2 className={section.title}>Account Information</h2>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className={form.grid}>
                       <div className="flex flex-col">
-                        <label htmlFor="empId" className={labelclassName}>
+                        <label htmlFor="empId" className={form.label}>
                           Employee ID
                         </label>
                         <FormField
@@ -424,13 +427,13 @@ function ProfileSettings() {
                           type={'text'}
                           placeholder={'Enter your ID'}
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id={'empId'}
                           disabled={true}
                         />
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="joiningDate" className={labelclassName}>
+                        <label htmlFor="joiningDate" className={form.label}>
                           Joining Date
                         </label>
                         <FormField
@@ -440,13 +443,13 @@ function ProfileSettings() {
                           type={'date'}
                           placeholder={'Enter your joining date'}
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id={'joiningDate'}
                           disabled={true}
                         />
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="workMode" className={labelclassName}>
+                        <label htmlFor="workMode" className={form.label}>
                           Work Mode
                         </label>
                         <FormField
@@ -456,13 +459,13 @@ function ProfileSettings() {
                           type={'text'}
                           placeholder={'Hybrid/Remote/Onsite'}
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id={'workMode'}
                           disabled={true}
                         />
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="location" className={labelclassName}>
+                        <label htmlFor="location" className={form.label}>
                           Location
                         </label>
                         <FormField
@@ -472,7 +475,7 @@ function ProfileSettings() {
                           type={'text'}
                           placeholder={'Enter your location'}
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id={'location'}
                           disabled={true}
                         />
@@ -480,20 +483,20 @@ function ProfileSettings() {
                     </div>
                   </div>
 
-                  <hr className="border-t border-slate-200 dark:border-slate-800" />
+                  <hr className={section.divider} />
 
                   {!isEditing && (
                     <div className="flex justify-between items-center gap-3 p-4">
                       <button
                         type="submit"
-                        className="px-5 py-2.5 bg-indigo-600 text-white font-medium text-xs xl:text-sm rounded-lg transition-colors duration-150 cursor-pointer hover:enabled:bg-indigo-700 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed dark:disabled:bg-slate-800 dark:disabled:text-slate-600"
+                        className={`${button.primary} min-w-36`}
                         disabled={!isCreateAllowed}
                       >
                         {isLoading ? (
                           <TailSpin
                             visible={true}
                             height={20}
-                            color="#fff"
+                            color={palette.white}
                             radius="4"
                             ariaLabel="tail-spin-loading"
                             wrapperStyle={{}}
@@ -507,7 +510,7 @@ function ProfileSettings() {
                       <button
                         type="reset"
                         id="reset"
-                        className="px-5 py-2.5 border border-slate-300 text-slate-700 font-medium text-xs xl:text-sm rounded-lg transition-colors duration-150 cursor-pointer hover:enabled:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed dark:border-slate-700 dark:text-slate-300 dark:hover:enabled:bg-slate-800"
+                        className={button.secondary}
                         disabled={!isCreateAllowed}
                       >
                         Reset
@@ -519,14 +522,14 @@ function ProfileSettings() {
                       <button
                         type="submit"
                         id="edit"
-                        className="px-5 py-2.5 bg-indigo-600 text-white font-medium text-xs xl:text-sm rounded-lg transition-colors duration-150 cursor-pointer hover:enabled:bg-indigo-700 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed dark:disabled:bg-slate-800 dark:disabled:text-slate-600"
+                        className={`${button.primary} min-w-36`}
                         disabled={!isUpdateAllowed}
                       >
                         {isLoading ? (
                           <TailSpin
                             visible={true}
                             height={20}
-                            color="#fff"
+                            color={palette.white}
                             radius="4"
                             ariaLabel="tail-spin-loading"
                             wrapperStyle={{}}

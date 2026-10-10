@@ -1,7 +1,15 @@
 /* eslint-disable @eslint-react/set-state-in-effect */
 import React, { useEffect, useMemo, useState } from 'react';
 import { CORRESPONDING_FILTER_TABLE_KEY_NAME } from '../../utils/constants';
-import { button, chip, cx, modal, surface, text } from '../../theme/theme';
+import {
+  button,
+  chip,
+  cx,
+  modal,
+  palette,
+  surface,
+  text,
+} from '../../theme/theme';
 import { X } from 'lucide-react';
 import { TailSpin } from 'react-loader-spinner';
 import type {
@@ -234,12 +242,12 @@ const FilterModal = ({
                         className={cx(
                           'relative flex items-center justify-between gap-1 min-h-10.5 px-3 py-2 text-left text-xs font-medium wrap-anywhere cursor-pointer transition-colors',
                           isActive
-                            ? 'bg-white text-brand-700 dark:bg-slate-900 dark:text-brand-300'
-                            : `${text.muted} hover:bg-white/70 hover:text-slate-700 dark:hover:bg-white/5 dark:hover:text-slate-200`
+                            ? 'bg-surface text-accent'
+                            : `${text.muted} hover:bg-surface-hover hover:text-ink-secondary`
                         )}
                       >
                         {isActive && (
-                          <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-r-full bg-brand-600 dark:bg-brand-400" />
+                          <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-r-full bg-accent" />
                         )}
                         <span>
                           {CORRESPONDING_FILTER_TABLE_KEY_NAME[filterKey]}
@@ -313,7 +321,7 @@ const FilterModal = ({
                       visible={true}
                       height={20}
                       width={20}
-                      color="#fff"
+                      color={palette.white}
                       radius="4"
                       ariaLabel="tail-spin-loading"
                       wrapperStyle={{}}

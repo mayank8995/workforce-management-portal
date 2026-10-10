@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react';
 import type { ListType, MobileTableProps } from '../../types/types';
 import {
-  checkboxClass,
   EDIT_EMPLOYEE_SUBTITLE,
   EDIT_EMPLOYEE_TITLE,
-  gradients,
   NAME,
 } from '../../utils/constants';
 import FormField from '../Form/FormField';
@@ -13,6 +11,14 @@ import { useModal } from '../../context/ModalContext';
 import AndOthersComponent from '../AndOthers/AndOthersComponent';
 import EmployeeForm from '../Form/EmployeeForm/EmployeeForm';
 import { useAuth } from '../../context/AuthContext';
+import {
+  avatar,
+  avatarGradient,
+  cx,
+  form,
+  table,
+  text,
+} from '../../theme/theme';
 
 function MobileViewCardForTable<T extends ListType>({
   list,
@@ -62,12 +68,19 @@ function MobileViewCardForTable<T extends ListType>({
         return (
           <article
             key={`${row._id}-data`}
-            className={`min-w-0 rounded-xl border bg-white p-4 max-xs:p-3 shadow-sm transition-colors dark:bg-slate-900 ${isSelected ? 'border-brand-600 ring-1 ring-brand-600 dark:border-brand-400 dark:ring-brand-400' : 'border-slate-200 dark:border-slate-800'}`}
+            className={cx(
+              table.mobileCard,
+              isSelected ? table.mobileCardSelected : table.mobileCardIdle
+            )}
           >
             {hasNameColumn && (
-              <div className="flex items-center gap-3 max-xs:gap-2.5 min-w-0 pb-3 mb-3 border-b border-slate-100 dark:border-slate-800">
+              <div className="flex items-center gap-3 max-xs:gap-2.5 min-w-0 pb-3 mb-3 border-b border-line-subtle">
                 <span
-                  className={`shrink-0 w-10 h-10 max-xs:w-9 max-xs:h-9 rounded-full text-white font-semibold text-sm max-xs:text-xs flex items-center justify-center ${gradients[index % gradients.length]}`}
+                  className={cx(
+                    avatar.base,
+                    'w-10 h-10 max-xs:w-9 max-xs:h-9 text-sm max-xs:text-xs',
+                    avatarGradient(index)
+                  )}
                 >
                   {name
                     ?.split(' ')
@@ -88,17 +101,22 @@ function MobileViewCardForTable<T extends ListType>({
                     });
                   }}
                 >
-                  <h2 className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 truncate">
+                  <h2
+                    className={cx(
+                      'text-sm font-semibold truncate',
+                      text.accent
+                    )}
+                  >
                     {name}
                   </h2>
                   {Array.isArray(nameValue) && nameValue.length > 1 && (
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                    <p className={cx('text-xs', text.muted)}>
                       +{nameValue.length - 1} more
                     </p>
                   )}
                 </button>
                 <FormField
-                  className={`${checkboxClass} h-5! w-5! ${!isUpdateAllowed ? 'cursor-pointer-none' : 'cursor-pointer'}`}
+                  className={`${form.checkbox} h-5! w-5! ${!isUpdateAllowed ? 'cursor-pointer-none' : 'cursor-pointer'}`}
                   disabled={!isUpdateAllowed}
                   name={String(row?._id)}
                   type={'checkbox'}
@@ -116,10 +134,15 @@ function MobileViewCardForTable<T extends ListType>({
                     key={column.key}
                     className="min-w-0 max-xs:flex max-xs:items-center max-xs:justify-between max-xs:gap-3"
                   >
-                    <dt className="text-[11px] font-medium uppercase tracking-wide text-slate-400 dark:text-slate-500 truncate max-xs:shrink-0 max-xs:max-w-[45%]">
+                    <dt
+                      className={cx(
+                        table.mobileLabel,
+                        'max-xs:shrink-0 max-xs:max-w-[45%]'
+                      )}
+                    >
                       {column?.header}
                     </dt>
-                    <dd className="mt-1 max-xs:mt-0 max-xs:min-w-0 max-xs:text-right max-xs:flex max-xs:justify-end max-xs:*:flex-none max-xs:*:items-end text-sm text-slate-800 dark:text-slate-200 wrap-break-word">
+                    <dd className="mt-1 max-xs:mt-0 max-xs:min-w-0 max-xs:text-right max-xs:flex max-xs:justify-end max-xs:*:flex-none max-xs:*:items-end text-sm text-ink wrap-break-word">
                       {Array.isArray(value) && value?.length > 0 ? (
                         <AndOthersComponent
                           values={value}

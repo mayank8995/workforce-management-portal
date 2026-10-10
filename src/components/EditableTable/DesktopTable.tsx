@@ -1,7 +1,6 @@
 import { TextSearch } from 'lucide-react';
 import React, { useEffect } from 'react';
 import {
-  checkboxClass,
   EDIT_EMPLOYEE_SUBTITLE,
   EDIT_EMPLOYEE_TITLE,
   NAME,
@@ -15,15 +14,11 @@ import { useModal } from '../../context/ModalContext';
 import AndOthersComponent from '../AndOthers/AndOthersComponent';
 import EmployeeForm from '../Form/EmployeeForm/EmployeeForm';
 import { useAuth } from '../../context/AuthContext';
+import { cx, emptyState, form, skeleton, table } from '../../theme/theme';
 
 // checkbox column + first data column stay pinned while the rest scrolls horizontally
 const stickyCheckboxCell = 'sticky left-0 z-10 w-12 min-w-12 bg-inherit';
-const stickyFirstCell =
-  'sticky left-12 z-10 bg-inherit shadow-[inset_-1px_0_0_rgb(226_232_240)] dark:shadow-[inset_-1px_0_0_rgb(30_41_59)]';
-const thCss =
-  'px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider whitespace-nowrap select-none text-slate-500 dark:text-slate-400';
-const tdCss =
-  'px-4 py-3 text-sm whitespace-nowrap text-slate-700 dark:text-slate-300';
+const stickyFirstCell = cx('sticky left-12 z-10 bg-inherit', table.stickyEdge);
 
 const isVisible = (item: { metadata?: { show?: boolean } }) =>
   item?.metadata?.show !== false;
@@ -70,17 +65,15 @@ const DesktopTable = <T extends ListType>(props: DesktopTableProps<T>) => {
 
   const visibleHeaders = headersData?.filter(isVisible);
   const visibleColumns = columnsData?.filter(isVisible);
-  const checkboxCss = `${checkboxClass} ${!isUpdateAllowed ? 'cursor-pointer-none' : 'cursor-pointer'}`;
+  const checkboxCss = `${form.checkbox} ${!isUpdateAllowed ? 'cursor-pointer-none' : 'cursor-pointer'}`;
 
   return (
     <div className="hidden lg:block overflow-x-auto">
       <table className="w-full min-w-max border-separate border-spacing-0">
         <thead>
           {visibleHeaders?.length > 0 && (
-            <tr className="bg-slate-50 dark:bg-slate-900">
-              <th
-                className={`${thCss} ${stickyCheckboxCell} border-b border-slate-200 dark:border-slate-800`}
-              >
+            <tr className={table.headRow}>
+              <th className={cx(table.headCell, stickyCheckboxCell)}>
                 <FormField
                   ref={ref}
                   name={'selectAll'}
@@ -99,7 +92,11 @@ const DesktopTable = <T extends ListType>(props: DesktopTableProps<T>) => {
                 return (
                   <th
                     key={header.key}
-                    className={`${thCss} ${index === 0 ? stickyFirstCell : ''} cursor-pointer border-b border-slate-200 dark:border-slate-800 hover:text-slate-800 dark:hover:text-slate-200`}
+                    className={cx(
+                      table.headCell,
+                      index === 0 && stickyFirstCell,
+                      'cursor-pointer hover:text-ink'
+                    )}
                     aria-sort={getAriaSort(
                       isSorted,
                       tableQueryParams?.sortOrder
@@ -107,7 +104,10 @@ const DesktopTable = <T extends ListType>(props: DesktopTableProps<T>) => {
                     onClick={() => handleSort(header?.key)}
                   >
                     <span
-                      className={`inline-flex items-center gap-1.5 ${isSorted ? 'text-brand-600 dark:text-brand-300' : ''}`}
+                      className={cx(
+                        'inline-flex items-center gap-1.5',
+                        isSorted && table.headCellSorted
+                      )}
                     >
                       {header?.value} {getSortIcon(header?.key)}
                     </span>
@@ -125,12 +125,15 @@ const DesktopTable = <T extends ListType>(props: DesktopTableProps<T>) => {
                 return (
                   <tr
                     key={`${row._id}-${index * 2}`}
-                    className={`group transition-colors duration-150 ${isSelected ? 'bg-brand-50 dark:bg-brand-950' : 'bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900'}`}
+                    className={cx(
+                      'group transition-colors duration-150',
+                      isSelected ? table.rowSelected : table.row
+                    )}
                   >
                     {/* {Hooking checkboxlist into list as checkbox list is derived from list} */}
                     <td
                       id={String(row?._id)}
-                      className={`${tdCss} ${stickyCheckboxCell} border-b border-slate-100 dark:border-slate-800/80`}
+                      className={cx(table.cell, stickyCheckboxCell)}
                     >
                       <FormField
                         name={String(row?._id)}
@@ -148,14 +151,18 @@ const DesktopTable = <T extends ListType>(props: DesktopTableProps<T>) => {
                       return (
                         <td
                           key={column?.key}
-                          className={`${tdCss} ${colIndex === 0 ? stickyFirstCell : ''} ${isName ? 'font-medium' : ''} border-b border-slate-100 dark:border-slate-800/80`}
+                          className={cx(
+                            table.cell,
+                            colIndex === 0 && stickyFirstCell,
+                            isName && 'font-medium'
+                          )}
                           id={String(row?._id)}
                         >
                           <button
                             id={column?.key}
                             className={`text-left max-w-full ${
                               isName
-                                ? 'cursor-pointer rounded-md hover:underline underline-offset-4 decoration-indigo-300 focus-visible:ring-2 focus-visible:ring-brand-600'
+                                ? 'cursor-pointer rounded-md hover:underline underline-offset-4 decoration-brand-300 focus-visible:ring-2 focus-visible:ring-brand-600'
                                 : 'cursor-default'
                             }`}
                             type="button"
@@ -198,15 +205,13 @@ const DesktopTable = <T extends ListType>(props: DesktopTableProps<T>) => {
             ) : (
               <tr>
                 <td colSpan={visibleHeaders?.length + 1} className="py-16">
-                  <div className="flex flex-col items-center justify-center gap-3 text-center">
-                    <span className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500">
+                  <div className={emptyState.wrapper}>
+                    <span className={emptyState.icon}>
                       <TextSearch size={22} />
                     </span>
                     <div>
-                      <h1 className="text-sm font-semibold text-slate-800 dark:text-slate-100">
-                        {NO_RESULT_FOUND}
-                      </h1>
-                      <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                      <h1 className={emptyState.title}>{NO_RESULT_FOUND}</h1>
+                      <p className={emptyState.description}>
                         Try adjusting your search or filters.
                       </p>
                     </div>
@@ -228,10 +233,14 @@ const DesktopTable = <T extends ListType>(props: DesktopTableProps<T>) => {
                       return (
                         <td
                           key={`${i + 1 + id + rowsPerPage}`}
-                          className="px-4 py-3.5 border-b border-slate-100 dark:border-slate-800/80"
+                          className="px-4 py-3.5 border-b border-line-subtle"
                         >
                           <div
-                            className={`${skeletonCellCss[i] ?? 'h-4 w-24'} rounded bg-slate-200 dark:bg-slate-800`}
+                            className={cx(
+                              skeletonCellCss[i] ?? 'h-4 w-24',
+                              'rounded',
+                              skeleton.fill
+                            )}
                           ></div>
                         </td>
                       );
