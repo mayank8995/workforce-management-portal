@@ -1,4 +1,5 @@
 import Toggle from '../Toggle/Toggle';
+import RealtimeStatus from '../Realtime/RealtimeStatus';
 import { ADMIN_PORTAL } from '../../utils/constants';
 
 function Header() {
@@ -7,9 +8,10 @@ function Header() {
       <h1 className="font-semibold tracking-tight text-slate-800 dark:text-slate-100 text-base md:text-xl truncate">
         {ADMIN_PORTAL}
       </h1>
-      {/* <div className="shrink-0"> */}
-      <Toggle />
-      {/* </div> */}
+      <div className="ml-auto md:ml-0 flex items-center gap-2">
+        <RealtimeStatus />
+        <Toggle />
+      </div>
     </header>
   );
 }
