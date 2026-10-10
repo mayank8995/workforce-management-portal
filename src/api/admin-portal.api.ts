@@ -10,6 +10,8 @@ import type {
   LoginForm,
   LoginProfile,
   ProfileForm,
+  PromotionPayload,
+  PromotionRecord,
   SignUpForm,
   TableQueryParams,
   UploadStatusResponse,
@@ -289,6 +291,24 @@ export const editEmployee = async (
     console.error('URL:', url);
     throw err;
   }
+};
+
+export const promoteEmployee = async (
+  _id: string,
+  payload: PromotionPayload
+) => {
+  const res = await apiClient.patch(
+    `/employees/${_id}/promote`,
+    JSON.stringify(payload)
+  );
+  return res;
+};
+
+export const getPromotionHistory = async (_id: string) => {
+  const res = await apiClient.get<{
+    data: { history: PromotionRecord[] };
+  }>(`/employees/${_id}/promotions`);
+  return res?.data?.data?.history ?? [];
 };
 
 export const guestLogin = async () => {

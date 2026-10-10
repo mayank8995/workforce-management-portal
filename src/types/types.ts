@@ -1,7 +1,7 @@
 import type { QueryClientConfig } from '@tanstack/react-query';
 import type { ChangeEvent, ComponentProps, ReactNode, RefObject } from 'react';
 
-interface Permission {
+export interface Permission {
   resource: string;
   actions: string[];
 }
@@ -645,4 +645,27 @@ export interface ChunkUploadOptions {
   chunkSize: number;
   onProgress?: (uploadedBytes: number) => void;
   signal?: AbortSignal;
+}
+
+export type EmployeeLevel = 'junior' | 'senior' | 'lead' | 'admin' | 'executive';
+
+export interface PromotionPayload {
+  newDesignation: string;
+  newLevel: EmployeeLevel;
+  newSalary?: number;
+  effectiveDate?: string;
+  // Current designation as seen by the client; the server rejects with 409 if it changed.
+  expectedDesignation: string;
+}
+
+export interface PromotionRecord {
+  readonly _id: string;
+  readonly previousDesignation: string;
+  readonly currentDesignation: string;
+  readonly previousLevel?: EmployeeLevel;
+  readonly currentLevel?: EmployeeLevel;
+  readonly previousSalary?: number;
+  readonly currentSalary?: number;
+  readonly promotedBy?: { readonly _id: string; readonly name: string } | null;
+  readonly promotedOn: string;
 }
