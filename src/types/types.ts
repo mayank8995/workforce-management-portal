@@ -605,3 +605,44 @@ export type EmployeeDirectoryResponse = Metadata & {
 };
 
 export type ScreenType = 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+// UPload types
+export type UploadStatus =
+  | 'idle'
+  | 'uploading'
+  | 'paused'
+  | 'failed'
+  | 'completed';
+
+export interface CreateUploadRequest {
+  fileName: string;
+  fileSize: number;
+  chunkSize: number;
+}
+
+export interface CreateUploadResponse {
+  data: {
+    uploadId: string;
+    totalChunks: number;
+  };
+}
+
+export interface UploadStatusResponse {
+  data: {
+    uploadId: string;
+    fileName: string;
+    fileSize: number;
+    chunkSize: number;
+    totalChunks: number;
+    uploadedChunks: number[];
+    status: 'uploading' | 'paused' | 'failed' | 'completed';
+  };
+}
+
+export interface ChunkUploadOptions {
+  file: File;
+  uploadId: string;
+  chunkIndex: number;
+  chunkSize: number;
+  onProgress?: (uploadedBytes: number) => void;
+  signal?: AbortSignal;
+}

@@ -2,6 +2,9 @@ import { toast } from 'react-toastify';
 import apiClient from '../services/http-common.service';
 import { getApiErrorDetails } from '../services/utils.service';
 import type {
+  ChunkUploadOptions,
+  CreateUploadRequest,
+  CreateUploadResponse,
   EmployeeFormType,
   FilterList,
   LoginForm,
@@ -9,6 +12,7 @@ import type {
   ProfileForm,
   SignUpForm,
   TableQueryParams,
+  UploadStatusResponse,
 } from '../types/types';
 import { router } from '../router/router';
 import { getEnv } from '../config/env';
@@ -320,4 +324,67 @@ export const aiChat = async (data: string) => {
     console.error('URL:', url);
     throw err;
   }
+};
+
+export const createUpload = async (
+  payload: CreateUploadRequest
+): Promise<CreateUploadResponse> => {
+  const { data } = await apiClient.post<CreateUploadResponse>(
+    '/uploads',
+    payload
+  );
+
+  return data;
+};
+
+export const getUploadStatus = async (
+  uploadId: string
+): Promise<UploadStatusResponse> => {
+  const { data } = await apiClient.get<UploadStatusResponse>(
+    `/uploads/${uploadId}`
+  );
+
+  return data;
+};
+
+export const uploadChunk = ({
+  file,
+  uploadId,
+  chunkIndex,
+  chunkSize,
+  onProgress,
+  signal,
+}: ChunkUploadOptions & {
+  signal?: AbortSignal;
+}): Promise<void> => {
+  const start = chunkIndex * chunkSize;
+  const end = Math.min(start + chunkSize, file.size);
+
+  const chunk = file.slice(start, end);
+
+  return apiClient.put(`/uploads/${uploadId}/chunks/${chunkIndex}`, chunk, {
+    headers: {
+      'Content-Type': 'application/octet-stream',
+    },
+
+    onUploadProgress: (event) => {
+      if (!event.total) return;
+
+      onProgress?.(event.loaded);
+    },
+
+    signal,
+  });
+};
+
+export const pauseUpload = async (uploadId: string): Promise<void> => {
+  await apiClient.patch(`/uploads/${uploadId}/pause`);
+};
+
+export const resumeUpload = async (uploadId: string): Promise<void> => {
+  await apiClient.patch(`/uploads/${uploadId}/resume`);
+};
+
+export const completeUpload = async (uploadId: string): Promise<void> => {
+  await apiClient.post(`/uploads/${uploadId}/complete`);
 };
