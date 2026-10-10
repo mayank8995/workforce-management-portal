@@ -68,7 +68,7 @@ function Dashboard() {
               </div>
             </>
           ) : (
-            <div className="flex flex-col flex-1 h-screen overflow-y-auto justify-center items-center dark:bg-gray-800">
+            <div className="flex flex-col flex-1 h-screen overflow-y-auto justify-center items-center">
               <ErrorPage refetchAll={refetchAll} />{' '}
             </div>
           )}

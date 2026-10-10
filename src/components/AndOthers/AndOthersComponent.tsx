@@ -33,7 +33,7 @@ const AndOthersComponent = ({
               )}
               {!showOthers && index === 0 && (
                 <span
-                  className="inline-flex justify-center text-indigo-600 dark:text-indigo-400 text-[10px]
+                  className="inline-flex justify-center text-accent text-[10px]
                      md:text-xs truncate cursor-pointer"
                   onClick={() => setShowOthers(true)}
                 >

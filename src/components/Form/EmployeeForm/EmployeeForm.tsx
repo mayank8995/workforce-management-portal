@@ -7,9 +7,6 @@ import { toast } from 'react-toastify';
 import { validateField } from '../../../services/form-validation.service';
 import { getApiErrorDetails } from '../../../services/utils.service';
 import {
-  className,
-  // iconActive,
-  labelclassName,
   VIEW_EMPLOYEE_SUB_TTILE,
   VIEW_EMPLOYEE_TTILE,
 } from '../../../utils/constants';
@@ -20,6 +17,7 @@ import {
   chip,
   form,
   modal,
+  palette,
   section,
   text,
 } from '../../../theme/theme';
@@ -411,7 +409,7 @@ function EmployeeForm({
                 }}
               >
                 <span>Upload documents</span>
-                <Upload size={24} className={iconActive} />
+                <Upload size={24} className={icon.active} />
               </button> */}
 
               <form
@@ -429,7 +427,7 @@ function EmployeeForm({
 
                     <div className={form.grid}>
                       <div className="flex flex-col">
-                        <label htmlFor="name" className={labelclassName}>
+                        <label htmlFor="name" className={form.label}>
                           Name
                         </label>
                         <FormField
@@ -439,13 +437,13 @@ function EmployeeForm({
                           type="text"
                           placeholder="Enter employee name"
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id="name"
                           disabled={!isUpdateAllowed}
                         />
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="email" className={labelclassName}>
+                        <label htmlFor="email" className={form.label}>
                           Email
                         </label>
                         <FormField
@@ -455,13 +453,13 @@ function EmployeeForm({
                           type="email"
                           placeholder="Enter employee email"
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id="email"
                           disabled={isEditing || !isUpdateAllowed}
                         />
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="empId" className={labelclassName}>
+                        <label htmlFor="empId" className={form.label}>
                           Employee ID
                         </label>
                         <FormField
@@ -471,13 +469,13 @@ function EmployeeForm({
                           type="text"
                           placeholder="Auto generated"
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id="empId"
                           disabled={true}
                         />
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="phone" className={labelclassName}>
+                        <label htmlFor="phone" className={form.label}>
                           Phone Number
                         </label>
                         <FormField
@@ -487,7 +485,7 @@ function EmployeeForm({
                           type="text"
                           placeholder="Enter phone number"
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id="phone"
                           maxlength={15}
                           disabled={!isUpdateAllowed}
@@ -506,7 +504,7 @@ function EmployeeForm({
 
                     <div className={form.grid}>
                       <div className="flex flex-col">
-                        <label htmlFor="department" className={labelclassName}>
+                        <label htmlFor="department" className={form.label}>
                           Department
                         </label>
                         <FormField
@@ -516,17 +514,14 @@ function EmployeeForm({
                           type="text"
                           placeholder="Enter department"
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id="department"
                           disabled={!isUpdateAllowed}
                         />
                       </div>
                       <div className="flex flex-col">
                         <div className="flex items-center justify-between">
-                          <label
-                            htmlFor="designation"
-                            className={labelclassName}
-                          >
+                          <label htmlFor="designation" className={form.label}>
                             Designation
                           </label>
                           {isEditing && isUpdateAllowed && (
@@ -554,13 +549,13 @@ function EmployeeForm({
                           type="text"
                           placeholder="Enter designation"
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id="designation"
                           disabled={isEditing || !isUpdateAllowed}
                         />
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="manager" className={labelclassName}>
+                        <label htmlFor="manager" className={form.label}>
                           Manager
                         </label>
                         <FormField
@@ -570,13 +565,13 @@ function EmployeeForm({
                           type="text"
                           placeholder="Enter manager name"
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id="manager"
                           disabled={!isUpdateAllowed}
                         />
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="joiningDate" className={labelclassName}>
+                        <label htmlFor="joiningDate" className={form.label}>
                           Joining Date
                         </label>
                         <FormField
@@ -586,7 +581,7 @@ function EmployeeForm({
                           type="date"
                           placeholder="Select joining date"
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id="joiningDate"
                           disabled={isEditing || !isUpdateAllowed}
                         />
@@ -594,7 +589,7 @@ function EmployeeForm({
                       <div className="flex flex-col">
                         <label
                           htmlFor="yearsOfExperience"
-                          className={labelclassName}
+                          className={form.label}
                         >
                           Years of Experience
                         </label>
@@ -605,13 +600,13 @@ function EmployeeForm({
                           type="number"
                           placeholder="Enter years of experience"
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id="yearsOfExperience"
                           disabled={!isUpdateAllowed}
                         />
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="location" className={labelclassName}>
+                        <label htmlFor="location" className={form.label}>
                           Location
                         </label>
                         <FormField
@@ -621,13 +616,13 @@ function EmployeeForm({
                           type="text"
                           placeholder="Enter location"
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id="location"
                           disabled={!isUpdateAllowed}
                         />
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="workMode" className={labelclassName}>
+                        <label htmlFor="workMode" className={form.label}>
                           Work Mode
                         </label>
                         <select
@@ -635,7 +630,7 @@ function EmployeeForm({
                           name="workMode"
                           value={formValues?.workMode}
                           onChange={onSelectChange}
-                          className={className}
+                          className={form.input}
                           disabled={!isUpdateAllowed}
                         >
                           <option value="">Select work mode</option>
@@ -648,7 +643,7 @@ function EmployeeForm({
                         )}
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="level" className={labelclassName}>
+                        <label htmlFor="level" className={form.label}>
                           Level
                         </label>
                         <select
@@ -656,7 +651,7 @@ function EmployeeForm({
                           name="level"
                           value={formValues?.level}
                           onChange={onSelectChange}
-                          className={className}
+                          className={form.input}
                           disabled={isEditing || !isUpdateAllowed}
                         >
                           <option value="">Select level</option>
@@ -684,10 +679,7 @@ function EmployeeForm({
                       <>
                         <div className={form.grid}>
                           <div className="flex flex-col">
-                            <label
-                              htmlFor="projectName"
-                              className={labelclassName}
-                            >
+                            <label htmlFor="projectName" className={form.label}>
                               Project Name
                             </label>
                             <FormField
@@ -697,12 +689,12 @@ function EmployeeForm({
                               type="text"
                               placeholder="Enter project name"
                               onChange={onProjectInputChange}
-                              className={className}
+                              className={form.input}
                               id="projectName"
                             />
                           </div>
                           <div className="flex flex-col">
-                            <label htmlFor="status" className={labelclassName}>
+                            <label htmlFor="status" className={form.label}>
                               Status
                             </label>
                             <select
@@ -710,7 +702,7 @@ function EmployeeForm({
                               name="status"
                               value={projectForm.status}
                               onChange={onProjectInputChange}
-                              className={className}
+                              className={form.input}
                             >
                               <option value="">Select status</option>
                               <option value="Active">Active</option>
@@ -726,10 +718,7 @@ function EmployeeForm({
                             )}
                           </div>
                           <div className="flex flex-col">
-                            <label
-                              htmlFor="riskStatus"
-                              className={labelclassName}
-                            >
+                            <label htmlFor="riskStatus" className={form.label}>
                               Risk Status
                             </label>
                             <select
@@ -737,7 +726,7 @@ function EmployeeForm({
                               name="riskStatus"
                               value={projectForm.riskStatus}
                               onChange={onProjectInputChange}
-                              className={className}
+                              className={form.input}
                             >
                               <option value="">Select risk status</option>
                               <option value="On Track">On Track</option>
@@ -753,7 +742,7 @@ function EmployeeForm({
                           <div className="flex flex-col">
                             <label
                               htmlFor="priorityRanking"
-                              className={labelclassName}
+                              className={form.label}
                             >
                               Priority Ranking
                             </label>
@@ -764,7 +753,7 @@ function EmployeeForm({
                               type="number"
                               placeholder="Enter priority ranking"
                               onChange={onProjectInputChange}
-                              className={className}
+                              className={form.input}
                               id="priorityRanking"
                             />
                           </div>
@@ -840,7 +829,7 @@ function EmployeeForm({
                                 <button
                                   type="button"
                                   onClick={() => removeProject(index)}
-                                  className="shrink-0 text-xs font-medium text-red-600 transition-colors hover:text-red-700 cursor-pointer dark:text-red-400 dark:hover:text-red-300"
+                                  className={`shrink-0 ${button.dangerLink} text-xs!`}
                                 >
                                   Delete
                                 </button>
@@ -864,7 +853,7 @@ function EmployeeForm({
 
                     <div className={form.grid}>
                       <div className="flex flex-col">
-                        <label htmlFor="salary" className={labelclassName}>
+                        <label htmlFor="salary" className={form.label}>
                           Salary
                         </label>
                         <FormField
@@ -874,13 +863,13 @@ function EmployeeForm({
                           type="number"
                           placeholder="Enter salary"
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id="salary"
                           disabled={!isUpdateAllowed}
                         />
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="rating" className={labelclassName}>
+                        <label htmlFor="rating" className={form.label}>
                           Rating
                         </label>
                         <FormField
@@ -890,7 +879,7 @@ function EmployeeForm({
                           type="number"
                           placeholder="0 - 5"
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id="rating"
                           disabled={!isUpdateAllowed}
                         />
@@ -898,7 +887,7 @@ function EmployeeForm({
                       <div className="flex flex-col">
                         <label
                           htmlFor="attendancePercentage"
-                          className={labelclassName}
+                          className={form.label}
                         >
                           Attendance Percentage
                         </label>
@@ -909,7 +898,7 @@ function EmployeeForm({
                           type="number"
                           placeholder="0 - 100"
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id="attendancePercentage"
                           disabled={!isUpdateAllowed}
                         />
@@ -917,7 +906,7 @@ function EmployeeForm({
                       <div className="flex flex-col">
                         <label
                           htmlFor="employeeSatisfaction"
-                          className={labelclassName}
+                          className={form.label}
                         >
                           Employee Satisfaction
                         </label>
@@ -926,7 +915,7 @@ function EmployeeForm({
                           name="employeeSatisfaction"
                           value={formValues?.employeeSatisfaction}
                           onChange={onSelectChange}
-                          className={className}
+                          className={form.input}
                           disabled={!isUpdateAllowed}
                         >
                           <option value="">Select satisfaction</option>
@@ -960,7 +949,7 @@ function EmployeeForm({
                           type="text"
                           placeholder="Enter a skill"
                           onChange={(e) => setSkillInput(e?.target?.value)}
-                          className={className}
+                          className={form.input}
                           id="skillInput"
                           disabled={!isUpdateAllowed}
                         />
@@ -985,7 +974,7 @@ function EmployeeForm({
                             <button
                               type="button"
                               onClick={() => removeSkill(skill)}
-                              className="cursor-pointer text-brand-400 transition-colors hover:text-red-500 disabled:cursor-not-allowed"
+                              className="cursor-pointer text-accent transition-colors hover:text-danger disabled:cursor-not-allowed"
                               disabled={!isUpdateAllowed}
                             >
                               <X size={12} />
@@ -1038,7 +1027,7 @@ function EmployeeForm({
                               <TailSpin
                                 visible={true}
                                 height={20}
-                                color="#fff"
+                                color={palette.white}
                                 radius="4"
                                 ariaLabel="tail-spin-loading"
                                 wrapperStyle={{}}
@@ -1070,7 +1059,7 @@ function EmployeeForm({
                               <TailSpin
                                 visible={true}
                                 height={20}
-                                color="#fff"
+                                color={palette.white}
                                 radius="4"
                                 ariaLabel="tail-spin-loading"
                                 wrapperStyle={{}}

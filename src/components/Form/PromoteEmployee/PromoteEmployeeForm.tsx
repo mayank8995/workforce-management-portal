@@ -5,7 +5,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { TrendingUp, X } from 'lucide-react';
 import { promoteEmployee } from '../../../api/admin-portal.api';
 import { getApiErrorDetails } from '../../../services/utils.service';
-import { className, labelclassName } from '../../../utils/constants';
+import { button, card, form, modal, palette, text } from '../../../theme/theme';
 import type { EmployeeLevel } from '../../../types/types';
 
 const LEVEL_OPTIONS: { value: EmployeeLevel; label: string }[] = [
@@ -55,7 +55,9 @@ function PromoteEmployeeForm({
 
   async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!isValid) {return;}
+    if (!isValid) {
+      return;
+    }
     setIsSaving(true);
     setError(null);
     setConflict(false);
@@ -88,22 +90,11 @@ function PromoteEmployeeForm({
   }
 
   return (
-    <div
-      className="p-4 sm:p-5
-        w-full sm:w-115 md:w-125
-        h-full
-        overflow-y-auto
-        bg-white dark:bg-slate-900
-        text-slate-900 dark:text-slate-100
-        shadow-2xl border-l border-slate-200 dark:border-slate-800
-        fixed z-300 right-0 top-0"
-    >
-      <div className="mb-5 flex justify-between items-start gap-3">
+    <div className={`${modal.drawer} lg:w-125!`}>
+      <div className={modal.stickyHeader}>
         <div className="min-w-0">
-          <h1 className="text-base xl:text-xl font-semibold text-slate-800 dark:text-slate-100 truncate">
-            Promote {name}
-          </h1>
-          <h2 className="text-xs xl:text-sm text-slate-500 mt-0.5 dark:text-slate-400">
+          <h1 className={`${modal.title} xl:text-lg`}>Promote {name}</h1>
+          <h2 className={modal.subtitle}>
             Updates the employee, their login profile and promotion history
             together.
           </h2>
@@ -112,31 +103,35 @@ function PromoteEmployeeForm({
           type="button"
           aria-label="Close"
           onClick={onClose}
-          className="shrink-0 flex items-center justify-center w-8 h-8 rounded-lg cursor-pointer transition-colors text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-300"
+          className={button.icon}
         >
           <X width={18} height={18} />
         </button>
       </div>
 
-      <div className="mb-4 rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm dark:border-slate-800 dark:bg-slate-800/40">
-        <p className="text-xs text-slate-500 dark:text-slate-400">Current</p>
-        <p className="font-medium text-slate-800 dark:text-slate-100">
-          {designation}
-          {level && (
-            <span className="ml-2 text-xs font-normal capitalize text-slate-500 dark:text-slate-400">
-              {level}
-            </span>
-          )}
-        </p>
+      <div className="px-4 sm:px-5 pt-5">
+        <div className={`${card.muted} p-3! text-sm`}>
+          <p className={`text-xs ${text.muted}`}>Current</p>
+          <p className={`font-medium ${text.primary}`}>
+            {designation}
+            {level && (
+              <span
+                className={`ml-2 text-xs font-normal capitalize ${text.muted}`}
+              >
+                {level}
+              </span>
+            )}
+          </p>
+        </div>
       </div>
 
       <form
         onSubmit={(e) => void handleSubmit(e)}
-        className="rounded-2xl border border-slate-200 bg-white p-4 flex flex-col gap-4 dark:border-slate-800 dark:bg-slate-900/60"
+        className="px-4 sm:px-5 py-5 flex flex-col gap-4"
         noValidate
       >
         <div className="flex flex-col">
-          <label htmlFor="newDesignation" className={labelclassName}>
+          <label htmlFor="newDesignation" className={form.label}>
             New designation
           </label>
           <input
@@ -147,14 +142,14 @@ function PromoteEmployeeForm({
             value={newDesignation}
             maxLength={35}
             onChange={(e) => setNewDesignation(e.target.value)}
-            className={className}
+            className={form.input}
             disabled={isSaving}
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className={form.grid}>
           <div className="flex flex-col">
-            <label htmlFor="newLevel" className={labelclassName}>
+            <label htmlFor="newLevel" className={form.label}>
               New level
             </label>
             <select
@@ -162,7 +157,7 @@ function PromoteEmployeeForm({
               name="newLevel"
               value={newLevel}
               onChange={(e) => setNewLevel(e.target.value)}
-              className={className}
+              className={form.input}
               disabled={isSaving}
             >
               <option value="">Select level</option>
@@ -174,7 +169,7 @@ function PromoteEmployeeForm({
             </select>
           </div>
           <div className="flex flex-col">
-            <label htmlFor="newSalary" className={labelclassName}>
+            <label htmlFor="newSalary" className={form.label}>
               New salary (optional)
             </label>
             <input
@@ -184,14 +179,14 @@ function PromoteEmployeeForm({
               min={0}
               value={newSalary}
               onChange={(e) => setNewSalary(e.target.value)}
-              className={className}
+              className={form.input}
               disabled={isSaving}
             />
           </div>
         </div>
 
         <div className="flex flex-col">
-          <label htmlFor="effectiveDate" className={labelclassName}>
+          <label htmlFor="effectiveDate" className={form.label}>
             Effective date
           </label>
           <input
@@ -201,21 +196,16 @@ function PromoteEmployeeForm({
             max={today()}
             value={effectiveDate}
             onChange={(e) => setEffectiveDate(e.target.value)}
-            className={className}
+            className={form.input}
             disabled={isSaving}
           />
         </div>
 
         {isUnchanged && trimmedDesignation && (
-          <p className="text-xs text-amber-600 dark:text-amber-400">
-            Designation or level must change.
-          </p>
+          <p className={form.warning}>Designation or level must change.</p>
         )}
         {error && (
-          <div
-            role="alert"
-            className="rounded-lg border border-red-200 bg-red-50 p-3 text-xs text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300"
-          >
+          <div role="alert" className={form.alert}>
             <p>{error}</p>
             {conflict && (
               <button
@@ -232,13 +222,13 @@ function PromoteEmployeeForm({
         <button
           type="submit"
           disabled={!isValid || isSaving}
-          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-indigo-600 text-white font-medium text-xs xl:text-sm rounded-lg transition-colors duration-150 cursor-pointer hover:enabled:bg-indigo-700 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed dark:disabled:bg-slate-800 dark:disabled:text-slate-600"
+          className={button.primary}
         >
           {isSaving ? (
             <TailSpin
               visible={true}
               height={20}
-              color="#fff"
+              color={palette.white}
               radius="4"
               ariaLabel="tail-spin-loading"
               wrapperClass="flex items-center justify-center"

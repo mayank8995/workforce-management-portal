@@ -1,8 +1,7 @@
 import { modal } from '../../../theme/theme';
 
 function EmployeeFormSkeleton() {
-  const skeletonClass =
-    'animate-pulse bg-slate-200 dark:bg-slate-700 rounded-xl';
+  const skeletonClass = 'animate-pulse bg-skeleton rounded-xl';
 
   const fieldSkeleton = (
     <div className="mb-4 flex flex-col">
@@ -13,7 +12,7 @@ function EmployeeFormSkeleton() {
 
   const sectionHeadingSkeleton = (
     <div className="flex items-center gap-2 mb-4">
-      <div className="w-1 h-5 bg-slate-300 dark:bg-slate-600 rounded-full animate-pulse" />
+      <div className="w-1 h-5 bg-skeleton rounded-full animate-pulse" />
       <div className={`h-5 w-48 ${skeletonClass}`} />
     </div>
   );
@@ -38,7 +37,7 @@ function EmployeeFormSkeleton() {
             </div>
           </div>
 
-          <hr className="border-t border-slate-200 dark:border-slate-800" />
+          <hr className="border-t border-line" />
 
           <div className="p-4">
             {sectionHeadingSkeleton}
@@ -55,7 +54,7 @@ function EmployeeFormSkeleton() {
             </div>
           </div>
 
-          <hr className="border-t border-slate-200 dark:border-slate-800" />
+          <hr className="border-t border-line" />
 
           <div className="p-4">
             {sectionHeadingSkeleton}
@@ -68,7 +67,7 @@ function EmployeeFormSkeleton() {
             </div>
           </div>
 
-          <hr className="border-t border-slate-200 dark:border-slate-800" />
+          <hr className="border-t border-line" />
 
           <div className="p-4">
             {sectionHeadingSkeleton}
@@ -85,7 +84,7 @@ function EmployeeFormSkeleton() {
             </div>
           </div>
 
-          <hr className="border-t border-slate-200 dark:border-slate-800" />
+          <hr className="border-t border-line" />
 
           <div className="p-4">
             {sectionHeadingSkeleton}
@@ -102,7 +101,7 @@ function EmployeeFormSkeleton() {
             </div>
           </div>
 
-          <hr className="border-t border-slate-200 dark:border-slate-800" />
+          <hr className="border-t border-line" />
 
           <div className="p-4">
             {sectionHeadingSkeleton}
@@ -113,8 +112,7 @@ function EmployeeFormSkeleton() {
                   w-4
                   h-4
                   rounded
-                  bg-slate-200
-                  dark:bg-slate-700
+                  bg-skeleton
                   animate-pulse
                 "
               />
@@ -123,7 +121,7 @@ function EmployeeFormSkeleton() {
             </div>
           </div>
 
-          <hr className="border-t border-slate-200 dark:border-slate-800" />
+          <hr className="border-t border-line" />
 
           <div className="flex justify-between items-center p-4">
             <div className={`h-11 w-40 ${skeletonClass}`} />

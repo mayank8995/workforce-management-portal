@@ -1,6 +1,7 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Hourglass } from 'react-loader-spinner';
+import { palette, surface } from '../../theme/theme';
 
 export const ProtectedRoute = () => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -15,12 +16,12 @@ export const ProtectedRoute = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center h-full bg-slate-100 dark:bg-gray-800">
+      <div className={`flex justify-center h-full ${surface.page}`}>
         <Hourglass
           visible={true}
           height="60"
           width="60"
-          colors={['#306cce', '#72a1ed']}
+          colors={[palette.brand, palette.brandLight]}
           ariaLabel="hourglass-loading"
           wrapperStyle={{}}
           wrapperClass="flex items-center justify-center min-h-screen"
