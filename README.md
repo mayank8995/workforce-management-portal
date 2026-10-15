@@ -23,6 +23,16 @@ The project focuses on building an workforce management dashboard similar to app
 * Role-based access control
 * Production database integration
 * Audit logs
+* Real-time updates
+Employee changes, dashboard numbers and the activity feed sync live across every open session.
+* Promotions & history
+Promote employees in a couple of clicks and keep a full promotion timeline for each person.
+
+* AI project assistant
+Ask the built-in assistant what the portal does, how it was built, or how to try it.
+
+* Works on any screen
+Responsive tables, cards and dialogs with both light and dark themes.
 
 ## 🛠️ Tech Stack
 
