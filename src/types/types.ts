@@ -1,7 +1,7 @@
 import type { QueryClientConfig } from '@tanstack/react-query';
 import type { ChangeEvent, ComponentProps, ReactNode, RefObject } from 'react';
 
-interface Permission {
+export interface Permission {
   resource: string;
   actions: string[];
 }
@@ -134,12 +134,8 @@ export type ReviewList = {
 export type TableToolbarProps = {
   txtToBeSearched: string;
   setTextToBeSearched: (e: string) => void;
-  tableQueryParams: TableQueryParams;
-  handleRowsPerPageChange: (e: ChangeEvent<HTMLSelectElement>) => void;
   openFilterModal: () => void;
   openSortModal: () => void;
-  handlePrevious: () => void;
-  handleNext: () => void;
   bulkAction: () => void;
   selectedRow: Set<unknown>;
   handleOnChange: (
@@ -149,6 +145,12 @@ export type TableToolbarProps = {
   ref?: RefObject<HTMLInputElement | null>;
   listSize: number;
   openCreateEmployeeModal: () => void;
+};
+export type TablePaginationProps = {
+  tableQueryParams: TableQueryParams;
+  handleRowsPerPageChange: (e: ChangeEvent<HTMLSelectElement>) => void;
+  handlePrevious: () => void;
+  handleNext: () => void;
 };
 export type TableTypeMap = {
   employees: Employee;
@@ -605,3 +607,67 @@ export type EmployeeDirectoryResponse = Metadata & {
 };
 
 export type ScreenType = 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+// UPload types
+export type UploadStatus =
+  | 'idle'
+  | 'uploading'
+  | 'paused'
+  | 'failed'
+  | 'completed';
+
+export interface CreateUploadRequest {
+  fileName: string;
+  fileSize: number;
+  chunkSize: number;
+}
+
+export interface CreateUploadResponse {
+  data: {
+    uploadId: string;
+    totalChunks: number;
+  };
+}
+
+export interface UploadStatusResponse {
+  data: {
+    uploadId: string;
+    fileName: string;
+    fileSize: number;
+    chunkSize: number;
+    totalChunks: number;
+    uploadedChunks: number[];
+    status: 'uploading' | 'paused' | 'failed' | 'completed';
+  };
+}
+
+export interface ChunkUploadOptions {
+  file: File;
+  uploadId: string;
+  chunkIndex: number;
+  chunkSize: number;
+  onProgress?: (uploadedBytes: number) => void;
+  signal?: AbortSignal;
+}
+
+export type EmployeeLevel = 'junior' | 'senior' | 'lead' | 'admin' | 'executive';
+
+export interface PromotionPayload {
+  newDesignation: string;
+  newLevel: EmployeeLevel;
+  newSalary?: number;
+  effectiveDate?: string;
+  // Current designation as seen by the client; the server rejects with 409 if it changed.
+  expectedDesignation: string;
+}
+
+export interface PromotionRecord {
+  readonly _id: string;
+  readonly previousDesignation: string;
+  readonly currentDesignation: string;
+  readonly previousLevel?: EmployeeLevel;
+  readonly currentLevel?: EmployeeLevel;
+  readonly previousSalary?: number;
+  readonly currentSalary?: number;
+  readonly promotedBy?: { readonly _id: string; readonly name: string } | null;
+  readonly promotedOn: string;
+}

@@ -3,6 +3,187 @@
 
 @custom-variant max-xs (@media (max-width: 330px));
 
+/* =============================================================================
+   DESIGN TOKENS
+   -----------------------------------------------------------------------------
+   Two layers of colour tokens live here; class recipes that combine them into
+   components (buttons, cards, modals ...) live in src/theme/theme.ts.
+
+   1. Fixed palettes (`@theme`)       -> same value in light and dark mode.
+   2. Semantic tokens (`@theme inline`) -> resolve to a CSS variable whose value
+      is swapped by `[data-theme='dark']`, so a single utility such as
+      `bg-surface` or `text-ink` is correct in both themes without `dark:`.
+   ========================================================================== */
+
+/* --- 1. Fixed palettes ----------------------------------------------------- */
+@theme {
+  /* Brand (primary) colour. 600 is the main brand shade. */
+  --color-brand-50: #f0effb;
+  --color-brand-100: #e2e0f6;
+  --color-brand-200: #c8c4ee;
+  --color-brand-300: #a7a1e3;
+  --color-brand-400: #7f77dd;
+  --color-brand-500: #6a61cb;
+  --color-brand-600: #534ab7;
+  --color-brand-700: #463ea0;
+  --color-brand-800: #3a3484;
+  --color-brand-900: #2f2a69;
+  --color-brand-950: #1e1b3a;
+
+  /* Haze: soft lavender stops for the light marketing / auth backdrop. */
+  --color-haze-100: #eef0fc;
+  --color-haze-200: #e7e9fb;
+  --color-haze-300: #dee1f7;
+
+  /* Dusk: deep navy-violet stops for every dark-mode page backdrop. */
+  --color-dusk-600: #211a3d;
+  --color-dusk-700: #2a1a52;
+  --color-dusk-800: #161233;
+  --color-dusk-900: #0f172a;
+}
+
+/* --- 2. Semantic, theme-aware tokens -------------------------------------- */
+@theme inline {
+  /* Backgrounds */
+  --color-canvas: var(--canvas); /* app page background */
+  --color-surface: var(--surface); /* cards, panels, modals, drawers */
+  --color-surface-muted: var(
+    --surface-muted
+  ); /* wells, table headers, side tabs */
+  --color-surface-hover: var(--surface-hover); /* hovered rows / list items */
+  --color-field: var(--field); /* form inputs */
+  --color-skeleton: var(--skeleton); /* loading placeholders */
+
+  /* Borders */
+  --color-line: var(--line); /* default border */
+  --color-line-subtle: var(--line-subtle); /* dividers inside a surface */
+  --color-line-strong: var(--line-strong); /* hovered / emphasised border */
+
+  /* Text ("ink") */
+  --color-ink: var(--ink); /* headings, primary text */
+  --color-ink-secondary: var(--ink-secondary); /* body text */
+  --color-ink-muted: var(--ink-muted); /* labels, captions */
+  --color-ink-subtle: var(--ink-subtle); /* hints, placeholders, chevrons */
+
+  /* Accent: brand colour tuned for readability on the current surface */
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-line: var(--accent-line);
+
+  /* Status tones: <tone> = text/icon, <tone>-soft = tint, <tone>-line = ring */
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-success-line: var(--success-line);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-warning-line: var(--warning-line);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-line: var(--danger-line);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-info-line: var(--info-line);
+  --color-caution: var(--caution);
+  --color-caution-soft: var(--caution-soft);
+  --color-caution-line: var(--caution-line);
+  --color-violet: var(--violet);
+  --color-violet-soft: var(--violet-soft);
+  --color-violet-line: var(--violet-line);
+  --color-neutral: var(--neutral);
+  --color-neutral-soft: var(--neutral-soft);
+  --color-neutral-line: var(--neutral-line);
+}
+
+/* Light theme values (default) */
+:root {
+  --canvas: #f1f5f9;
+  --surface: #ffffff;
+  --surface-muted: #f8fafc;
+  --surface-hover: #f8fafc;
+  --field: #f8fafc;
+  --skeleton: #e2e8f0;
+
+  --line: #e2e8f0;
+  --line-subtle: #f1f5f9;
+  --line-strong: #cbd5e1;
+
+  --ink: #0f172a;
+  --ink-secondary: #334155;
+  --ink-muted: #64748b;
+  --ink-subtle: #94a3b8;
+
+  --accent: #534ab7;
+  --accent-soft: #f0effb;
+  --accent-line: #c8c4ee;
+
+  --success: #047857;
+  --success-soft: #ecfdf5;
+  --success-line: #a7f3d0;
+  --warning: #b45309;
+  --warning-soft: #fffbeb;
+  --warning-line: #fde68a;
+  --danger: #b91c1c;
+  --danger-soft: #fef2f2;
+  --danger-line: #fecaca;
+  --info: #1d4ed8;
+  --info-soft: #eff6ff;
+  --info-line: #bfdbfe;
+  --caution: #c2410c;
+  --caution-soft: #fff7ed;
+  --caution-line: #fed7aa;
+  --violet: #7e22ce;
+  --violet-soft: #faf5ff;
+  --violet-line: #e9d5ff;
+  --neutral: #475569;
+  --neutral-soft: #f1f5f9;
+  --neutral-line: #e2e8f0;
+}
+
+/* Dark theme values. Surfaces used under sticky table cells stay opaque. */
+[data-theme='dark'] {
+  --canvas: #0f172a;
+  --surface: #151b32;
+  --surface-muted: #111729;
+  --surface-hover: #1c2340;
+  --field: #0f0a1f;
+  --skeleton: #334155;
+
+  --line: #27304d;
+  --line-subtle: #1f2741;
+  --line-strong: #3a4566;
+
+  --ink: #f1f5f9;
+  --ink-secondary: #cbd5e1;
+  --ink-muted: #94a3b8;
+  --ink-subtle: #64748b;
+
+  --accent: #a7a1e3;
+  --accent-soft: #26244f;
+  --accent-line: #3a3484;
+
+  --success: #34d399;
+  --success-soft: rgb(16 185 129 / 0.12);
+  --success-line: rgb(16 185 129 / 0.3);
+  --warning: #fbbf24;
+  --warning-soft: rgb(245 158 11 / 0.12);
+  --warning-line: rgb(245 158 11 / 0.3);
+  --danger: #f87171;
+  --danger-soft: rgb(239 68 68 / 0.12);
+  --danger-line: rgb(239 68 68 / 0.3);
+  --info: #60a5fa;
+  --info-soft: rgb(59 130 246 / 0.12);
+  --info-line: rgb(59 130 246 / 0.3);
+  --caution: #fb923c;
+  --caution-soft: rgb(249 115 22 / 0.12);
+  --caution-line: rgb(249 115 22 / 0.3);
+  --violet: #c084fc;
+  --violet-soft: rgb(168 85 247 / 0.12);
+  --violet-line: rgb(168 85 247 / 0.3);
+  --neutral: #cbd5e1;
+  --neutral-soft: rgb(148 163 184 / 0.12);
+  --neutral-line: rgb(148 163 184 / 0.25);
+}
+
 @font-face {
   font-family: 'Inter';
   src: url('/fonts/inter-400.woff2') format('woff2');
@@ -51,4 +232,22 @@ select option {
 
 *:focus {
   outline: none;
+}
+
+/* Thin, theme-aware scrollbar for scrollable panels (e.g. long chart lists). */
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--line-strong);
+    border-radius: 9999px;
+  }
 }

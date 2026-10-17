@@ -1,6 +1,7 @@
 import { createPortal } from 'react-dom';
 import type { MODAL_COMPONENTS, ModalType } from '../../utils/modalRegistry';
 import useLockBodyScroll from '../../hooks/useLockBodyScroll';
+import { modal } from '../../theme/theme';
 type OverlayContainerProps<T extends ModalType> = {
   Component: (typeof MODAL_COMPONENTS)[T];
   props: Record<any, any>;
@@ -23,7 +24,7 @@ const OverlayContainer = <T extends ModalType>({
       {createPortal(<ModalComponent {...props} onClose={onClose} />, modalRoot)}
       <button
         aria-label="overlay"
-        className="fixed inset-0 bg-black/50 z-30 transition-opacity duration-300 ease-linear"
+        className={modal.backdrop}
         onClick={onClose}
       />
     </>

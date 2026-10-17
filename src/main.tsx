@@ -5,6 +5,7 @@ import { RouterProvider } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ToastContainer } from 'react-toastify';
 import { AuthProvider } from './context/AuthContext.tsx';
+import { SocketProvider } from './context/SocketContext.tsx';
 import { LoaderFlagProvider } from './context/Loadercontext.tsx';
 import { ModalProvider } from './context/ModalContext.tsx';
 import { router } from './router/router.tsx';
@@ -64,12 +65,14 @@ createRoot(document.getElementById('root')!, {
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <ModalProvider>
-          <ToastContainer autoClose={1000} />
-          <LoaderFlagProvider>
-            <RouterProvider router={router} />
-          </LoaderFlagProvider>
-        </ModalProvider>
+        <SocketProvider>
+          <ModalProvider>
+            <ToastContainer autoClose={1000} />
+            <LoaderFlagProvider>
+              <RouterProvider router={router} />
+            </LoaderFlagProvider>
+          </ModalProvider>
+        </SocketProvider>
       </AuthProvider>
     </QueryClientProvider>
   </StrictMode>

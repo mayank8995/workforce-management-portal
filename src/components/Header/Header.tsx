@@ -1,15 +1,16 @@
 import Toggle from '../Toggle/Toggle';
+import RealtimeStatus from '../Realtime/RealtimeStatus';
 import { ADMIN_PORTAL } from '../../utils/constants';
+import { shell } from '../../theme/theme';
 
 function Header() {
   return (
-    <header className="h-14 min-h-14 flex items-center sm:justify-start md:justify-between gap-3 pl-4 pr-14 md:px-5 bg-white border-b border-slate-200 dark:bg-slate-950 dark:border-slate-800">
-      <h1 className="font-semibold tracking-tight text-slate-800 dark:text-slate-100 text-base md:text-xl truncate">
-        {ADMIN_PORTAL}
-      </h1>
-      {/* <div className="shrink-0"> */}
-      <Toggle />
-      {/* </div> */}
+    <header className={shell.header}>
+      <h1 className={shell.headerTitle}>{ADMIN_PORTAL}</h1>
+      <div className="ml-auto md:ml-0 flex items-center gap-2">
+        <RealtimeStatus />
+        <Toggle />
+      </div>
     </header>
   );
 }

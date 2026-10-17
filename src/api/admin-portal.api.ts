@@ -2,13 +2,19 @@ import { toast } from 'react-toastify';
 import apiClient from '../services/http-common.service';
 import { getApiErrorDetails } from '../services/utils.service';
 import type {
+  ChunkUploadOptions,
+  CreateUploadRequest,
+  CreateUploadResponse,
   EmployeeFormType,
   FilterList,
   LoginForm,
   LoginProfile,
   ProfileForm,
+  PromotionPayload,
+  PromotionRecord,
   SignUpForm,
   TableQueryParams,
+  UploadStatusResponse,
 } from '../types/types';
 import { router } from '../router/router';
 import { getEnv } from '../config/env';
@@ -287,6 +293,24 @@ export const editEmployee = async (
   }
 };
 
+export const promoteEmployee = async (
+  _id: string,
+  payload: PromotionPayload
+) => {
+  const res = await apiClient.patch(
+    `/employees/${_id}/promote`,
+    JSON.stringify(payload)
+  );
+  return res;
+};
+
+export const getPromotionHistory = async (_id: string) => {
+  const res = await apiClient.get<{
+    data: { history: PromotionRecord[] };
+  }>(`/employees/${_id}/promotions`);
+  return res?.data?.data?.history ?? [];
+};
+
 export const guestLogin = async () => {
   try {
     const res = await apiClient.post('/guest');
@@ -320,4 +344,67 @@ export const aiChat = async (data: string) => {
     console.error('URL:', url);
     throw err;
   }
+};
+
+export const createUpload = async (
+  payload: CreateUploadRequest
+): Promise<CreateUploadResponse> => {
+  const { data } = await apiClient.post<CreateUploadResponse>(
+    '/uploads',
+    payload
+  );
+
+  return data;
+};
+
+export const getUploadStatus = async (
+  uploadId: string
+): Promise<UploadStatusResponse> => {
+  const { data } = await apiClient.get<UploadStatusResponse>(
+    `/uploads/${uploadId}`
+  );
+
+  return data;
+};
+
+export const uploadChunk = ({
+  file,
+  uploadId,
+  chunkIndex,
+  chunkSize,
+  onProgress,
+  signal,
+}: ChunkUploadOptions & {
+  signal?: AbortSignal;
+}): Promise<void> => {
+  const start = chunkIndex * chunkSize;
+  const end = Math.min(start + chunkSize, file.size);
+
+  const chunk = file.slice(start, end);
+
+  return apiClient.put(`/uploads/${uploadId}/chunks/${chunkIndex}`, chunk, {
+    headers: {
+      'Content-Type': 'application/octet-stream',
+    },
+
+    onUploadProgress: (event) => {
+      if (!event.total) return;
+
+      onProgress?.(event.loaded);
+    },
+
+    signal,
+  });
+};
+
+export const pauseUpload = async (uploadId: string): Promise<void> => {
+  await apiClient.patch(`/uploads/${uploadId}/pause`);
+};
+
+export const resumeUpload = async (uploadId: string): Promise<void> => {
+  await apiClient.patch(`/uploads/${uploadId}/resume`);
+};
+
+export const completeUpload = async (uploadId: string): Promise<void> => {
+  await apiClient.post(`/uploads/${uploadId}/complete`);
 };

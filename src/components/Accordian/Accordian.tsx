@@ -3,6 +3,7 @@ import type { AccordionSection, Employee } from '../../types/types';
 import { extract } from '../../services/utils.service';
 import { FIELD_LABELS } from '../../utils/constants';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { card, cx, text } from '../../theme/theme';
 
 interface Accordian {
   accordian: AccordionSection;
@@ -40,7 +41,10 @@ export default function Accordion({
                     <div className="flex flex-row justify-between gap-2">
                       <h2
                         title={rowLabel}
-                        className="text-xs xl:text-sm font-medium text-gray-500"
+                        className={cx(
+                          text.muted,
+                          'text-xs xl:text-sm font-medium'
+                        )}
                       >
                         {rowLabel}
                       </h2>
@@ -48,7 +52,10 @@ export default function Accordion({
                         <h2
                           title={val}
                           key={val}
-                          className="text-xs xl:text-sm  font-semibold text-gray-900 dark:text-white  min-w-0 flex-1 break-all text-end"
+                          className={cx(
+                            text.primary,
+                            'text-xs xl:text-sm font-semibold min-w-0 flex-1 break-all text-end'
+                          )}
                         >
                           {val}
                         </h2>
@@ -66,7 +73,10 @@ export default function Accordion({
                   {accordian?.showColumns && (
                     <h2
                       title={rowLabel}
-                      className="text-xs xl:text-sm font-medium text-gray-500 shrink-0 whitespace-nowrap"
+                      className={cx(
+                        text.muted,
+                        'text-xs xl:text-sm font-medium shrink-0 whitespace-nowrap'
+                      )}
                     >
                       {rowLabel}
                     </h2>
@@ -76,7 +86,10 @@ export default function Accordion({
                       <h2
                         title={String(val)}
                         key={String(val)}
-                        className="text-xs xl:text-sm font-medium text-gray-900  dark:text-white  min-w-0 flex-1 break-all text-end"
+                        className={cx(
+                          text.primary,
+                          'text-xs xl:text-sm font-medium min-w-0 flex-1 break-all text-end'
+                        )}
                       >
                         {String(val)}
                       </h2>
@@ -84,7 +97,10 @@ export default function Accordion({
                   ) : (
                     <h2
                       title={String(value)}
-                      className="text-xs xl:text-sm font-medium text-gray-900  dark:text-white  min-w-0 flex-1 break-all text-end"
+                      className={cx(
+                        text.primary,
+                        'text-xs xl:text-sm font-medium min-w-0 flex-1 break-all text-end'
+                      )}
                     >
                       {String(value)}
                     </h2>
@@ -101,9 +117,7 @@ export default function Accordion({
   }
   return (
     <div
-      className={
-        'mt-2 rounded-2xl bg-linear-to-br from-white to-indigo-50/40 border border-slate-100 dark:bg-linear-to-br dark:from-slate-900 dark:to-purple-950/20 dark:border-slate-900/50 p-2 flex flex-col gap-3 shadow-sm'
-      }
+      className={cx('mt-2', card.accordion)}
       id={accordian?.id}
       aria-controls={`accordian-panel-${accordian?.id}`}
       onClick={handleAccordian}
@@ -112,7 +126,9 @@ export default function Accordion({
         type="button"
         className="flex justify-between font-semibold items-center cursor-pointer"
       >
-        <div className="dark:text-white flex min-w-0 gap-2 flex-1 items-center">
+        <div
+          className={cx(text.primary, 'flex min-w-0 gap-2 flex-1 items-center')}
+        >
           {accordian?.render
             ? accordian?.render({ className: 'h-4 w-4 xl:h-6 xl:w-6' })
             : null}
@@ -120,9 +136,9 @@ export default function Accordion({
         </div>{' '}
         <span aria-hidden={!openAccordian} aria-expanded={openAccordian}>
           {!openAccordian ? (
-            <ChevronDown className="dark:text-white" size={18} />
+            <ChevronDown className={text.muted} size={18} />
           ) : (
-            <ChevronUp className="dark:text-white" size={18} />
+            <ChevronUp className={text.muted} size={18} />
           )}
         </span>
       </button>

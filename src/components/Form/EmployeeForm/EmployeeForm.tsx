@@ -7,12 +7,20 @@ import { toast } from 'react-toastify';
 import { validateField } from '../../../services/form-validation.service';
 import { getApiErrorDetails } from '../../../services/utils.service';
 import {
-  className,
-  labelclassName,
   VIEW_EMPLOYEE_SUB_TTILE,
   VIEW_EMPLOYEE_TTILE,
 } from '../../../utils/constants';
 import FormField from '../FormField';
+import {
+  button,
+  card,
+  chip,
+  form,
+  modal,
+  palette,
+  section,
+  text,
+} from '../../../theme/theme';
 import type {
   EmployeeFormType,
   Project,
@@ -26,7 +34,10 @@ import ErrorPage from '../../Error/ErrorPage';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEmployeeDetail } from '../../../api/tanstack.query';
 import { useAuth } from '../../../context/AuthContext';
-import { X } from 'lucide-react';
+import { TrendingUp, X } from 'lucide-react';
+// import FileUpload from '../../FileUpload/FileUpload';
+import PromoteEmployeeForm from '../PromoteEmployee/PromoteEmployeeForm';
+import { useModal } from '../../../context/ModalContext';
 
 function EmployeeForm({
   onClose,
@@ -51,6 +62,8 @@ function EmployeeForm({
   const row = details?.['data']?.data?.result ?? [];
 
   const { can } = useAuth();
+  const { openModal } = useModal();
+
   const isUpdateAllowed = can('employee', 'update');
 
   const [formValues, setFormValues] = useState<EmployeeFormType>({
@@ -102,7 +115,6 @@ function EmployeeForm({
     const { name, value, type, checked } = e?.target;
 
     const fieldValue = type === 'checkbox' ? checked : value;
-
     setFormValues((prevData) => ({
       ...prevData,
       [name]: fieldValue,
@@ -369,53 +381,53 @@ function EmployeeForm({
   return (
     <>
       {!isDataLoading ? (
-        <div
-          className="p-4 sm:p-5
-            w-full sm:w-115 md:w-125 lg:w-135
-            h-full
-            overflow-y-auto
-            bg-white dark:bg-slate-900
-            text-slate-900 dark:text-slate-100
-            shadow-2xl border-l border-slate-200 dark:border-slate-800
-            fixed z-[300] right-0 top-0"
-        >
+        <div className={modal.drawer}>
           {!isError ? (
             <div>
-              <div className="mb-5 flex justify-between items-start gap-3">
+              <div className={modal.stickyHeader}>
                 <div className="min-w-0">
-                  <h1 className="text-base xl:text-xl font-semibold text-slate-800 dark:text-slate-100 truncate">
+                  <h1 className={`${modal.title} xl:text-lg`}>
                     {!isUpdateAllowed ? VIEW_EMPLOYEE_TTILE : title}
                   </h1>
-                  <h2 className="text-xs xl:text-sm text-slate-500 mt-0.5 dark:text-slate-400">
+                  <h2 className={modal.subtitle}>
                     {!isUpdateAllowed ? VIEW_EMPLOYEE_SUB_TTILE : subtitle}
                   </h2>
                 </div>
                 <button
                   onClick={onClose}
-                  className="shrink-0 flex items-center justify-center w-8 h-8 rounded-lg cursor-pointer transition-colors text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-300"
+                  aria-label="Close"
+                  className={button.icon}
                 >
                   <X width={18} height={18} />
                 </button>
               </div>
+              {/* <button
+                type="button"
+                className="cursor-pointer flex items-center justify-end"
+                onClick={() => {
+                  openModal(FileUpload);
+                }}
+              >
+                <span>Upload documents</span>
+                <Upload size={24} className={icon.active} />
+              </button> */}
 
               <form
                 onSubmit={handleSubmit}
                 onReset={formReset}
-                className="rounded-2xl border border-slate-200 bg-white flex flex-col dark:border-slate-800 dark:bg-slate-900/60"
+                className="flex flex-col"
                 noValidate
               >
                 <fieldset disabled={!isUpdateAllowed}>
-                  <div className="p-4">
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="w-1 h-4 bg-indigo-500 rounded-full shrink-0" />
-                      <h2 className="text-sm xl:text-base font-semibold text-slate-800 dark:text-slate-100">
-                        Personal Information
-                      </h2>
+                  <div className={section.wrapper}>
+                    <div className={section.heading}>
+                      <div className={section.accent} />
+                      <h2 className={section.title}>Personal Information</h2>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className={form.grid}>
                       <div className="flex flex-col">
-                        <label htmlFor="name" className={labelclassName}>
+                        <label htmlFor="name" className={form.label}>
                           Name
                         </label>
                         <FormField
@@ -425,13 +437,13 @@ function EmployeeForm({
                           type="text"
                           placeholder="Enter employee name"
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id="name"
                           disabled={!isUpdateAllowed}
                         />
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="email" className={labelclassName}>
+                        <label htmlFor="email" className={form.label}>
                           Email
                         </label>
                         <FormField
@@ -441,13 +453,13 @@ function EmployeeForm({
                           type="email"
                           placeholder="Enter employee email"
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id="email"
                           disabled={isEditing || !isUpdateAllowed}
                         />
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="empId" className={labelclassName}>
+                        <label htmlFor="empId" className={form.label}>
                           Employee ID
                         </label>
                         <FormField
@@ -457,13 +469,13 @@ function EmployeeForm({
                           type="text"
                           placeholder="Auto generated"
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id="empId"
                           disabled={true}
                         />
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="phone" className={labelclassName}>
+                        <label htmlFor="phone" className={form.label}>
                           Phone Number
                         </label>
                         <FormField
@@ -473,7 +485,7 @@ function EmployeeForm({
                           type="text"
                           placeholder="Enter phone number"
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id="phone"
                           maxlength={15}
                           disabled={!isUpdateAllowed}
@@ -482,19 +494,17 @@ function EmployeeForm({
                     </div>
                   </div>
 
-                  <hr className="border-t border-slate-200 dark:border-slate-800" />
+                  <hr className={section.divider} />
 
-                  <div className="p-4">
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="w-1 h-4 bg-indigo-500 rounded-full shrink-0" />
-                      <h2 className="text-sm xl:text-base font-semibold text-slate-800 dark:text-slate-100">
-                        Employment Information
-                      </h2>
+                  <div className={section.wrapper}>
+                    <div className={section.heading}>
+                      <div className={section.accent} />
+                      <h2 className={section.title}>Employment Information</h2>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className={form.grid}>
                       <div className="flex flex-col">
-                        <label htmlFor="department" className={labelclassName}>
+                        <label htmlFor="department" className={form.label}>
                           Department
                         </label>
                         <FormField
@@ -504,15 +514,34 @@ function EmployeeForm({
                           type="text"
                           placeholder="Enter department"
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id="department"
                           disabled={!isUpdateAllowed}
                         />
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="designation" className={labelclassName}>
-                          Designation
-                        </label>
+                        <div className="flex items-center justify-between">
+                          <label htmlFor="designation" className={form.label}>
+                            Designation
+                          </label>
+                          {isEditing && isUpdateAllowed && (
+                            <button
+                              type="button"
+                              onClick={() =>
+                                openModal(PromoteEmployeeForm, {
+                                  _id,
+                                  name: formValues?.name,
+                                  designation: formValues?.designation,
+                                  level: formValues?.level,
+                                  salary: Number(formValues?.salary),
+                                })
+                              }
+                              className={`${button.link} mb-1.5`}
+                            >
+                              <TrendingUp size={14} /> Promote
+                            </button>
+                          )}
+                        </div>
                         <FormField
                           errors={errors}
                           value={formValues?.designation}
@@ -520,13 +549,13 @@ function EmployeeForm({
                           type="text"
                           placeholder="Enter designation"
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id="designation"
-                          disabled={!isUpdateAllowed}
+                          disabled={isEditing || !isUpdateAllowed}
                         />
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="manager" className={labelclassName}>
+                        <label htmlFor="manager" className={form.label}>
                           Manager
                         </label>
                         <FormField
@@ -536,13 +565,13 @@ function EmployeeForm({
                           type="text"
                           placeholder="Enter manager name"
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id="manager"
                           disabled={!isUpdateAllowed}
                         />
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="joiningDate" className={labelclassName}>
+                        <label htmlFor="joiningDate" className={form.label}>
                           Joining Date
                         </label>
                         <FormField
@@ -552,7 +581,7 @@ function EmployeeForm({
                           type="date"
                           placeholder="Select joining date"
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id="joiningDate"
                           disabled={isEditing || !isUpdateAllowed}
                         />
@@ -560,7 +589,7 @@ function EmployeeForm({
                       <div className="flex flex-col">
                         <label
                           htmlFor="yearsOfExperience"
-                          className={labelclassName}
+                          className={form.label}
                         >
                           Years of Experience
                         </label>
@@ -571,13 +600,13 @@ function EmployeeForm({
                           type="number"
                           placeholder="Enter years of experience"
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id="yearsOfExperience"
                           disabled={!isUpdateAllowed}
                         />
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="location" className={labelclassName}>
+                        <label htmlFor="location" className={form.label}>
                           Location
                         </label>
                         <FormField
@@ -587,13 +616,13 @@ function EmployeeForm({
                           type="text"
                           placeholder="Enter location"
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id="location"
                           disabled={!isUpdateAllowed}
                         />
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="workMode" className={labelclassName}>
+                        <label htmlFor="workMode" className={form.label}>
                           Work Mode
                         </label>
                         <select
@@ -601,7 +630,7 @@ function EmployeeForm({
                           name="workMode"
                           value={formValues?.workMode}
                           onChange={onSelectChange}
-                          className={className}
+                          className={form.input}
                           disabled={!isUpdateAllowed}
                         >
                           <option value="">Select work mode</option>
@@ -610,13 +639,11 @@ function EmployeeForm({
                           <option value="Onsite">Onsite</option>
                         </select>
                         {errors?.workMode && (
-                          <p className="text-xs text-red-600 mt-1 dark:text-red-400">
-                            {errors.workMode}
-                          </p>
+                          <p className={form.error}>{errors.workMode}</p>
                         )}
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="level" className={labelclassName}>
+                        <label htmlFor="level" className={form.label}>
                           Level
                         </label>
                         <select
@@ -624,8 +651,8 @@ function EmployeeForm({
                           name="level"
                           value={formValues?.level}
                           onChange={onSelectChange}
-                          className={className}
-                          disabled={!isUpdateAllowed}
+                          className={form.input}
+                          disabled={isEditing || !isUpdateAllowed}
                         >
                           <option value="">Select level</option>
                           <option value="junior">Junior</option>
@@ -634,32 +661,25 @@ function EmployeeForm({
                           <option value="executive">Executive</option>
                         </select>
                         {errors?.level && (
-                          <p className="text-xs text-red-600 mt-1 dark:text-red-400">
-                            {errors.level}
-                          </p>
+                          <p className={form.error}>{errors.level}</p>
                         )}
                       </div>
                     </div>
                   </div>
 
-                  <hr className="border-t border-slate-200 dark:border-slate-800" />
+                  <hr className={section.divider} />
 
-                  <div className="p-4">
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="w-1 h-4 bg-indigo-500 rounded-full shrink-0" />
-                      <h2 className="text-sm xl:text-base font-semibold text-slate-800 dark:text-slate-100">
-                        Projects
-                      </h2>
+                  <div className={section.wrapper}>
+                    <div className={section.heading}>
+                      <div className={section.accent} />
+                      <h2 className={section.title}>Projects</h2>
                     </div>
 
                     {isUpdateAllowed && (
                       <>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className={form.grid}>
                           <div className="flex flex-col">
-                            <label
-                              htmlFor="projectName"
-                              className={labelclassName}
-                            >
+                            <label htmlFor="projectName" className={form.label}>
                               Project Name
                             </label>
                             <FormField
@@ -669,12 +689,12 @@ function EmployeeForm({
                               type="text"
                               placeholder="Enter project name"
                               onChange={onProjectInputChange}
-                              className={className}
+                              className={form.input}
                               id="projectName"
                             />
                           </div>
                           <div className="flex flex-col">
-                            <label htmlFor="status" className={labelclassName}>
+                            <label htmlFor="status" className={form.label}>
                               Status
                             </label>
                             <select
@@ -682,7 +702,7 @@ function EmployeeForm({
                               name="status"
                               value={projectForm.status}
                               onChange={onProjectInputChange}
-                              className={className}
+                              className={form.input}
                             >
                               <option value="">Select status</option>
                               <option value="Active">Active</option>
@@ -692,16 +712,13 @@ function EmployeeForm({
                               <option value="Support">Support</option>
                             </select>
                             {projectErrors?.status && (
-                              <p className="text-xs text-red-600 mt-1 dark:text-red-400">
+                              <p className={form.error}>
                                 {projectErrors.status}
                               </p>
                             )}
                           </div>
                           <div className="flex flex-col">
-                            <label
-                              htmlFor="riskStatus"
-                              className={labelclassName}
-                            >
+                            <label htmlFor="riskStatus" className={form.label}>
                               Risk Status
                             </label>
                             <select
@@ -709,7 +726,7 @@ function EmployeeForm({
                               name="riskStatus"
                               value={projectForm.riskStatus}
                               onChange={onProjectInputChange}
-                              className={className}
+                              className={form.input}
                             >
                               <option value="">Select risk status</option>
                               <option value="On Track">On Track</option>
@@ -717,7 +734,7 @@ function EmployeeForm({
                               <option value="Critical">Critical</option>
                             </select>
                             {projectErrors?.riskStatus && (
-                              <p className="text-xs text-red-600 mt-1 dark:text-red-400">
+                              <p className={form.error}>
                                 {projectErrors.riskStatus}
                               </p>
                             )}
@@ -725,7 +742,7 @@ function EmployeeForm({
                           <div className="flex flex-col">
                             <label
                               htmlFor="priorityRanking"
-                              className={labelclassName}
+                              className={form.label}
                             >
                               Priority Ranking
                             </label>
@@ -736,7 +753,7 @@ function EmployeeForm({
                               type="number"
                               placeholder="Enter priority ranking"
                               onChange={onProjectInputChange}
-                              className={className}
+                              className={form.input}
                               id="priorityRanking"
                             />
                           </div>
@@ -746,7 +763,7 @@ function EmployeeForm({
                           <button
                             type="button"
                             onClick={addProject}
-                            className="px-4 py-2 bg-indigo-600 text-white font-medium text-xs xl:text-sm rounded-lg transition-colors duration-150 cursor-pointer hover:bg-indigo-700"
+                            className={button.primarySm}
                           >
                             + Add Project
                           </button>
@@ -759,41 +776,49 @@ function EmployeeForm({
                         {formValues?.projects.map((project, index) => (
                           <div
                             key={`${project?.projectName}-${index}`}
-                            className="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:bg-slate-800/40 dark:border-slate-800"
+                            className={card.muted}
                           >
                             <div className="flex justify-between items-start gap-4">
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 mb-3 flex-wrap">
-                                  <span className="text-sm font-medium text-slate-800 dark:text-slate-100">
+                                  <span
+                                    className={`${text.primary} text-sm font-medium`}
+                                  >
                                     {project.projectName}
                                   </span>
-                                  <span className="px-2 py-0.5 text-xs rounded-full bg-indigo-50 text-indigo-700 ring-1 ring-indigo-200 dark:bg-indigo-500/10 dark:text-indigo-300 dark:ring-indigo-900">
+                                  <span className={chip.tag}>
                                     Priority #{project.priorityRanking}
                                   </span>
                                 </div>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                   <div>
-                                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                                    <p className={`${text.muted} text-xs`}>
                                       Status
                                     </p>
-                                    <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                                    <p
+                                      className={`${text.secondary} text-sm font-medium`}
+                                    >
                                       {project.status}
                                     </p>
                                   </div>
                                   <div>
-                                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                                    <p className={`${text.muted} text-xs`}>
                                       Risk Status
                                     </p>
-                                    <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                                    <p
+                                      className={`${text.secondary} text-sm font-medium`}
+                                    >
                                       {project.riskStatus}
                                     </p>
                                   </div>
                                   <div>
-                                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                                    <p className={`${text.muted} text-xs`}>
                                       Priority
                                     </p>
-                                    <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                                    <p
+                                      className={`${text.secondary} text-sm font-medium`}
+                                    >
                                       {project.priorityRanking}
                                     </p>
                                   </div>
@@ -804,7 +829,7 @@ function EmployeeForm({
                                 <button
                                   type="button"
                                   onClick={() => removeProject(index)}
-                                  className="shrink-0 text-xs font-medium text-red-600 transition-colors hover:text-red-700 cursor-pointer dark:text-red-400 dark:hover:text-red-300"
+                                  className={`shrink-0 ${button.dangerLink} text-xs!`}
                                 >
                                   Delete
                                 </button>
@@ -816,19 +841,19 @@ function EmployeeForm({
                     )}
                   </div>
 
-                  <hr className="border-t border-slate-200 dark:border-slate-800" />
+                  <hr className={section.divider} />
 
-                  <div className="p-4">
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="w-1 h-4 bg-indigo-500 rounded-full shrink-0" />
-                      <h2 className="text-sm xl:text-base font-semibold text-slate-800 dark:text-slate-100">
+                  <div className={section.wrapper}>
+                    <div className={section.heading}>
+                      <div className={section.accent} />
+                      <h2 className={section.title}>
                         Compensation & Performance
                       </h2>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className={form.grid}>
                       <div className="flex flex-col">
-                        <label htmlFor="salary" className={labelclassName}>
+                        <label htmlFor="salary" className={form.label}>
                           Salary
                         </label>
                         <FormField
@@ -838,13 +863,13 @@ function EmployeeForm({
                           type="number"
                           placeholder="Enter salary"
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id="salary"
                           disabled={!isUpdateAllowed}
                         />
                       </div>
                       <div className="flex flex-col">
-                        <label htmlFor="rating" className={labelclassName}>
+                        <label htmlFor="rating" className={form.label}>
                           Rating
                         </label>
                         <FormField
@@ -854,7 +879,7 @@ function EmployeeForm({
                           type="number"
                           placeholder="0 - 5"
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id="rating"
                           disabled={!isUpdateAllowed}
                         />
@@ -862,7 +887,7 @@ function EmployeeForm({
                       <div className="flex flex-col">
                         <label
                           htmlFor="attendancePercentage"
-                          className={labelclassName}
+                          className={form.label}
                         >
                           Attendance Percentage
                         </label>
@@ -873,7 +898,7 @@ function EmployeeForm({
                           type="number"
                           placeholder="0 - 100"
                           onChange={onInputChange}
-                          className={className}
+                          className={form.input}
                           id="attendancePercentage"
                           disabled={!isUpdateAllowed}
                         />
@@ -881,7 +906,7 @@ function EmployeeForm({
                       <div className="flex flex-col">
                         <label
                           htmlFor="employeeSatisfaction"
-                          className={labelclassName}
+                          className={form.label}
                         >
                           Employee Satisfaction
                         </label>
@@ -890,7 +915,7 @@ function EmployeeForm({
                           name="employeeSatisfaction"
                           value={formValues?.employeeSatisfaction}
                           onChange={onSelectChange}
-                          className={className}
+                          className={form.input}
                           disabled={!isUpdateAllowed}
                         >
                           <option value="">Select satisfaction</option>
@@ -899,7 +924,7 @@ function EmployeeForm({
                           <option value="Low">Low</option>
                         </select>
                         {errors?.employeeSatisfaction && (
-                          <p className="text-xs text-red-600 mt-1 dark:text-red-400">
+                          <p className={form.error}>
                             {errors?.employeeSatisfaction}
                           </p>
                         )}
@@ -907,14 +932,12 @@ function EmployeeForm({
                     </div>
                   </div>
 
-                  <hr className="border-t border-slate-200 dark:border-slate-800" />
+                  <hr className={section.divider} />
 
-                  <div className="p-4">
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="w-1 h-4 bg-indigo-500 rounded-full shrink-0" />
-                      <h2 className="text-sm xl:text-base font-semibold text-slate-800 dark:text-slate-100">
-                        Skills
-                      </h2>
+                  <div className={section.wrapper}>
+                    <div className={section.heading}>
+                      <div className={section.accent} />
+                      <h2 className={section.title}>Skills</h2>
                     </div>
 
                     {isUpdateAllowed && (
@@ -926,14 +949,14 @@ function EmployeeForm({
                           type="text"
                           placeholder="Enter a skill"
                           onChange={(e) => setSkillInput(e?.target?.value)}
-                          className={className}
+                          className={form.input}
                           id="skillInput"
                           disabled={!isUpdateAllowed}
                         />
                         <button
                           type="button"
                           onClick={addSkill}
-                          className="shrink-0 px-4 py-2 bg-indigo-600 text-white font-medium text-xs xl:text-sm rounded-lg transition-colors duration-150 cursor-pointer hover:bg-indigo-700"
+                          className={`${button.primarySm} shrink-0 h-auto!`}
                         >
                           Add
                         </button>
@@ -945,13 +968,13 @@ function EmployeeForm({
                         {formValues?.skills?.map((skill) => (
                           <div
                             key={skill}
-                            className="flex items-center gap-1.5 pl-3 pr-2 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-medium ring-1 ring-indigo-200 dark:bg-indigo-500/10 dark:text-indigo-300 dark:ring-indigo-900"
+                            className={`${chip.tag} pl-3 pr-2 py-1`}
                           >
                             <span>{skill}</span>
                             <button
                               type="button"
                               onClick={() => removeSkill(skill)}
-                              className="cursor-pointer text-indigo-400 transition-colors hover:text-red-500 disabled:cursor-not-allowed"
+                              className="cursor-pointer text-accent transition-colors hover:text-danger disabled:cursor-not-allowed"
                               disabled={!isUpdateAllowed}
                             >
                               <X size={12} />
@@ -962,14 +985,12 @@ function EmployeeForm({
                     )}
                   </div>
 
-                  <hr className="border-t border-slate-200 dark:border-slate-800" />
+                  <hr className={section.divider} />
 
-                  <div className="p-4">
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="w-1 h-4 bg-indigo-500 rounded-full shrink-0" />
-                      <h2 className="text-sm xl:text-base font-semibold text-slate-800 dark:text-slate-100">
-                        Employee Status
-                      </h2>
+                  <div className={section.wrapper}>
+                    <div className={section.heading}>
+                      <div className={section.accent} />
+                      <h2 className={section.title}>Employee Status</h2>
                     </div>
 
                     <div className="flex items-center gap-3">
@@ -979,34 +1000,34 @@ function EmployeeForm({
                         type="checkbox"
                         checked={formValues?.onNoticePeriod}
                         onChange={onInputChange}
-                        className="w-4 h-4 accent-indigo-600 cursor-pointer"
+                        className={`${form.checkbox} cursor-pointer`}
                         disabled={!isUpdateAllowed}
                       />
                       <label
                         htmlFor="onNoticePeriod"
-                        className="text-sm text-slate-700 dark:text-slate-300 cursor-pointer"
+                        className={`${text.secondary} text-sm cursor-pointer`}
                       >
                         Employee is on notice period
                       </label>
                     </div>
                   </div>
 
-                  <hr className="border-t border-slate-200 dark:border-slate-800" />
+                  <hr className={section.divider} />
 
                   {isUpdateAllowed && (
                     <>
                       {!isEditing ? (
-                        <div className="flex justify-between items-center gap-3 p-4">
+                        <div className={modal.stickyFooter}>
                           <button
                             type="submit"
                             disabled={formDisabled}
-                            className="px-5 py-2.5 bg-indigo-600 text-white font-medium text-xs xl:text-sm rounded-lg transition-colors duration-150 cursor-pointer hover:enabled:bg-indigo-700 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed dark:disabled:bg-slate-800 dark:disabled:text-slate-600"
+                            className={`${button.primary} min-w-36`}
                           >
                             {isLoading ? (
                               <TailSpin
                                 visible={true}
                                 height={20}
-                                color="#fff"
+                                color={palette.white}
                                 radius="4"
                                 ariaLabel="tail-spin-loading"
                                 wrapperStyle={{}}
@@ -1021,24 +1042,24 @@ function EmployeeForm({
                             type="reset"
                             id="reset"
                             disabled={formDisabled}
-                            className="px-5 py-2.5 border border-slate-300 text-slate-700 font-medium text-xs xl:text-sm rounded-lg transition-colors duration-150 cursor-pointer hover:enabled:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed dark:border-slate-700 dark:text-slate-300 dark:hover:enabled:bg-slate-800"
+                            className={button.secondary}
                           >
                             Reset
                           </button>
                         </div>
                       ) : (
-                        <div className="flex justify-between items-center p-4">
+                        <div className={modal.stickyFooter}>
                           <button
                             type="submit"
                             id="edit"
-                            className="px-5 py-2.5 bg-indigo-600 text-white font-medium text-xs xl:text-sm rounded-lg transition-colors duration-150 cursor-pointer hover:enabled:bg-indigo-700 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed dark:disabled:bg-slate-800 dark:disabled:text-slate-600"
+                            className={`${button.primary} min-w-36`}
                             disabled={formDisabled}
                           >
                             {isLoading ? (
                               <TailSpin
                                 visible={true}
                                 height={20}
-                                color="#fff"
+                                color={palette.white}
                                 radius="4"
                                 ariaLabel="tail-spin-loading"
                                 wrapperStyle={{}}

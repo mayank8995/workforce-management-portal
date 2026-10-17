@@ -3,6 +3,7 @@ import MobileViewCardForTable from './MobileViewCardForTable';
 import { NO_RESULT_FOUND } from '../../utils/constants';
 import type { ListType, MobileTableProps } from '../../types/types';
 import { useLoader } from '../../context/Loadercontext';
+import { card, cx, emptyState, skeleton } from '../../theme/theme';
 
 const MobileTable = <T extends ListType>({
   list,
@@ -15,11 +16,11 @@ const MobileTable = <T extends ListType>({
 }: MobileTableProps<T>) => {
   const { isLoading } = useLoader();
   return (
-    <div className="lg:hidden pl-2 pr-2">
-      <>
-        {!isLoading ? (
-          <>
-            {list?.length > 0 ? (
+    <div className="lg:hidden p-3 max-xs:p-2 sm:p-4">
+      {!isLoading ? (
+        <>
+          {list?.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <MobileViewCardForTable
                 list={list}
                 rowsPerPage={rowsPerPage}
@@ -29,55 +30,75 @@ const MobileTable = <T extends ListType>({
                 setSelectedRow={setSelectedRow}
                 handleOnChange={handleOnChange}
               />
-            ) : (
-              <div className="bg-linear-to-br from-white to-indigo-50/40 rounded-2xl border-t-4 shadow-sm border border-slate-100 p-5 flex flex-col gap-3  dark:bg-linear-to-br dark:from-slate-900 dark:to-purple-950/20  mb-2   dark:border-slate-900/50">
-                <h1 className="dark:text-slate-100 text-slate-800">
-                  <span className="flex items-center justify-center">
-                    <TextSearch className="pr-1" />
-                    {NO_RESULT_FOUND}
-                  </span>
-                </h1>
+            </div>
+          ) : (
+            <div
+              className={cx(
+                emptyState.wrapper,
+                'py-12 rounded-xl border border-dashed border-line'
+              )}
+            >
+              <span className={emptyState.icon}>
+                <TextSearch size={22} />
+              </span>
+              <div>
+                <h1 className={emptyState.title}>{NO_RESULT_FOUND}</h1>
+                <p className={emptyState.description}>
+                  Try adjusting your search or filters.
+                </p>
               </div>
-            )}
-          </>
-        ) : (
-          <>
-            {Array.from({ length: rowsPerPage }, (_, index) => index + 1)?.map(
-              (_, id) => {
-                return (
-                  <div
-                    key={`${id + rowsPerPage}`}
-                    className="bg-linear-to-br from-white to-indigo-50/40 rounded-2xl border-t-4 shadow-sm border border-slate-100 p-5 flex flex-col gap-3  dark:bg-linear-to-br dark:from-slate-900 dark:to-purple-950/20  mb-2  odd:bg-white even:bg-slate-50 dark:odd:bg-slate-900 dark:even:bg-slate-800/40 dark:border-slate-900/50 "
-                  >
-                    <div className="animate-pulse">
-                      <div className="flex items-center gap-3">
-                        <h1 className={`h-9 w-9 rounded-full bg-gray-200`}></h1>
-                        <h2 className="h-4 w-48 rounded bg-gray-200"></h2>
-                      </div>
-                    </div>
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {Array.from({ length: rowsPerPage }, (_, index) => index + 1)?.map(
+            (_, id) => {
+              return (
+                <div
+                  key={`${id + rowsPerPage}`}
+                  className={cx(card.base, 'animate-pulse p-4')}
+                >
+                  <div className="flex items-center gap-3 pb-3 mb-3 border-b border-line-subtle">
+                    <div
+                      className={cx(
+                        'h-10 w-10 shrink-0 rounded-full',
+                        skeleton.fill
+                      )}
+                    ></div>
+                    <div
+                      className={cx(
+                        'h-4 w-40 max-w-full rounded',
+                        skeleton.fill
+                      )}
+                    ></div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-3 max-xs:grid-cols-1">
                     {Array.from(
-                      { length: columnsData?.length },
+                      { length: Math.max((columnsData?.length || 0) - 2, 2) },
                       (_, index) => index + 1
                     )?.map((_, i) => {
                       return (
                         <div
                           key={`${i + 1 + id + rowsPerPage}`}
-                          className="animate-pulse"
+                          className="space-y-1.5"
                         >
-                          <div className={`grid grid-cols-2 gap-y-1 text-xs`}>
-                            <h2 className="h-4 w-25 rounded bg-gray-200"></h2>
-                            <h2 className="h-4 w-35 rounded bg-gray-200"></h2>
-                          </div>
+                          <div
+                            className={cx('h-2.5 w-16 rounded', skeleton.fill)}
+                          ></div>
+                          <div
+                            className={cx('h-3.5 w-24 rounded', skeleton.fill)}
+                          ></div>
                         </div>
                       );
                     })}
                   </div>
-                );
-              }
-            )}
-          </>
-        )}
-      </>
+                </div>
+              );
+            }
+          )}
+        </div>
+      )}
     </div>
   );
 };

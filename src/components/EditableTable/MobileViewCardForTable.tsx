@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react';
 import type { ListType, MobileTableProps } from '../../types/types';
 import {
-  bgColors,
   EDIT_EMPLOYEE_SUBTITLE,
   EDIT_EMPLOYEE_TITLE,
-  gradients,
   NAME,
 } from '../../utils/constants';
 import FormField from '../Form/FormField';
@@ -13,6 +11,14 @@ import { useModal } from '../../context/ModalContext';
 import AndOthersComponent from '../AndOthers/AndOthersComponent';
 import EmployeeForm from '../Form/EmployeeForm/EmployeeForm';
 import { useAuth } from '../../context/AuthContext';
+import {
+  avatar,
+  avatarGradient,
+  cx,
+  form,
+  table,
+  text,
+} from '../../theme/theme';
 
 function MobileViewCardForTable<T extends ListType>({
   list,
@@ -41,100 +47,123 @@ function MobileViewCardForTable<T extends ListType>({
     setSelectedRow(new Set());
   }, [tableQueryParams]);
 
-  function getRowCss(value: string) {
-    const initialCss = `grid grid-cols-2 gap-y-2 text-xs min-w-0 flex-1`;
-    if (value === 'id') {
-      return 'hidden';
-    }
-    return initialCss;
-  }
+  const hasNameColumn = columnsData?.some((column) => column?.key === NAME);
+  const detailColumns = columnsData?.filter(
+    (column) =>
+      column?.key !== NAME &&
+      column?.key !== 'id' &&
+      (column?.metadata as { show?: boolean } | undefined)?.show !== false
+  );
+
   return (
     <>
-      {list?.map((row, index: number) => (
-        <div
-          key={`${row._id}-data`}
-          className="bg-linear-to-br from-white to-indigo-50/40 rounded-2xl border-t-4 shadow-sm border border-slate-100 p-5 flex flex-col gap-3  dark:bg-linear-to-br dark:from-slate-900 dark:to-purple-950/20  mb-2  odd:bg-white even:bg-slate-50 dark:odd:bg-slate-900 dark:even:bg-slate-800/40 dark:border-slate-900/50 "
-        >
-          {columnsData?.map((coloumn) => {
-            const value = row[coloumn?.key];
-            return (
-              <React.Fragment key={coloumn.key}>
-                {coloumn?.key === NAME && (
-                  <div className="flex items-center justify-between min-w-0">
-                    <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <h1
-                        className={`shrink-0 w-6 h-6 xl:w-9 xl:h-9 rounded-full text-white font-bold text-[10px] xl:text-sm flex items-center justify-center ${gradients[index % gradients.length]} col-span-0 dark:${bgColors[index % bgColors.length]}`}
-                      >
-                        {String(value)
-                          ?.split(' ')
-                          .map((n: string) => n[0])
-                          .join('')}
-                      </h1>
-                      <button
-                        type="button"
-                        className={` flex flex-col gap-1 min-w-0 cursor-pointer`}
-                        onClick={() => {
-                          openModal(EmployeeForm, {
-                            _id: row._id,
-                            tableQueryParams,
-                            title: EDIT_EMPLOYEE_TITLE,
-                            subtitle: EDIT_EMPLOYEE_SUBTITLE,
-                          });
-                        }}
-                      >
-                        <h2 className="text-indigo-600 dark:text-indigo-400 text-sm xl:text-base truncate">
-                          {Array.isArray(value) && value?.length > 0
-                            ? value[0]
-                            : value}
-                        </h2>
-                      </button>
-                    </div>
-                    <FormField
-                      className={`${!isUpdateAllowed ? 'cursor-pointer-none' : 'cursor-pointer'} w-auto`}
-                      disabled={!isUpdateAllowed}
-                      name={String(row?._id)}
-                      type={'checkbox'}
-                      id={String(row?._id)}
-                      checked={selectedRow.has(String(row?._id))}
-                      onChange={handleOnChange}
-                    />
-                  </div>
-                )}
-                <>
-                  {coloumn?.key !== 'name' &&
-                    !(coloumn?.metadata?.show === false) && (
-                      <div className={getRowCss(coloumn?.key)}>
-                        <h2 className="text-slate-500 text-xs xl:text-base truncate">
-                          {coloumn?.header
-                            ?.split(' ')
-                            .map(
-                              (n: string) => n[0] + n.substring(1).toLowerCase()
-                            )
-                            .join(' ')}
-                        </h2>
-                        <h2 className=" text-slate-800 dark:text-slate-300 text-xs xl:text-base">
-                          {Array.isArray(value) && value?.length > 0 ? (
-                            <AndOthersComponent
-                              values={value}
-                              id={coloumn?.key}
-                              render={coloumn?.render}
-                            />
-                          ) : (
-                            <>
-                              {!coloumn?.render
-                                ? row[coloumn?.key]
-                                : coloumn?.render(String(value), coloumn?.key)}
-                            </>
-                          )}
-                        </h2>
-                      </div>
+      {list?.map((row, index: number) => {
+        const isSelected = selectedRow.has(String(row?._id));
+        const nameValue = row[NAME as keyof T];
+        const name = String(
+          Array.isArray(nameValue) && nameValue?.length > 0
+            ? nameValue[0]
+            : (nameValue ?? '')
+        );
+        return (
+          <article
+            key={`${row._id}-data`}
+            className={cx(
+              table.mobileCard,
+              isSelected ? table.mobileCardSelected : table.mobileCardIdle
+            )}
+          >
+            {hasNameColumn && (
+              <div className="flex items-center gap-3 max-xs:gap-2.5 min-w-0 pb-3 mb-3 border-b border-line-subtle">
+                <span
+                  className={cx(
+                    avatar.base,
+                    'w-10 h-10 max-xs:w-9 max-xs:h-9 text-sm max-xs:text-xs',
+                    avatarGradient(index)
+                  )}
+                >
+                  {name
+                    ?.split(' ')
+                    .map((n: string) => n[0])
+                    .join('')
+                    .slice(0, 2)
+                    .toUpperCase()}
+                </span>
+                <button
+                  type="button"
+                  className="flex-1 min-w-0 text-left cursor-pointer rounded-md focus-visible:ring-2 focus-visible:ring-brand-600"
+                  onClick={() => {
+                    openModal(EmployeeForm, {
+                      _id: row._id,
+                      tableQueryParams,
+                      title: EDIT_EMPLOYEE_TITLE,
+                      subtitle: EDIT_EMPLOYEE_SUBTITLE,
+                    });
+                  }}
+                >
+                  <h2
+                    className={cx(
+                      'text-sm font-semibold truncate',
+                      text.accent
                     )}
-                </>
-              </React.Fragment>
-            );
-          })}
-        </div>
-      ))}
+                  >
+                    {name}
+                  </h2>
+                  {Array.isArray(nameValue) && nameValue.length > 1 && (
+                    <p className={cx('text-xs', text.muted)}>
+                      +{nameValue.length - 1} more
+                    </p>
+                  )}
+                </button>
+                <FormField
+                  className={`${form.checkbox} h-5! w-5! ${!isUpdateAllowed ? 'cursor-pointer-none' : 'cursor-pointer'}`}
+                  disabled={!isUpdateAllowed}
+                  name={String(row?._id)}
+                  type={'checkbox'}
+                  id={String(row?._id)}
+                  checked={isSelected}
+                  onChange={handleOnChange}
+                />
+              </div>
+            )}
+            <dl className="grid grid-cols-2 gap-x-4 gap-y-3 max-xs:grid-cols-1 max-xs:gap-y-2.5">
+              {detailColumns?.map((column) => {
+                const value = row[column?.key];
+                return (
+                  <div
+                    key={column.key}
+                    className="min-w-0 max-xs:flex max-xs:items-center max-xs:justify-between max-xs:gap-3"
+                  >
+                    <dt
+                      className={cx(
+                        table.mobileLabel,
+                        'max-xs:shrink-0 max-xs:max-w-[45%]'
+                      )}
+                    >
+                      {column?.header}
+                    </dt>
+                    <dd className="mt-1 max-xs:mt-0 max-xs:min-w-0 max-xs:text-right max-xs:flex max-xs:justify-end max-xs:*:flex-none max-xs:*:items-end text-sm text-ink wrap-break-word">
+                      {Array.isArray(value) && value?.length > 0 ? (
+                        <AndOthersComponent
+                          values={value}
+                          id={column?.key}
+                          render={column?.render}
+                        />
+                      ) : (
+                        <>
+                          {!column?.render
+                            ? row[column?.key]
+                            : column?.render(String(value), column?.key)}
+                        </>
+                      )}
+                    </dd>
+                  </div>
+                );
+              })}
+            </dl>
+          </article>
+        );
+      })}
     </>
   );
 }
